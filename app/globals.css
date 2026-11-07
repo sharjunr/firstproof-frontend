@@ -5639,3 +5639,224 @@ td strong {
 .editorial-hero .career-links a:hover { border-color:#0969da; color:#0969da; transform:translateY(-2px); }
 .editorial-hero .career-links a svg { color:#8c959f; }
 @media(max-width:600px){.editorial-hero .career-links{gap:7px;margin-top:18px}.editorial-hero .career-links a{font-size:11px;padding:7px 12px;gap:6px}}
+
+/* Unified slate & blue palette across Marketplace, details, and workspaces */
+.nav-links,
+.icon-button {
+  color: #59636e;
+}
+.nav-links a:hover,
+.nav-links a.selected,
+.icon-button.saved,
+.opportunity-card h3 a:hover,
+.card-bottom .text-link,
+.section-heading > .text-link,
+.audience .text-link,
+.dashboard-callout .text-link {
+  color: #0969da;
+}
+.icon-button:hover {
+  background: #f6f8fa;
+  color: #1f2328;
+}
+.nav-links.open a,
+.nav-actions select,
+.market-search input,
+.filter-heading h2,
+.results-heading strong,
+.results-heading select,
+input,
+textarea,
+select,
+.opportunity-card h3,
+.opportunity-card h4,
+.principle-strip > strong,
+.process-three h3,
+.app-main h3,
+.gate h1,
+.empty h2,
+.modal-head h2,
+.timeline strong,
+.sidebar-note strong,
+.dashboard-callout h3,
+dd {
+  color: #1f2328;
+}
+.market-search,
+.results-heading select,
+.nav-actions select,
+input,
+textarea,
+select {
+  background: #fff;
+  border-color: #d1d9e0;
+}
+.market-search {
+  border-radius: 14px;
+  box-shadow: 0 4px 16px #1f232808;
+}
+input,
+textarea,
+select,
+.results-heading select {
+  border-radius: 8px;
+}
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: #0969da;
+  box-shadow: 0 0 0 3px #0969da18;
+}
+input::placeholder,
+textarea::placeholder,
+.market-search input::placeholder {
+  color: #818b98;
+}
+input[type="checkbox"] {
+  accent-color: #0969da;
+}
+.industry-shortcuts button {
+  border: 1px solid #d1d9e0;
+  background: #fff;
+  color: #59636e;
+  border-radius: 999px;
+  padding: 8px 14px;
+}
+.industry-shortcuts button[aria-pressed="true"] {
+  background: #0969da;
+  color: #fff;
+  border-color: #0969da;
+}
+.industry-shortcuts button:hover {
+  border-color: #0969da;
+  color: #0969da;
+}
+.filters,
+.card-facts,
+dl > div,
+hr,
+.file-row,
+.modal-head,
+.timeline li,
+.eligibility-row,
+.candidate-list,
+td {
+  border-color: #d1d9e0;
+}
+.market-search > svg,
+.result-pagination,
+.card-top > div:nth-child(2) > span,
+.card-top small,
+.card-bottom small,
+.card-facts,
+.card-review,
+.major-list > span:first-child,
+.principle-strip > span,
+.audience-number,
+.process-three article > div > span,
+.check-line,
+.commitment p,
+.commitment small,
+dt,
+.loading span,
+.empty p,
+.summary-line,
+.file-row,
+.file-row small,
+.deadline,
+.modal p,
+.timeline small,
+.candidate-head p,
+.eligibility-row,
+.deliverable-link,
+.deliverable-link > span,
+.deliverable-link > small,
+.footer p,
+.footer small,
+.footer a:not(.logo),
+.footer > div > span,
+.promise-section small,
+.auth-story > small,
+.toast button,
+.candidate-toolbar .input-icon > svg,
+.dashboard-sidebar > a,
+.role-tabs button,
+.candidate-list > button {
+  color: #59636e;
+}
+.meta span + span:before,
+.challenge-label {
+  color: #818b98 !important;
+}
+.card-majors {
+  color: #59636e !important;
+  border-top: 1px solid #d1d9e0;
+}
+.opportunity-card {
+  border-radius: 12px;
+}
+.opportunity-card:hover,
+.opportunity-card:focus-within {
+  border-color: #0969da;
+  box-shadow: 0 8px 24px #1f232810;
+}
+.card-review svg,
+.process-three article svg,
+.check-line svg,
+.commitment > svg,
+.sidebar-note > svg,
+.dashboard-callout > svg,
+.upload-box svg,
+.file-row > svg {
+  color: #0969da;
+}
+.empty,
+.upload-box,
+.deliverable-link,
+th {
+  border-color: #d1d9e0;
+  background: #f6f8fa;
+  color: #59636e;
+}
+.toast {
+  background: #fff;
+  border-color: #d1d9e0;
+  color: #1f2328;
+  box-shadow: 0 10px 35px #1f232818;
+}
+.stepper button {
+  color: #59636e;
+  border-color: #d1d9e0;
+}
+.stepper button > span {
+  border-color: #d1d9e0;
+}
+.stepper button.active {
+  border-color: #0969da;
+  color: #0969da;
+}
+.stepper button.active > span {
+  background: #0969da;
+  color: #fff;
+}
+.stepper button.complete {
+  color: #1a7f37;
+}
+.dashboard-sidebar > a:hover {
+  background: #eff2f5;
+  color: #1f2328;
+}
+.role-tabs button.active {
+  background: #ddf4ff;
+  border-color: #0969da;
+  color: #0969da;
+}
+.timeline li:before {
+  background: #0969da;
+}
+.badge.blue,
+.badge.violet {
+  background: #ddf4ff;
+  border-color: #b6e3ff;
+  color: #0969da;
+}
