@@ -5331,6 +5331,16 @@ body {
 .button {
   background: #0969da;
   border-color: #0969da;
+  border-radius: 12px;
+}
+.nav-actions > .text-link {
+  font-size: 11px;
+}
+.nav-actions > .button.small {
+  border-radius: 999px;
+  padding: 8px 13px;
+  font-size: 11px;
+  gap: 6px;
 }
 .button:hover {
   background: #0860ca;
@@ -5618,8 +5628,8 @@ td strong {
 .preview-registration{padding:22px;border:1px solid #d1d9e0;border-radius:8px;margin:25px 0;background:#fff}.preview-registration>h3{font-size:17px}.preview-registration>p{font-size:11px}.demo-auth{margin-top:20px}.auth-panel form.preview-registration{margin-top:25px}.declaration .notice{margin-bottom:0}
 
 /* Suggested career searches */
-.editorial-hero .career-links { display:flex; flex-wrap:wrap; justify-content:center; gap:12px; max-width:1050px; margin:28px auto 0; }
-.editorial-hero .career-links a { display:inline-flex; align-items:center; gap:12px; padding:13px 23px; border:1px solid #e4e5e7; border-radius:999px; background:#fff; box-shadow:0 4px 16px #1f232808; font-size:15px; font-weight:500; color:#24292f; }
+.editorial-hero .career-links { display:flex; flex-wrap:wrap; justify-content:center; gap:9px; max-width:960px; margin:22px auto 0; }
+.editorial-hero .career-links a { display:inline-flex; align-items:center; gap:8px; padding:8px 15px; border:1px solid #e4e5e7; border-radius:999px; background:#fff; box-shadow:0 4px 16px #1f232808; font-size:12px; font-weight:500; color:#24292f; }
 .editorial-hero .career-links a:hover { border-color:#0969da; color:#0969da; transform:translateY(-2px); }
 .editorial-hero .career-links a svg { color:#8c959f; }
-@media(max-width:600px){.editorial-hero .career-links{gap:9px;margin-top:22px}.editorial-hero .career-links a{font-size:13px;padding:11px 16px;gap:8px}}
+@media(max-width:600px){.editorial-hero .career-links{gap:7px;margin-top:18px}.editorial-hero .career-links a{font-size:11px;padding:7px 12px;gap:6px}}

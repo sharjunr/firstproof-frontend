@@ -99,7 +99,7 @@ export function Nav() {
                 Sign in
               </Link>
               <Link className="button small" href="/sign-up">
-                Get started <ArrowUpRight size={14} />
+                Get started <ArrowUpRight size={13} />
               </Link>
             </>
           )}

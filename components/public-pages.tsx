@@ -15,7 +15,6 @@ import {
   MapPin,
   Clock,
   Bookmark,
-  Check,
   ArrowLeft,
 } from "lucide-react";
 import { useStore } from "./store";
@@ -44,10 +43,6 @@ export function Landing() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.45 }}
         >
-          <p className="eyebrow">
-            <span className="edition-dot" />
-            THE FIRST CHAPTER OF YOUR CAREER
-          </p>
           <h1>
             Your work.
             <br />
@@ -93,18 +88,8 @@ export function Landing() {
               {label: "Remote internships", href: "/marketplace?arrangement=Remote&type=Internship"},
               {label: "Engineering challenges", href: "/marketplace?industry=Engineering"},
             ].map(({label,href}) => (
-              <Link key={label} href={href}>{label}<ArrowRight size={17}/></Link>
+              <Link key={label} href={href}>{label}<ArrowRight size={14}/></Link>
             ))}
-          </div>
-          <div className="hero-proof">
-            <span>
-              <Check size={14} />
-              Short, scoped projects
-            </span>
-            <span>
-              <Check size={14} />
-              Reviewed by people
-            </span>
           </div>
         </motion.div>
       </section>
