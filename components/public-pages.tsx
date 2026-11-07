@@ -771,15 +771,23 @@ export function Details({ id }: { id: string }) {
             <h3>What you’ll bring</h3>
             <p>{o.qualifications}</p>
           </section>
-          <section className="panel">
+          <section className="panel project-spotlight">
             <p className="eyebrow">ROLE-SPECIFIC ENGINEERING CHALLENGE</p>
             <h2>{o.challenge}</h2>
+            <div className="challenge-priority">
+              <strong>Start here: build the project below.</strong>
+              <p>
+                Your work sample is the main part of this application. Other
+                applicants may complete the same challenge. Show your own
+                reasoning and follow every required deliverable.
+              </p>
+            </div>
             <div className="inline-callout">
               <Clock size={19} />
               <span>
                 Estimated time: <strong>{o.effort} hours</strong> ·{" "}
                 {o.skills?.slice(0, 2).join(" / ") || o.industry} · Fictional
-                employer challenge using synthetic data.
+                employer challenge using synthetic data and scoped requirements.
               </span>
             </div>
             {o.scenario && (
@@ -827,7 +835,7 @@ export function Details({ id }: { id: string }) {
             <h2>A realistic FirstProof hiring process</h2>
             {[
               "Employer posts a role-specific internship and defines a representative technical task.",
-              "Student checks eligibility, accepts the challenge, and downloads starter materials.",
+              "Student checks eligibility, accepts the challenge, and downloads starter materials. No resume or school details are requested.",
               "Student completes the engineering assignment and submits code, plots, and documentation.",
               "FirstProof performs a similarity check (suspicious overlap is referred for human review, never auto-rejected).",
               "Employer reviews the submission against published criteria and chooses whether to shortlist.",

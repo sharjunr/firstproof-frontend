@@ -56,11 +56,11 @@ export function Nav() {
           {state.user ? (
             <>
               <select
-                aria-label="Switch fictional demo role"
+                aria-label="Switch preview role"
                 value={state.user.role}
                 onChange={(e) => {
                   login(e.target.value as "student" | "employer");
-                  notify("Switched fictional demo account.");
+                  notify("Switched preview account.");
                 }}
               >
                 <option value="student">Student demo</option>
@@ -122,7 +122,7 @@ export function Footer() {
         <small>
           Skills open doors.
           <br />
-          Demo sign-in is not secure authentication.
+          Local preview · Example listings, not live vacancies · AI review coming soon.
         </small>
       </div>
     </footer>
@@ -277,7 +277,7 @@ export function Gate({
             : "A different way to discover talent."}
         </h1>
         <p>
-          Enter a fictional {role} account to explore the complete workflow.
+          Use a preview {role} account to explore the complete workflow.
         </p>
         <Link className="button" href={'/sign-up?next='+encodeURIComponent(nextPath)}>Register to join <ArrowRight size={16}/></Link>
         <br/>

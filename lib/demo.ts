@@ -1,3 +1,4 @@
+import { developRole } from "./role-content";
 import { expandedCatalog } from "./catalog";
 import type { Store, Opportunity, Application, Eligibility } from "./types";
 export const emptyEligibility: Eligibility = {
@@ -1031,7 +1032,7 @@ export function seed(now = new Date()): Store {
           : "Engineering · Year 3",
       resume: own
         ? student.resume
-        : "Fictional student résumé. Academic projects and relevant coursework; no verified employment claims.",
+        : "Fictional student resume. Academic projects and relevant coursework; no verified employment claims.",
       stage: stages[i],
       integrity:
         i === 5
@@ -1088,7 +1089,7 @@ export function seed(now = new Date()): Store {
     version: 2,
     user: null,
     profile: { ...student },
-    opportunities,
+    opportunities: opportunities.map(developRole),
     applications,
     saved: [],
   };
