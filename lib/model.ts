@@ -1,3 +1,4 @@
+import {evaluateTechnical,policyError} from "./screening";
 import type { Store, Opportunity, Application, Stage } from "./types";
 
 export function searchOpportunities(items: Opportunity[], query: string) {
@@ -142,6 +143,7 @@ export function validateOpportunity(o: Opportunity) {
     const rubricError = rubricErrors(o.rubric);
     if (rubricError) errors.rubric = rubricError;
   }
+  const screeningError=policyError(o.screeningPolicy);if(screeningError)errors.screeningPolicy=screeningError;
   return errors;
 }
 export function submitApplication(
@@ -179,7 +181,7 @@ export function submitApplication(
     ...s,
     applications: s.applications.map((x) =>
       x.id === id
-        ? {
+        ? evaluateTechnical({
             ...x,
             stage: "Submitted",
             submittedAt: now.toISOString(),
@@ -196,7 +198,7 @@ export function submitApplication(
                   "Saved in the local demo. No server upload or similarity analysis occurred.",
               },
             ],
-          }
+          }, now)
         : x,
     ),
   };
@@ -216,6 +218,7 @@ export function changeStage(s: Store, id: string, stage: Stage): Store {
     ].includes(stage)
   )
     throw new Error("This status transition is unavailable.");
+  if(a.screeningSnapshot && ["Shortlisted","Invited to Next Stage"].includes(stage) && !a.screening?.advancedToHR)throw new Error("A qualified human-reviewed submission must be selected for HR first.");
   const at = new Date().toISOString();
   return {
     ...s,

@@ -1,4 +1,6 @@
 "use client";
+import {assertScreeningEdit} from "../lib/screening";
+import {ScreeningEditor,ScreeningMetrics,ScreeningFixtures,EmployerScreening,inQueue,queueOptions} from "./screening-controls";
 import Link from "next/link";
 import { useState } from "react";
 import {
@@ -97,6 +99,8 @@ function DashboardBody({ onlyOpportunities }: { onlyOpportunities: boolean }) {
       />
       {!onlyOpportunities && (
         <>
+          <ScreeningMetrics applications={apps}/>
+          <ScreeningFixtures/>
           <div className="metrics five">
             {metrics.map(([name, n, Icon]) => (
               <article key={name}>
@@ -496,6 +500,7 @@ function PostBody({ editId }: { editId?: string }) {
       owner: state.user!.id,
       status: publish ? ("Published" as const) : ("Draft" as const),
     };
+    try { assertScreeningEdit(state,record); } catch(error) { setErrors({screeningPolicy:(error as Error).message});notify((error as Error).message);return; }
     setState((s) => ({
       ...s,
       opportunities: s.opportunities.some((x) => x.id === record.id)
@@ -756,6 +761,8 @@ function PostBody({ editId }: { editId?: string }) {
                 setO((current) => ({ ...current, ...patch }))
               }
             />
+            <ScreeningEditor opportunity={o} locked={state.applications.some(a=>a.opportunityId===o.id)} onChange={patch=>setO(current=>({...current,...patch}))}/>
+            {errors.screeningPolicy&&<p role="alert" className="form-error">{errors.screeningPolicy}</p>}
             {errors.rubric && (
               <p className="form-error" role="alert">
                 {errors.rubric}
@@ -912,6 +919,7 @@ function CandidateBody({
     [query, setQuery] = useState(""),
     [flags, setFlags] = useState(flagsOnly),
     [status, setStatus] = useState(""),
+    [screeningQueue,setScreeningQueue]=useState("All submissions"),
     [confirm, setConfirm] = useState<Stage | null>(null),
     [clarify, setClarify] = useState(false),
     [message, setMessage] = useState(""),
@@ -923,7 +931,7 @@ function CandidateBody({
           .toLowerCase()
           .includes(query.toLowerCase())) &&
       (!flags || a.integrity === "Demo: human review recommended") &&
-      (!status || a.stage === status),
+      (!status || a.stage === status) && inQueue(a,screeningQueue),
   );
   const a = filtered.find((a) => a.id === selected) || filtered[0];
   const o = state.opportunities.find((o) => o.id === a?.opportunityId);
@@ -953,6 +961,9 @@ function CandidateBody({
         title="Meet the work. Then the person."
         description="Human decisions, supported by the work students choose to share."
       />
+      <ScreeningMetrics applications={all}/>
+      <ScreeningFixtures/>
+      <label>Screening queue<select value={screeningQueue} onChange={e=>setScreeningQueue(e.target.value)}>{queueOptions.map(q=><option key={q}>{q}</option>)}</select></label>
       <div className="candidate-toolbar">
         <div className="input-icon">
           <Search size={16} />
@@ -1142,6 +1153,7 @@ function CandidateBody({
             </section>
             <section className="panel">
               <SubmissionReview application={a} opportunity={o} />
+              <EmployerScreening key={a.id} application={a}/>
               <h2>Employer actions</h2>
               <p className="fine-print">
                 Your actions update the shared local demo. No real candidate is

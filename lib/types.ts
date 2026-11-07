@@ -1,3 +1,4 @@
+import type {ScreeningPolicy,ScreeningSnapshot,ScreeningRecord} from "./screening";
 export type Role = "student" | "employer";
 export type Stage =
   | "Draft"
@@ -55,6 +56,7 @@ export interface Opportunity {
   rubric?: { id: string; label: string; weight: number; description: string }[];
   referenceSolution?: string;
   privateEvaluationFiles?: LocalFile[];
+  screeningPolicy?: ScreeningPolicy;
   demo: true;
 }
 export interface LocalFile {
@@ -72,6 +74,9 @@ export interface Eligibility {
   acknowledgment: boolean;
 }
 export interface Application {
+  screeningSnapshot?: ScreeningSnapshot;
+  screeningPayload?: string;
+  screening?: ScreeningRecord;
   id: string;
   opportunityId: string;
   studentId: string;

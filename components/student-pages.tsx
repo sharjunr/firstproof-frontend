@@ -1,4 +1,6 @@
 "use client";
+import {freezeScreening} from "../lib/screening";
+import {ScreeningSubmission,StudentScreening} from "./screening-controls";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -74,6 +76,7 @@ function WorkspaceBody({ id }: { id: string }) {
         studentName: state.profile.name,
         studentEmail: state.profile.email,
         joinedAt: now,
+        screeningSnapshot: freezeScreening(o,now),
         university: "",
         program: "",
         resume: "",
@@ -238,6 +241,7 @@ function WorkspaceBody({ id }: { id: string }) {
           </button>
         ))}
       </div>
+      <ScreeningSubmission key={a.id} application={a}/>
       <div className="workspace-grid">
         <section className="panel">
           {step === 0 ? (
@@ -701,6 +705,7 @@ function TrackerBody() {
                 </div>
                 <div className="app-status">
                   <Status stage={a.stage} />
+                  {a.screening && <small>Technical: {a.screening.reports.at(-1)?.outcome}</small>}
                   {a.backgroundRequest?.status==='requested'&&<Badge tone="blue">Next-stage request</Badge>}
                   <Deadline application={a as Application} />
                 </div>
@@ -745,6 +750,7 @@ function TrackerBody() {
             }
           </h3>
           <Deadline application={active as Application} />
+          <StudentScreening key={active.id} application={active}/>
           <BackgroundResponse application={active} />
           <h3>Integrity review</h3>
           <p>

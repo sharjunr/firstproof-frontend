@@ -1117,7 +1117,7 @@ export function upgradeDemoCatalog(saved: Store, now = new Date()): Store {
     opportunities: [
       ...saved.opportunities.map((o) => {
         const fresh = byId.get(o.id);
-        if (fresh && legacyTitles.has(o.title)) {
+        if (fresh && legacyTitles.has(o.title) && !o.screeningPolicy && !saved.applications.some(a=>a.opportunityId===o.id)) {
           return { ...fresh };
         }
         return {
