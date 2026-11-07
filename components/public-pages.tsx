@@ -49,7 +49,7 @@ export function Landing() {
             <span>Your first opportunity.</span>
           </h1>
           <p>
-            Find real employer challenges. Prove your skills. Unlock career opportunities.
+            Find real employer challenges. Compete with students, Unlock Careers
           </p>
           <form
             className="hero-search"
