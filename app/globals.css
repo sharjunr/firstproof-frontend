@@ -5932,3 +5932,15 @@ th {
 .challenge-priority{border-left:4px solid #0969da;padding:20px 22px;margin:20px 0 26px;background:#eaf3ff;border-radius:0 10px 10px 0;color:#143d69}
 .challenge-priority strong{font-size:18px;line-height:1.5}.challenge-priority p{font-size:14px!important;line-height:1.7;margin:10px 0 0!important;color:#344d68!important}
 .resume-upload-box{padding:20px;border:1px solid #b6d3f2;background:#f5f9ff;border-radius:10px;margin:18px 0}.resume-upload-box input{max-width:100%;padding:12px;background:white}.resume-upload-box h4{margin-top:0}.resume-upload-box .file-row{flex-wrap:wrap;overflow-wrap:anywhere}
+.company-icon.has-logo {
+  padding: 0;
+  overflow: hidden;
+  border: none;
+  background: transparent;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.12);
+}
+.company-icon.has-logo svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}

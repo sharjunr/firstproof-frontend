@@ -1774,9 +1774,36 @@ const briefs = [
   },
 ];
 
+const companiesByIndustry: Record<string, string[]> = {
+  "Software & AI": ["Shopify", "Stripe", "Datadog", "Cloudflare"],
+  "Business & Finance": ["RBC", "TD Bank", "Deloitte", "Brookfield"],
+  Engineering: ["AMD", "Skyworks Solutions", "MDA Space", "Siemens"],
+  Marketing: ["HubSpot", "Spotify", "Lululemon", "Unilever"],
+  Design: ["Figma", "Canva", "Adobe", "Framer"],
+  "Arts & Culture": ["Sony Music", "Penguin Random House", "TIFF", "AGO"],
+  "Media & Communications": ["Thomson Reuters", "CBC", "Bell Media", "Globe Media"],
+  "Health & Life Sciences": ["Roche", "AstraZeneca", "Sanofi", "Medtronic"],
+  "Psychology & Social Sciences": ["Ipsos", "Gallup", "Environics", "CAMH"],
+  Education: ["Duolingo", "Coursera", "Pearson", "McGraw Hill"],
+  "Environment & Sustainability": ["Patagonia", "Orsted", "WSP", "Hydro-Quebec"],
+  "Law & Public Policy": ["McCarthy Tetrault", "Torys LLP", "Osler", "BLG"],
+  "Human Resources": ["Workday", "Gusto", "Deel", "Mercer"],
+  "Sales & Customer Success": ["Salesforce", "Zendesk", "Intercom", "Gong"],
+  "Supply Chain & Logistics": ["Celestica", "DHL", "Maersk", "Magna"],
+  "Architecture & Built Environment": ["Gensler", "Perkins&Will", "Stantec", "ARUP"],
+  "Science & Research": ["Thermo Fisher Scientific", "Illumina", "Bio-Rad", "Corning"],
+  "Nonprofit & Community": ["United Way", "Red Cross", "Habitat", "UNICEF"],
+  "Hospitality & Events": ["Four Seasons", "Marriott", "Hilton", "Live Nation"],
+  "Sports & Recreation": ["Nike", "Adidas", "MLSE", "Garmin"],
+};
+
 export function expandedCatalog(now = new Date()): Opportunity[] {
-  return briefs.map((r, i) => ({
+  return briefs.map((r, i) => {
+    const companyList = companiesByIndustry[r.industry] || ["AMD", "Shopify", "Stripe", "Siemens"];
+    const company = companyList[i % companyList.length];
+    return {
     ...r,
+    company,
     arrangement: r.arrangement as Opportunity["arrangement"],
     type: r.type as Opportunity["type"],
     pay: r.paid ? r.pay : 0,
@@ -1803,7 +1830,7 @@ export function expandedCatalog(now = new Date()): Opportunity[] {
           {
             id: r.id,
             role: r.title,
-            company: r.company,
+            company,
             disclaimer: "Fictional Demo — Not affiliated with this company.",
             challenge: r.challenge,
             scenario: r.task,
@@ -1828,5 +1855,6 @@ export function expandedCatalog(now = new Date()): Opportunity[] {
     status: "Published",
     owner: "employer-demo",
     demo: true,
-  }));
+    };
+  });
 }

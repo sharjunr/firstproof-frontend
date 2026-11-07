@@ -33,7 +33,7 @@ const starterBriefs:Record<string,string> = {
 'operations':'Improve an order-fulfillment workflow with four steps: receive order (5 minutes), check stock (10 minutes), pack (15 minutes), and arrange pickup (10 minutes). The team processes 20 orders daily; 4 orders require an extra 15-minute stock clarification. Map the current process, calculate the baseline handling effort, and propose two changes with measurable success criteria. Identify what the data cannot tell you about waiting time or staffing. Submit a process map, a calculation sheet, and a short implementation plan.'
 };
 export function developRole(o:Opportunity): Opportunity {
-  if (!o.id.startsWith('cat-')) return o;
+  if (!o.id.startsWith('catalog-')) return o;
   const responsibility = focus[o.industry] || 'planning focused work, documenting decisions, and communicating clear outcomes';
   const brief = starterBriefs[o.id] || clean(o.instructions).split('\n\nUse only')[0];
   return {...o, company:clean(o.company),

@@ -22,6 +22,7 @@ import {
   Badge,
   Heading,
   OpportunityCard,
+  CompanyLogo,
   industries,
   Empty,
   Loading,
@@ -708,9 +709,7 @@ export function Details({ id }: { id: string }) {
         Back to marketplace
       </Link>
       <div className="detail-heading">
-        <div className="company-icon big">
-          {o.company.slice(0, 2).toUpperCase()}
-        </div>
+        <CompanyLogo company={o.company} big />
         <div>
           <div className="detail-company-line">
             <span className="muted">{o.company}</span>

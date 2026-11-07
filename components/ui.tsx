@@ -23,6 +23,8 @@ import {
 import type { Opportunity, Application } from "../lib/types";
 import { useStore } from "./store";
 import { deadlineInfo } from "../lib/model";
+import { CompanyLogo } from "../lib/company-logos";
+export { CompanyLogo };
 export { catalogIndustries as industries } from "../lib/catalog";
 export function Logo() {
   return (
@@ -169,13 +171,7 @@ export function OpportunityCard({ o }: { o: Opportunity }) {
   return (
     <article className="opportunity-card">
       <div className="card-top">
-        <div className="company-icon">
-          {o.company
-            .split(" ")
-            .map((w) => w[0])
-            .join("")
-            .slice(0, 2)}
-        </div>
+        <CompanyLogo company={o.company} />
         <div>
           <span>{o.company}</span>
           <small>Fictional Demo — Not affiliated with this company.</small>

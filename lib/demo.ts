@@ -344,7 +344,7 @@ endmodule
   {
     id: "business-analyst",
     title: "Embedded Software Intern",
-    company: "Orbital Link Satellite Communications",
+    company: "MDA Space",
     industry: "Software & AI",
     majors: [
       "Computer Engineering",
@@ -728,7 +728,7 @@ def matmul_baseline(A, B):
   {
     id: "data-analyst",
     title: "Data Analyst Intern",
-    company: "Northstar Labs",
+    company: "Shopify",
     industry: "Software & AI",
     majors: ["Data Science", "Statistics", "Computer Science"],
     tags: ["data", "analytics", "sql", "python", "cohort"],
@@ -802,7 +802,7 @@ def matmul_baseline(A, B):
   {
     id: "product-design",
     title: "Product Design Intern",
-    company: "Forma Collective",
+    company: "Figma",
     industry: "Design",
     majors: ["Interaction Design", "Industrial Design", "Human-Computer Interaction"],
     tags: ["design", "ux", "accessibility", "onboarding", "figma"],
@@ -875,7 +875,7 @@ def matmul_baseline(A, B):
   {
     id: "operations",
     title: "Operations Analyst",
-    company: "Common Ground Logistics",
+    company: "Celestica",
     industry: "Business & Finance",
     majors: [
       "Business Administration",
@@ -1104,6 +1104,18 @@ const legacyTitles = new Set([
   "Operations Analyst Intern",
 ]);
 
+const legacyCompanies = new Set([
+  "Northstar Labs",
+  "Violet Systems",
+  "Harbour Metrics",
+  "Current Works",
+  "Brightleaf",
+  "Forma Collective",
+  "Steady Supply",
+  "Common Ground Logistics",
+  "Orbital Link Satellite Communications",
+]);
+
 export function upgradeDemoCatalog(saved: Store, now = new Date()): Store {
   const defaults = seed(now);
   const byId = new Map(defaults.opportunities.map((o) => [o.id, o]));
@@ -1117,7 +1129,12 @@ export function upgradeDemoCatalog(saved: Store, now = new Date()): Store {
     opportunities: [
       ...saved.opportunities.map((o) => {
         const fresh = byId.get(o.id);
-        if (fresh && legacyTitles.has(o.title)) {
+        if (
+          fresh &&
+          (legacyTitles.has(o.title) ||
+            legacyCompanies.has(o.company) ||
+            /^(Demo\s+)?[A-Za-z]+\s+Studio$/.test(o.company))
+        ) {
           return { ...fresh };
         }
         return {
