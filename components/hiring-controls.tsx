@@ -17,13 +17,13 @@ import {
   employerApplicationView,
   rubricErrors,
 } from "../lib/model";
-import { saveFile, fileError, openFile } from "../lib/files";
+import { saveFile, fileError, openFile, resumeFileError } from "../lib/files";
 import { Badge } from "./ui";
 
 export function NextStageReview({ application }: { application: Application }) {
   const { state, setState, notify } = useStore();
   const [message, setMessage] = useState(
-    "Please share your résumé and any education information you choose to provide for the next hiring stage.",
+    "Please share your resume and any education information you choose to provide for the next hiring stage.",
   );
   const [error, setError] = useState("");
   const view = employerApplicationView(application);
@@ -35,7 +35,7 @@ export function NextStageReview({ application }: { application: Application }) {
       <h3>Optional next-stage information</h3>
       {!advanced ? (
         <p>
-          Shortlist or advance this applicant before requesting a résumé or
+          Shortlist or advance this applicant before requesting a resume or
           education details. Initial review uses name, email, and submitted work
           only.
         </p>
@@ -44,10 +44,11 @@ export function NextStageReview({ application }: { application: Application }) {
           <Badge tone="success">Shared with applicant consent</Badge>
           {view.backgroundRequest.resume && (
             <>
-              <h4>Résumé supplied for this stage</h4>
+              <h4>Resume supplied for this stage</h4>
               <p className="pre-wrap">{view.backgroundRequest.resume}</p>
             </>
           )}
+          {view.backgroundRequest.resumeFile && <button className="button secondary" onClick={()=>{const file=view.backgroundRequest!.resumeFile!;openFile(file.id,file.name).catch(e=>setError(e.message));}}><FileText size={16}/>Download resume: {view.backgroundRequest.resumeFile.name}</button>}
           {view.backgroundRequest.education && (
             <>
               <h4>Optional education information</h4>
@@ -111,22 +112,34 @@ export function BackgroundResponse({
     [education, setEducation] = useState(""),
     [consent, setConsent] = useState(false),
     [error, setError] = useState("");
+  const [selectedFile,setSelectedFile] = useState<File | null>(null);
+  const [busy,setBusy] = useState(false);
   const req = application.backgroundRequest;
   if (!req)
     return (
       <div className="notice">
-        Your initial application contains name, email, and project work. Résumé
+        Your initial application contains name, email, and project work. Resume
         and education sharing is available only if the employer advances you and
         requests it.
       </div>
     );
-  function respond(share: boolean) {
+  async function respond(share: boolean) {
     try {
       if (share && !consent)
         throw new Error("Confirm your consent before sharing.");
-      setState(
-        respondToBackground(state, application.id, share, resume, education),
-      );
+      setBusy(true);
+      let attachment: LocalFile | undefined;
+      if (share && selectedFile) {
+        if (application.stage !== "Invited to Next Stage") throw new Error("A next-stage invitation is required to upload a resume.");
+        const validation = await resumeFileError(selectedFile);
+        if(validation) throw new Error(validation);
+        attachment={id:crypto.randomUUID(),name:selectedFile.name,size:selectedFile.size,type:selectedFile.type,stored:true};
+        // Validate permissions and the pending request before storing any file bytes.
+        respondToBackground(state,application.id,true,resume,education,attachment);
+        await saveFile(attachment!.id,selectedFile);
+      }
+      setState(current=>respondToBackground(current, application.id, share, resume, education, attachment));
+      setSelectedFile(null);
       notify(
         share
           ? "Selected information shared with this employer in the local preview."
@@ -135,7 +148,7 @@ export function BackgroundResponse({
       setError("");
     } catch (e) {
       setError((e as Error).message);
-    }
+    } finally { setBusy(false); }
   }
   return (
     <section className="background-panel">
@@ -148,8 +161,15 @@ export function BackgroundResponse({
             You choose what to share. Leave either field empty or decline the
             request.
           </p>
+          {application.stage === "Invited to Next Stage" && <div className="resume-upload-box">
+            <h4>Submit your resume for the next stage</h4>
+            <p>PDF or Word (.pdf, .doc, .docx), maximum 5 MB. The employer receives only the file and details you choose to share.</p>
+            <label>Resume file (optional)<input type="file" accept=".pdf,.doc,.docx" disabled={busy} onChange={async e=>{const file=e.target.files?.[0];setSelectedFile(null);setError('');if(!file)return;const issue=await resumeFileError(file);if(issue){setError(issue);e.target.value='';return;}setSelectedFile(file);}}/></label>
+            {selectedFile && <div className="file-row"><FileText size={16}/>{selectedFile.name} · {Math.max(1,Math.ceil(selectedFile.size/1024))} KB<button type="button" className="button secondary small" disabled={busy} onClick={()=>setSelectedFile(null)}>Remove file</button></div>}
+            <p className="fine-print">Local preview: the file is saved only in this browser. Secure backend storage is not connected, so this does not send a resume to a real employer.</p>
+          </div>}
           <label>
-            Résumé text (optional)
+            Resume text (optional)
             <textarea
               rows={5}
               maxLength={10000}
@@ -172,26 +192,26 @@ export function BackgroundResponse({
               checked={consent}
               onChange={(e) => setConsent(e.target.checked)}
             />
-            I consent to sharing only the information entered above with this
+            I consent to sharing the selected resume file and information entered above with this
             employer for the next stage.
           </label>
           <div className="modal-actions">
-            <button className="button secondary" onClick={() => respond(false)}>
+            <button className="button secondary" disabled={busy} onClick={() => void respond(false)}>
               Decline request
             </button>
             <button
               className="button"
-              disabled={!consent}
-              onClick={() => respond(true)}
+              disabled={!consent || busy}
+              onClick={() => void respond(true)}
             >
-              Share selected details
+              {busy ? "Saving…" : "Share selected details"}
             </button>
           </div>
         </>
       ) : (
         <Badge tone={req.status === "shared" ? "success" : "neutral"}>
           {req.status === "shared"
-            ? "You shared a response"
+            ? "Submission confirmed — your selected details were saved in this local preview"
             : req.status === "declined"
               ? "You declined this request"
               : "Request is unavailable at the current stage"}
@@ -520,9 +540,9 @@ export function SubmissionReview({
         </div>
       ))}
       <h4>AI rubric evaluation</h4>
-      <Badge>Not connected</Badge>
+      <Badge>Coming soon</Badge>
       <p>
-        No AI score, ranking, originality finding, or code test result has been
+        AI review is planned and not connected yet. No AI score, ranking, originality finding, or code test result has been
         generated. The employer can review the submission against the published
         rubric manually.
       </p>

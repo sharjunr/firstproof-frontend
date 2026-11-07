@@ -85,7 +85,7 @@ function DashboardBody({ onlyOpportunities }: { onlyOpportunities: boolean }) {
         title={
           onlyOpportunities
             ? "Opportunities you’ve opened."
-            : "Look beyond the résumé."
+            : "Look beyond the resume."
         }
         description="Discover the work. Meet the person behind it."
         action={
@@ -862,7 +862,7 @@ function CandidateBody({
                     .join("")}
                 </div>
                 <div>
-                  <Badge>APPLICANT · SAMPLE</Badge>
+                  <Badge>APPLICANT</Badge>
                   <h2>{a.studentName}</h2>
                   <p>{a.studentEmail || "Email not supplied"}</p>
                 </div>
@@ -879,7 +879,7 @@ function CandidateBody({
               </p>
               <div className="notice">
                 First-stage review includes name, email, and project work only.
-                Résumés, school, GPA, and employment history are not collected
+                Resumes, school, GPA, and employment history are not collected
                 here.
               </div>
               <NextStageReview application={a} />

@@ -71,6 +71,7 @@ export interface Application {
     message: string;
     requestedAt: string;
     resume?: string;
+    resumeFile?: LocalFile;
     education?: string;
     sharedAt?: string;
   };

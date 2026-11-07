@@ -658,15 +658,16 @@ export function Details({ id }: { id: string }) {
             <h3>What you’ll bring</h3>
             <p>{o.qualifications}</p>
           </section>
-          <section className="panel">
-            <p className="eyebrow">YOUR MINI-PROJECT</p>
+          <section className="panel project-spotlight">
+            <p className="eyebrow">YOUR APPLICATION CHALLENGE · MINI-PROJECT</p>
             <h2>{o.challenge}</h2>
+            <div className="challenge-priority"><strong>Start here: build the project below.</strong><p>Your work sample is the main part of this application. Other applicants may complete the same challenge. Show your own reasoning and follow every required deliverable.</p></div>
             <p>{o.instructions}</p>
             <div className="inline-callout">
               <Clock size={19} />
               <span>
                 Estimated effort: <strong>{o.effort} hours</strong>. Use
-                synthetic data. This is a scoped demonstration task.
+                synthetic data and stay within the project scope.
               </span>
             </div>
             <h3>Required deliverables</h3>
@@ -689,7 +690,7 @@ export function Details({ id }: { id: string }) {
             <h2>From submission to a response</h2>
             {[
               "Prepare your work and explanation.",
-              "Confirm submission permissions. No résumé or school details are requested.",
+              "Confirm submission permissions. No resume or school details are requested.",
               "Submit before the deadline.",
               "Track your application while the employer reviews.",
             ].map((s) => (

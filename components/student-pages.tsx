@@ -244,7 +244,7 @@ function WorkspaceBody({ id }: { id: string }) {
             <>
               <p className="eyebrow">A BRIEF WORTH READING</p>
               <h2>{o.challenge}</h2>
-              <p>{o.instructions}</p>
+              <div className="challenge-priority"><strong>Your mini-project: {o.challenge}</strong><p>Complete the required deliverables below. Your submission is considered alongside other applicants; explain your own approach and decisions.</p><p>Time budget: {o.effort} hours · Completion window: {o.challengeDays || 7} days after joining, before the application deadline.</p></div><p>{o.instructions}</p>
               <h3>Deliverables checklist</h3>
               {o.deliverables.map((d) => (
                 <div className="check-line" key={d}>
@@ -372,7 +372,7 @@ function WorkspaceBody({ id }: { id: string }) {
               </p>
               <div className="notice">
                 Only your name, email, and project work are included in initial
-                review. Do not add your résumé, school, GPA, or employment
+                review. Do not add your resume, school, GPA, or employment
                 history.
               </div>
             </>
@@ -841,7 +841,7 @@ export function Auth({ register = false }: { register?: boolean }) {
         <p>
           {register
             ? "Choose how you’d like to explore."
-            : "Sign in or explore a fictional account."}
+            : "Sign in or explore a preview account."}
         </p>
         <div className="role-tabs">
           <button
@@ -862,7 +862,7 @@ export function Auth({ register = false }: { register?: boolean }) {
         {register && dataMode==='demo' && <form className="preview-registration" onSubmit={e=>{e.preventDefault();const f=new FormData(e.currentTarget);const name=String(f.get('previewName')||'').trim();const email=String(f.get('previewEmail')||'').trim();if(!name||!email)return;const user={id:role==='employer'?'employer-demo':'preview-'+crypto.randomUUID(),name,email,role,university:'',program:'',resume:''};setState(s=>({...s,user,profile:role==='student'?user:s.profile}));const next=params.get('next');router.push(next?.startsWith('/')&&!next.startsWith('//')?next:role==='employer'?'/employer':'/tracker')}}><h3>Create a preview account</h3><p>Use sample name and email only. This local preview does not create a secure account, verify email, or store a password.</p><label>Name<input name="previewName" required maxLength={100} autoComplete="off"/></label><label>Email<input name="previewEmail" type="email" required autoComplete="off"/></label><button className="button full" type="submit">Create preview account <ArrowRight size={16}/></button></form>}
         <div className="demo-auth">
           <SparkleMark />
-          <h3>Or explore with a sample account.</h3>
+          <h3>Or explore a preview account.</h3>
           <p>
             No password. No real applicant data. Everything stays in this
             browser.
@@ -962,7 +962,7 @@ export function Profile() {
         <Heading
           label="YOUR ACCOUNT"
           title="Just the essentials."
-          description="Your work comes first. We do not collect a résumé, school, GPA, or employment history at this stage."
+          description="Your work comes first. We do not collect a resume, school, GPA, or employment history at this stage."
         />
         <form
           className="panel"

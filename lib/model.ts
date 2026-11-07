@@ -278,6 +278,7 @@ export function employerApplicationView(a: Application) {
           ...(mayShare
             ? {
                 resume: backgroundRequest.resume,
+                resumeFile: backgroundRequest.resumeFile,
                 education: backgroundRequest.education,
                 sharedAt: backgroundRequest.sharedAt,
               }
@@ -325,6 +326,7 @@ export function respondToBackground(
   share: boolean,
   resume = "",
   education = "",
+  resumeFile?: import("./types").LocalFile,
 ): Store {
   const a = s.applications.find((x) => x.id === id);
   if (!a || s.user?.role !== "student" || s.user.id !== a.studentId)
@@ -334,7 +336,9 @@ export function respondToBackground(
     a.backgroundRequest?.status !== "requested"
   )
     throw new Error("No active next-stage request exists.");
-  if (share && !resume.trim() && !education.trim())
+  if (share && resumeFile && (a.stage !== "Invited to Next Stage" || !/\.(pdf|doc|docx)$/i.test(resumeFile.name) || resumeFile.size <= 0 || resumeFile.size > 5 * 1024 * 1024))
+    throw new Error("Resume files require a next-stage invitation and a PDF or Word document up to 5 MB.");
+  if (share && !resume.trim() && !education.trim() && !resumeFile)
     throw new Error(
       "Add the information you choose to share, or decline the request.",
     );
@@ -350,6 +354,7 @@ export function respondToBackground(
               ...(share
                 ? {
                     resume: resume.trim(),
+                    ...(resumeFile ? {resumeFile} : {}),
                     education: education.trim(),
                     sharedAt: new Date().toISOString(),
                   }
