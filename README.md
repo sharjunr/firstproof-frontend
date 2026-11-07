@@ -42,7 +42,7 @@ This is a **frontend demo**, not a secure recruitment service. Do not collect re
 
 ## Layout and accessibility
 
-Dark violet design, responsive navigation and filters, keyboard-focus styling, labeled forms, native modal dialogs with focus trapping, reduced-motion support, and file-error states. Font loading uses an optional Google Fonts stylesheet with an Arial fallback.
+Warm editorial design, responsive navigation and filters, keyboard-focus styling, labeled forms, native modal dialogs with focus trapping, reduced-motion support, and file-error states. Font loading uses an optional Google Fonts stylesheet with an Arial fallback.
 
 ## Ownership and handoff
 

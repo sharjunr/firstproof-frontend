@@ -4,14 +4,11 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
 import { motion, useReducedMotion } from "motion/react";
 import {
+  Users as UsersIcon,
   ArrowRight,
   ArrowUpRight,
   Search,
-  Sparkles,
   Code2,
-  BarChart3,
-  CircuitBoard,
-  Megaphone,
   ShieldCheck,
   SlidersHorizontal,
   MapPin,
@@ -35,55 +32,30 @@ export function Landing() {
   const router = useRouter();
   const [query, setQuery] = useState("");
   const reduced = useReducedMotion();
-  const glow = useRef<HTMLDivElement>(null);
   const { state } = useStore();
+  const featured = state.opportunities.find((o) => o.status === "Published");
   return (
     <>
-      <section
-        className="hero"
-        onPointerMove={(e) => {
-          if (!reduced && glow.current) {
-            const r = e.currentTarget.getBoundingClientRect();
-            glow.current.style.setProperty(
-              "--mx",
-              `${((e.clientX - r.left) / r.width) * 100}%`,
-            );
-            glow.current.style.setProperty(
-              "--my",
-              `${((e.clientY - r.top) / r.height) * 100}%`,
-            );
-          }
-        }}
-      >
-        <div className="hero-glow" ref={glow} />
-        <div className="hero-grid" />
-        <div className="particles" aria-hidden="true">
-          {Array.from({ length: 16 }, (_, i) => (
-            <i
-              key={i}
-              style={{
-                left: ((i * 37) % 100) + "%",
-                top: ((i * 23) % 90) + "%",
-                animationDelay: -(i * 1.8) + "s",
-              }}
-            />
-          ))}
-        </div>
+      <section className="hero editorial-hero">
         <motion.div
           className="hero-content"
-          initial={reduced ? false : { opacity: 0, y: 14 }}
+          initial={reduced ? false : { opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.65 }}
+          transition={{ duration: 0.45 }}
         >
-          <span className="hero-pill">
-            <span />A first chance, built around what you can do{" "}
-            <ArrowUpRight size={13} />
-          </span>
+          <p className="eyebrow">
+            <span className="edition-dot" />
+            THE FIRST CHAPTER OF YOUR CAREER
+          </p>
           <h1>
-            Your potential deserves
-            <br />a <span>first chance.</span>
+            Less experience.
+            <br />
+            More <span>possibility.</span>
           </h1>
-          <p>Discover employer challenges. Prove what you can do.</p>
+          <p>
+            You’re more than the jobs you’ve already had. Show employers what
+            you can do with a small, practical challenge.
+          </p>
           <form
             className="hero-search"
             onSubmit={(e) => {
@@ -91,223 +63,169 @@ export function Landing() {
               router.push("/marketplace?q=" + encodeURIComponent(query));
             }}
           >
-            <Search size={21} />
+            <Search size={20} />
             <input
               aria-label="Search opportunities"
-              placeholder="I'm looking for AI internships near Toronto"
+              placeholder="AI internships near Toronto"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
             />
             <button aria-label="Explore opportunities" type="submit">
-              <span>Explore opportunities</span>
-              <ArrowUpRight size={24} />
+              <ArrowRight size={21} />
             </button>
           </form>
           <div className="suggestions">
+            <span>START WITH</span>
             {[
               "AI internships",
               "Business challenges",
               "Engineering projects",
-              "Marketing opportunities",
             ].map((s) => (
               <Link key={s} href={"/marketplace?q=" + encodeURIComponent(s)}>
                 {s}
-                <ArrowUpRight size={11} />
+                <ArrowUpRight size={12} />
               </Link>
             ))}
           </div>
           <div className="hero-proof">
             <span>
-              <Check size={13} />
-              Skills before job titles
+              <Check size={14} />
+              Short, scoped projects
             </span>
             <span>
-              <Check size={13} />
-              Human hiring decisions
-            </span>
-            <span>
-              <Check size={13} />A commitment to review
+              <Check size={14} />
+              Reviewed by people
             </span>
           </div>
         </motion.div>
-        <div className="hero-foot">
-          <span>
-            FOR THE BUILDERS. THE THINKERS. THE NOT-YET-GIVEN-A-CHANCERS.
-          </span>
-          <span>SCROLL TO EXPLORE ↓</span>
+        <div className="proof-scene">
+          <div className="scene-caption">
+            <span>YOUR POTENTIAL, IN PRACTICE</span>
+            <span>01 / FIRSTPROOF</span>
+          </div>
+          <div className="scene-sheet">
+            <div className="sheet-top">
+              <span className="sheet-symbol">
+                <Code2 size={22} />
+              </span>
+              <Badge>FICTIONAL DEMO</Badge>
+            </div>
+            <p className="eyebrow">
+              A SMALL PROJECT. A DIFFERENT FIRST IMPRESSION.
+            </p>
+            <h2>{featured?.challenge || "Put your skills to work."}</h2>
+            <p>
+              {featured?.instructions ||
+                "Discover a challenge and make your approach tangible."}
+            </p>
+            <div className="sheet-flow">
+              <div>
+                <Check size={15} />
+                <span>Build something small</span>
+              </div>
+              <div>
+                <Check size={15} />
+                <span>Explain your thinking</span>
+              </div>
+              <div>
+                <ShieldCheck size={15} />
+                <span>Reach a human reviewer</span>
+              </div>
+            </div>
+            <div className="sheet-footer">
+              <div>
+                <strong>{featured?.title || "Your next opportunity"}</strong>
+                <span>
+                  {featured?.company || "FirstProof"} · Fictional employer
+                </span>
+              </div>
+              <Link
+                href={
+                  featured ? "/opportunities/" + featured.id : "/marketplace"
+                }
+                aria-label="Open featured challenge"
+              >
+                <ArrowUpRight size={22} />
+              </Link>
+            </div>
+          </div>
+          <div className="scene-note">
+            <span className="note-icon">
+              <Clock size={19} />
+            </span>
+            <div>
+              <strong>Your time deserves a response.</strong>
+              <span>A published review commitment on every challenge.</span>
+            </div>
+          </div>
+          <div className="scene-index">
+            <span>LEARN BY DOING. GET SEEN FOR IT.</span>
+            <span>↗</span>
+          </div>
         </div>
       </section>
-      <section className="section intro">
-        <p className="eyebrow">A DIFFERENT STARTING LINE</p>
-        <h2>
-          You have the skills.
-          <br />
-          <span>Let your work introduce you.</span>
-        </h2>
-        <p>
-          The first-job paradox shouldn’t define your future. FirstProof
-          connects short, practical challenges to opportunities—so employers can
-          see more than your experience section.
-        </p>
+      <section className="principle-strip">
+        <span>A BETTER WAY TO GET STARTED</span>
+        <strong>Real work samples.</strong>
+        <strong>Clear expectations.</strong>
+        <strong>Human decisions.</strong>
+        <span>THAT’S FIRSTPROOF.</span>
       </section>
-      <section className="section">
+      <section className="section flow-section">
         <div className="section-heading">
           <div>
-            <p className="eyebrow">FROM POTENTIAL TO POSSIBILITY</p>
-            <h2>A clear path. A real person on the other side.</h2>
+            <p className="eyebrow">HOW IT COMES TOGETHER</p>
+            <h2>
+              From “give me a chance”
+              <br />
+              to “here’s what I made.”
+            </h2>
           </div>
-          <p>Seven steps. One shared hiring workflow.</p>
+          <p>
+            No mystery process. Just a focused project and a clear next step.
+          </p>
         </div>
-        <div className="steps-grid">
+        <div className="process-three">
           {[
-            "Employer posts a role",
-            "Discover your opportunity",
-            "Build a small project",
-            "Submit your work",
-            "Integrity & eligibility checks",
-            "Employer reviews your work",
-            "Track your next step",
-          ].map((s, i) => (
-            <article key={s}>
-              <span>0{i + 1}</span>
-              <h3>{s}</h3>
-              <p>
-                {
-                  [
-                    "A relevant challenge, clear scope, and a published review timeframe.",
-                    "Search by interest, location, and the kind of work you want to do.",
-                    "Show your approach through a short, practical mini-project.",
-                    "Attach files, share links, or paste your work and explanation.",
-                    "Declarations stay self-reported. Similarity concerns go to humans.",
-                    "Your résumé and work sample reach an authorized reviewer.",
-                    "Employers make decisions. You see where your application stands.",
-                  ][i]
-                }
-              </p>
+            {
+              n: "01",
+              title: "Find your kind of work.",
+              text: "Explore employer-created challenges connected to internships and entry-level roles.",
+              icon: Search,
+            },
+            {
+              n: "02",
+              title: "Make your potential tangible.",
+              text: "Complete a short project. Share files, links, or your work directly, with an explanation.",
+              icon: Code2,
+            },
+            {
+              n: "03",
+              title: "Let your work meet a person.",
+              text: "Employers review your submission. Follow your application and its review deadline.",
+              icon: UsersIcon,
+            },
+          ].map(({ n, title, text, icon: Icon }) => (
+            <article key={n}>
+              <div>
+                <span>{n}</span>
+                <Icon size={22} />
+              </div>
+              <h3>{title}</h3>
+              <p>{text}</p>
             </article>
           ))}
         </div>
       </section>
-      <section className="section">
+      <section className="section featured-section">
         <div className="section-heading">
           <div>
-            <p className="eyebrow">MORE THAN A RÉSUMÉ</p>
-            <h2>Evidence opens a different conversation.</h2>
-          </div>
-        </div>
-        <div className="comparison">
-          <article>
-            <span className="eyebrow">TRADITIONAL APPLICATION</span>
-            <h3>“What have you done before?”</h3>
-            <p>
-              Previous roles and credentials can leave your potential between
-              the lines.
-            </p>
-          </article>
-          <article>
-            <span className="eyebrow">A STANDALONE CHATBOT</span>
-            <h3>“Here’s how you could prepare.”</h3>
-            <p>
-              Useful guidance, without an employer’s posting, application
-              record, or commitment to review.
-            </p>
-          </article>
-          <article className="highlight">
-            <span className="eyebrow">THE FIRSTPROOF APPROACH</span>
-            <h3>“Show us what you can do.”</h3>
-            <p>
-              Employer-created challenges, concrete work samples, and a
-              trackable human review.
-            </p>
-          </article>
-        </div>
-      </section>
-      <section className="section audience">
-        <article id="students">
-          <div className="large-icon">
-            <Code2 />
-          </div>
-          <p className="eyebrow">FOR STUDENTS</p>
-          <h2>
-            Your first role starts
-            <br />
-            with your next project.
-          </h2>
-          <p>
-            Find a challenge that speaks to you. Build something small. Give an
-            employer a reason to look closer.
-          </p>
-          <Link className="text-link violet" href="/marketplace">
-            Find your first opportunity <ArrowUpRight size={16} />
-          </Link>
-        </article>
-        <article id="employers">
-          <div className="large-icon">
-            <BarChart3 />
-          </div>
-          <p className="eyebrow">FOR EMPLOYERS</p>
-          <h2>
-            Discover ability
-            <br />
-            beyond the experience section.
-          </h2>
-          <p>
-            Create a focused challenge and review real work. Your team keeps
-            control of every recruitment decision.
-          </p>
-          <Link className="text-link violet" href="/employer">
-            Explore the employer workspace <ArrowUpRight size={16} />
-          </Link>
-        </article>
-      </section>
-      <section className="section">
-        <div className="section-heading">
-          <div>
-            <p className="eyebrow">MANY DISCIPLINES. ONE FIRST CHANCE.</p>
-            <h2>What could you prove?</h2>
+            <p className="eyebrow">SMALL PROJECTS. OPEN POSSIBILITIES.</p>
+            <h2>Your next chapter could start here.</h2>
           </div>
           <Link className="text-link" href="/marketplace">
-            Explore all challenges <ArrowUpRight size={16} />
+            Explore all opportunities <ArrowUpRight size={17} />
           </Link>
-        </div>
-        <div className="category-grid">
-          {[Code2, BarChart3, CircuitBoard, Megaphone].map((Icon, i) => (
-            <Link
-              key={i}
-              className="category-card"
-              href={
-                "/marketplace?industry=" + encodeURIComponent(industries[i])
-              }
-            >
-              <Icon />
-              <small>0{i + 1}</small>
-              <h3>{industries[i]}</h3>
-              <p>
-                {
-                  [
-                    "Build a feedback classifier.",
-                    "Find the story in sales data.",
-                    "Diagnose a circuit problem.",
-                    "Give a new product its voice.",
-                  ][i]
-                }
-              </p>
-              <ArrowUpRight size={18} />
-            </Link>
-          ))}
-        </div>
-        <p className="fine-print">
-          Examples use fictional employers and synthetic briefs. No confirmed
-          partnerships are implied.
-        </p>
-      </section>
-      <section className="section">
-        <div className="section-heading">
-          <div>
-            <p className="eyebrow">YOUR NEXT SMALL PROJECT</p>
-            <h2>Explore the possibilities.</h2>
-          </div>
-          <Badge tone="violet">FICTIONAL DEMO LISTINGS</Badge>
         </div>
         <div className="cards-grid">
           {state.opportunities
@@ -317,56 +235,76 @@ export function Landing() {
               <OpportunityCard key={o.id} o={o} />
             ))}
         </div>
+        <p className="fine-print">
+          All listings are fictional demo opportunities. No employer
+          partnerships or active vacancies are implied.
+        </p>
       </section>
-      <section className="section">
-        <div className="review-feature">
-          <div className="review-art" aria-hidden="true">
-            <div>
-              <ShieldCheck size={60} />
-              <strong>
-                Work submitted.
-                <br />
-                Review committed.
-              </strong>
-              <span>YOUR WORK DESERVES A RESPONSE</span>
-            </div>
-          </div>
-          <div>
-            <p className="eyebrow">THE EMPLOYER REVIEW COMMITMENT</p>
-            <h2>
-              Your effort should
-              <br />
-              reach a real person.
-            </h2>
-            <p>
-              Every published challenge includes an employer-selected review
-              timeframe. Eligible, complete applications get a visible review
-              deadline—and overdue reviews stay visible.
-            </p>
-            <CheckLine>See the commitment before you start.</CheckLine>
-            <CheckLine>Track the review after you submit.</CheckLine>
-            <CheckLine>Human decisions, always.</CheckLine>
-            <p className="fine-print">
-              A review commitment does not guarantee an interview or job. Demo
-              deadlines illustrate the planned workflow.
-            </p>
-          </div>
+      <section className="section audience">
+        <article id="students">
+          <span className="audience-number">FOR THE NEXT GENERATION</span>
+          <h2>
+            Your first role shouldn’t
+            <br />
+            need a previous one.
+          </h2>
+          <p>
+            Find a starting point that values your approach, your curiosity, and
+            the work you can show.
+          </p>
+          <Link className="text-link" href="/marketplace">
+            Find your first opportunity <ArrowUpRight size={17} />
+          </Link>
+        </article>
+        <article id="employers">
+          <span className="audience-number">FOR EMPLOYERS WHO LOOK CLOSER</span>
+          <h2>
+            Discover the person
+            <br />
+            behind the potential.
+          </h2>
+          <p>
+            Post a focused challenge. Review tangible work. Give someone their
+            first meaningful opportunity.
+          </p>
+          <Link className="text-link" href="/employer">
+            Open your employer workspace <ArrowUpRight size={17} />
+          </Link>
+        </article>
+      </section>
+      <section className="section promise-section">
+        <div className="promise-symbol">
+          <ShieldCheck size={48} />
         </div>
+        <div>
+          <p className="eyebrow">THE REVIEW COMMITMENT</p>
+          <h2>Because effort deserves a response.</h2>
+          <p>
+            See the employer’s review timeframe before starting. Track the
+            deadline after submitting. Every hiring decision stays with a human.
+          </p>
+          <small>
+            A commitment to review eligible, complete submissions—not a
+            guarantee of an interview or job.
+          </small>
+        </div>
+        <Link className="button" href="/sign-in">
+          Try the full demo <ArrowRight size={16} />
+        </Link>
       </section>
       <section className="section final-cta">
-        <Sparkles />
-        <p className="eyebrow">THE NEXT CHAPTER IS YOURS</p>
+        <p className="eyebrow">PROVE YOUR POTENTIAL. EARN YOUR OPPORTUNITY.</p>
         <h2>
-          Don’t just tell them.
+          Everyone starts somewhere.
           <br />
-          <span>Show them.</span>
+          <span>Start with proof.</span>
         </h2>
         <div>
           <Link className="button" href="/marketplace">
             Find a challenge <ArrowUpRight size={17} />
           </Link>
           <Link className="button secondary" href="/employer/post-opportunity">
-            Post an opportunity <ArrowUpRight size={17} />
+            Create an opportunity <ArrowUpRight size={17} />
           </Link>
         </div>
       </section>
