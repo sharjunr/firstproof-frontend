@@ -26,7 +26,7 @@ npm run build
 
 ## Demo experience
 
-Open Sign In and choose the fictional student or employer account. The header role selector lets you switch between them. All eight fictional opportunities and linked applications share one store. Changes persist in localStorage on this browser and origin. Actual file bytes are saved in IndexedDB; selected files are never uploaded to a server. Max 8 files per application, 10 MB each. New submissions remain “Not checked”; seeded integrity results are explicitly fictional scenarios.
+Open Sign In and choose the fictional student or employer account. The header role selector lets you switch between them. All 88 fictional opportunities across 20 fields and linked applications share one store. Changes persist in localStorage on this browser and origin. Actual file bytes are saved in IndexedDB; selected files are never uploaded to a server. Max 8 files per application, 10 MB each. New submissions remain “Not checked”; seeded integrity results are explicitly fictional scenarios.
 
 Search → challenge → workspace → save/resume → submit → tracker. Switch to employer → candidates → shortlist. Switch back to student → tracker to see the same decision. Posting an opportunity adds it to the local marketplace. Drafts do not start a review deadline; submission snapshots the employer’s calendar-day commitment.
 
@@ -47,3 +47,9 @@ Warm editorial design, responsive navigation and filters, keyboard-focus styling
 ## Ownership and handoff
 
 Repository: https://github.com/sharjunr/firstproof-frontend. Frontend changes are delivered on `feature/firstproof-frontend` through a pull request. No teammate code is included or replaced.
+
+## Expanded demo marketplace
+
+Explore 88 fictional roles across 20 fields, including business, arts, engineering, health, science, education, policy, hospitality, and recreation. Each added listing has a distinct practical challenge, relevant majors, synthetic sample facts or a concrete scenario, deliverables, effort estimate, compensation, and human-review commitment. These are not live jobs or employer partnerships.
+
+The marketplace supports major and industry filters, field shortcuts, word-based search aliases such as “software roles” and “HR jobs,” and 12-result pagination. Existing local demo records gain missing catalog listings without losing drafts, applications, notes, saved opportunities, or employer-created listings. See docs/catalog.md.

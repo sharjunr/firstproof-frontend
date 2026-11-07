@@ -1,11 +1,11 @@
 import type { Store, Opportunity, Application, Stage } from "./types";
+
 export function searchOpportunities(items: Opportunity[], query: string) {
   const stop = new Set([
     "i",
     "am",
     "m",
     "im",
-    "i’m",
     "looking",
     "for",
     "near",
@@ -26,21 +26,66 @@ export function searchOpportunities(items: Opportunity[], query: string) {
     "internship",
     "jobs",
     "job",
+    "role",
+    "roles",
+    "positions",
+    "position",
+    "work",
+    "find",
+    "show",
+    "some",
+    "my",
+    "major",
+    "majors",
   ]);
-  const tokens = query
-    .toLowerCase()
-    .replace(/[^a-z0-9 +]/g, " ")
+  const aliases: Record<string, string[]> = {
+    arts: ["art", "arts", "illustration", "theatre", "music"],
+    art: ["art", "arts", "illustration", "graphic"],
+    hr: ["human resources", "people operations"],
+    healthcare: ["health", "clinical", "nursing", "public health"],
+    tech: ["software", "technology", "computer science"],
+    coding: ["developer", "software", "programming"],
+    engineer: ["engineer", "engineering"],
+    engineers: ["engineer", "engineering"],
+    designer: ["design", "designer"],
+    designers: ["design", "designer"],
+    finance: ["finance", "financial", "investment", "accounting"],
+    ai: ["ai", "artificial intelligence", "machine learning"],
+    remote: ["remote"],
+    business: ["business", "operations", "finance", "sales"],
+    psych: ["psychology", "behavioral"],
+  };
+  const normalize = (s: string) =>
+    s
+      .toLowerCase()
+      .replace(/[^a-z0-9+#]+/g, " ")
+      .trim();
+  const tokens = normalize(query)
     .split(/\s+/)
     .filter((t) => t && !stop.has(t));
-  return items.filter(
-    (o) =>
-      o.status === "Published" &&
-      tokens.every((t) =>
-        `${o.title} ${o.company} ${o.industry} ${o.location} ${o.arrangement} ${o.challenge}`
-          .toLowerCase()
-          .includes(t),
+  return items.filter((o) => {
+    if (o.status !== "Published") return false;
+    const hay =
+      " " +
+      normalize(
+        [
+          o.title,
+          o.company,
+          o.industry,
+          o.location,
+          o.arrangement,
+          o.type,
+          ...(o.majors || []),
+          ...(o.tags || []),
+        ].join(" "),
+      ) +
+      " ";
+    return tokens.every((t) =>
+      (aliases[t] || [t, t.endsWith("s") ? t.slice(0, -1) : t + "s"]).some(
+        (term) => hay.includes(" " + term + " "),
       ),
-  );
+    );
+  });
 }
 export function deadlineInfo(a: Application, now = Date.now()) {
   if (!a.reviewDue || a.stage === "Draft")

@@ -23,13 +23,7 @@ import {
 import type { Opportunity, Application } from "../lib/types";
 import { useStore } from "./store";
 import { deadlineInfo } from "../lib/model";
-export const industries = [
-  "Software & AI",
-  "Business & Finance",
-  "Engineering",
-  "Marketing",
-  "Design",
-];
+export { catalogIndustries as industries } from "../lib/catalog";
 export function Logo() {
   return (
     <Link className="logo" href="/" aria-label="FirstProof home">
@@ -230,6 +224,12 @@ export function OpportunityCard({ o }: { o: Opportunity }) {
         <span>{o.arrangement}</span>
         <span>{o.type}</span>
       </div>
+      {o.majors?.length ? (
+        <p className="card-majors">
+          For {o.majors.slice(0, 2).join(" · ")}
+          {o.majors.length > 2 ? " + more" : ""}
+        </p>
+      ) : null}
       <p className="challenge-label">THE CHALLENGE</p>
       <h4>{o.challenge}</h4>
       <p className="clamp">{o.instructions}</p>

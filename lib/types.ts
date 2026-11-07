@@ -17,6 +17,8 @@ export interface Opportunity {
   title: string;
   company: string;
   industry: string;
+  majors?: string[];
+  tags?: string[];
   location: string;
   arrangement: "Remote" | "Hybrid" | "Onsite";
   type: "Internship" | "Entry-level";

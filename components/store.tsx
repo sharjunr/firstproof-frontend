@@ -9,7 +9,7 @@ import {
   type SetStateAction,
 } from "react";
 import type { Store, Role } from "../lib/types";
-import { seed, student, employer } from "../lib/demo";
+import { seed, student, employer, upgradeDemoCatalog } from "../lib/demo";
 const Context = createContext<{
   state: Store;
   setState: Dispatch<SetStateAction<Store>>;
@@ -31,7 +31,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
           Array.isArray(value.opportunities) &&
           Array.isArray(value.applications)
         )
-          setState(value);
+          setState(upgradeDemoCatalog(value));
       }
     } catch {}
     setReady(true);

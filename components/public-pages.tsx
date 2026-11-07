@@ -315,6 +315,8 @@ export function Marketplace() {
   const drawer = useRef<HTMLElement>(null);
   const params = useSearchParams();
   const { state, ready } = useStore();
+  const [major, setMajor] = useState("");
+  const [page, setPage] = useState(1);
   const [q, setQ] = useState(params.get("q") || ""),
     [industry, setIndustry] = useState(params.get("industry") || ""),
     [location, setLocation] = useState(""),
@@ -363,10 +365,29 @@ export function Marketplace() {
       previous?.focus();
     };
   }, [filters]);
+  useEffect(
+    () => setPage(1),
+    [
+      q,
+      industry,
+      major,
+      location,
+      arrangement,
+      type,
+      paid,
+      minPay,
+      duration,
+      effort,
+      deadline,
+      saved,
+      sort,
+    ],
+  );
   const items = searchOpportunities(state.opportunities, q)
     .filter(
       (o) =>
         (!industry || o.industry === industry) &&
+        (!major || o.majors?.includes(major)) &&
         (!location || o.location === location) &&
         (!arrangement || o.arrangement === arrangement) &&
         (!type || o.type === type) &&
@@ -384,7 +405,22 @@ export function Marketplace() {
           ? a.effort - b.effort
           : a.deadline.localeCompare(b.deadline),
     );
+  const pageSize = 12;
+  const pageCount = Math.max(1, Math.ceil(items.length / pageSize));
+  const currentPage = Math.min(page, pageCount);
+  const visibleItems = items.slice(
+    (currentPage - 1) * pageSize,
+    currentPage * pageSize,
+  );
+  function changePage(next: number) {
+    setPage(next);
+    document
+      .getElementById("marketplace-results")
+      ?.scrollIntoView({ block: "start" });
+  }
   function reset() {
+    setMajor("");
+    setPage(1);
     setQ("");
     setIndustry("");
     setLocation("");
@@ -402,7 +438,7 @@ export function Marketplace() {
       <Heading
         label="THE OPPORTUNITY MARKETPLACE"
         title="Find your next first."
-        description="Short challenges. Tangible work. A new way to be considered."
+        description="Explore work samples across business, arts, engineering, science, health, and more. Every listing is a fictional demo opportunity."
       />
       <form className="market-search" onSubmit={(e) => e.preventDefault()}>
         <Search size={20} />
@@ -420,6 +456,29 @@ export function Marketplace() {
         Search matches listing keywords, not your location automatically. All
         opportunities below are fictional demo records.
       </p>
+      <div className="industry-shortcuts" aria-label="Browse broad fields">
+        {[
+          "Software & AI",
+          "Business & Finance",
+          "Arts & Culture",
+          "Engineering",
+          "Health & Life Sciences",
+          "Education",
+          "Science & Research",
+        ].map((field) => (
+          <button
+            key={field}
+            aria-pressed={industry === field}
+            onClick={() => {
+              setQ("");
+              setMajor("");
+              setIndustry(industry === field ? "" : field);
+            }}
+          >
+            {field}
+          </button>
+        ))}
+      </div>
       <div className="market-layout">
         <aside
           ref={drawer}
@@ -446,6 +505,14 @@ export function Marketplace() {
           </div>
           {[
             ["Industry", industry, setIndustry, industries],
+            [
+              "Major / study area",
+              major,
+              setMajor,
+              [
+                ...new Set(state.opportunities.flatMap((o) => o.majors || [])),
+              ].sort(),
+            ],
             [
               "Location",
               location,
@@ -523,9 +590,10 @@ export function Marketplace() {
           </button>
         </aside>
         <div>
-          <div className="results-heading">
+          <div className="results-heading" id="marketplace-results">
             <span>
-              <strong>{items.length}</strong> opportunities to explore
+              <strong>{items.length}</strong> demo opportunities ·{" "}
+              {new Set(state.opportunities.map((o) => o.industry)).size} fields
             </span>
             <div>
               <button
@@ -551,7 +619,7 @@ export function Marketplace() {
             <Loading />
           ) : items.length ? (
             <div className="cards-grid two">
-              {items.map((o) => (
+              {visibleItems.map((o) => (
                 <OpportunityCard key={o.id} o={o} />
               ))}
             </div>
@@ -564,6 +632,37 @@ export function Marketplace() {
                 Clear filters
               </button>
             </Empty>
+          )}
+          {ready && items.length > 0 && (
+            <nav
+              className="result-pagination"
+              aria-label="Marketplace result pages"
+            >
+              <span aria-live="polite">
+                Showing {(currentPage - 1) * pageSize + 1}–
+                {Math.min(currentPage * pageSize, items.length)} of{" "}
+                {items.length}
+              </span>
+              <div>
+                <button
+                  className="button secondary small"
+                  disabled={currentPage === 1}
+                  onClick={() => changePage(currentPage - 1)}
+                >
+                  Previous
+                </button>
+                <span>
+                  Page {currentPage} of {pageCount}
+                </span>
+                <button
+                  className="button secondary small"
+                  disabled={currentPage === pageCount}
+                  onClick={() => changePage(currentPage + 1)}
+                >
+                  Next <ArrowRight size={14} />
+                </button>
+              </div>
+            </nav>
           )}
         </div>
       </div>
@@ -620,6 +719,14 @@ export function Details({ id }: { id: string }) {
             <Badge tone="violet">{o.industry}</Badge>
             <h2>The opportunity</h2>
             <p>{o.description}</p>
+            {o.majors?.length ? (
+              <div className="major-list">
+                <span>RELEVANT STUDY AREAS</span>
+                {o.majors.map((m) => (
+                  <Badge key={m}>{m}</Badge>
+                ))}
+              </div>
+            ) : null}
             <h3>What you’ll bring</h3>
             <p>{o.qualifications}</p>
           </section>

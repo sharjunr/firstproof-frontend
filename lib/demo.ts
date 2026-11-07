@@ -1,3 +1,4 @@
+import { expandedCatalog } from "./catalog";
 import type { Store, Opportunity, Application, Eligibility } from "./types";
 export const emptyEligibility: Eligibility = {
   academic: false,
@@ -131,6 +132,20 @@ const rows = [
     "Map a fictional order fulfillment process and recommend two improvements, with measurable success criteria.",
   ],
 ] as const;
+const baseMajors = [
+  ["Computer Science", "Computer Engineering", "Mathematics"],
+  ["Computer Science", "Software Engineering"],
+  ["Business Administration", "Economics", "Finance"],
+  ["Electrical Engineering", "Computer Engineering"],
+  ["Marketing", "Communications"],
+  ["Data Science", "Statistics", "Computer Science"],
+  ["Interaction Design", "Industrial Design"],
+  [
+    "Business Administration",
+    "Supply Chain Management",
+    "Industrial Engineering",
+  ],
+];
 export function seed(now = new Date()): Store {
   const date = (days: number) =>
     new Date(now.getTime() + days * 86400000).toISOString();
@@ -139,6 +154,7 @@ export function seed(now = new Date()): Store {
     title: r[1],
     company: r[2],
     industry: r[3],
+    majors: baseMajors[i],
     location: r[4],
     arrangement: r[5],
     type: i === 7 ? "Entry-level" : "Internship",
@@ -169,6 +185,7 @@ export function seed(now = new Date()): Store {
     owner: "employer-demo",
     demo: true,
   }));
+  opportunities.push(...expandedCatalog(now));
   const applications: Application[] = Array.from({ length: 7 }, (_, i) => {
     const stages: Application["stage"][] = [
       "Submitted",
@@ -257,5 +274,16 @@ export function seed(now = new Date()): Store {
     opportunities,
     applications,
     saved: [],
+  };
+}
+
+export function upgradeDemoCatalog(saved: Store, now = new Date()): Store {
+  const known = new Set(saved.opportunities.map((o) => o.id));
+  return {
+    ...saved,
+    opportunities: [
+      ...saved.opportunities,
+      ...seed(now).opportunities.filter((o) => !known.has(o.id)),
+    ],
   };
 }
