@@ -5,6 +5,7 @@ const routes = [
   "marketplace",
   "tracker",
   "profile",
+  "submission-success",
   "sign-in",
   "sign-up",
   "employer",

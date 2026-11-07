@@ -3,7 +3,13 @@ import { usePathname, useSearchParams } from "next/navigation";
 import { StoreProvider } from "./store";
 import { Nav, Footer } from "./ui";
 import { Landing, Marketplace, Details } from "./public-pages";
-import { Workspace, Tracker, Auth, Profile } from "./student-pages";
+import {
+  Workspace,
+  Tracker,
+  Auth,
+  Profile,
+  SubmissionSuccess,
+} from "./student-pages";
 import {
   EmployerDashboard,
   PostOpportunity,
@@ -21,6 +27,7 @@ export function App() {
   else if (path.startsWith("/workspace/"))
     page = <Workspace id={path.split("/")[2]} />;
   else if (path === "/tracker") page = <Tracker />;
+  else if (path === "/submission-success") page = <SubmissionSuccess />;
   else if (path === "/profile") page = <Profile />;
   else if (path === "/sign-in") page = <Auth />;
   else if (path === "/sign-up") page = <Auth register />;

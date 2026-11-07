@@ -5,6 +5,7 @@ import { useState, useEffect, useRef } from "react";
 import { motion, useReducedMotion } from "motion/react";
 import {
   Users as UsersIcon,
+  Plus,
   ArrowRight,
   ArrowUpRight,
   Search,
@@ -27,13 +28,13 @@ import {
   Loading,
   CheckLine,
 } from "./ui";
-import { searchOpportunities } from "../lib/model";
+import { searchOpportunities, publicOpportunityView } from "../lib/model";
+import { ChallengeResources } from "./hiring-controls";
 export function Landing() {
   const router = useRouter();
   const [query, setQuery] = useState("");
   const reduced = useReducedMotion();
   const { state } = useStore();
-  const featured = state.opportunities.find((o) => o.status === "Published");
   return (
     <>
       <section className="hero editorial-hero">
@@ -48,13 +49,12 @@ export function Landing() {
             THE FIRST CHAPTER OF YOUR CAREER
           </p>
           <h1>
-            Less experience.
+            Your work.
             <br />
-            More <span>possibility.</span>
+            <span>Your first opportunity.</span>
           </h1>
           <p>
-            You’re more than the jobs you’ve already had. Show employers what
-            you can do with a small, practical challenge.
+            Find real employer challenges. Prove your skills. Unlock career opportunities.
           </p>
           <form
             className="hero-search"
@@ -63,10 +63,21 @@ export function Landing() {
               router.push("/marketplace?q=" + encodeURIComponent(query));
             }}
           >
-            <Search size={20} />
+            <button
+              type="button"
+              className="search-help"
+              aria-label="Browse suggested searches"
+              onClick={() =>
+                document
+                  .getElementById("suggested-searches")
+                  ?.scrollIntoView({ block: "center", behavior: "smooth" })
+              }
+            >
+              <Plus size={23} />
+            </button>
             <input
               aria-label="Search opportunities"
-              placeholder="AI internships near Toronto"
+              placeholder="Describe the opportunity you’re looking for…"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
             />
@@ -74,17 +85,15 @@ export function Landing() {
               <ArrowRight size={21} />
             </button>
           </form>
-          <div className="suggestions">
-            <span>START WITH</span>
+          <div className="suggestions career-links" id="suggested-searches">
             {[
-              "AI internships",
-              "Business challenges",
-              "Engineering projects",
-            ].map((s) => (
-              <Link key={s} href={"/marketplace?q=" + encodeURIComponent(s)}>
-                {s}
-                <ArrowUpRight size={12} />
-              </Link>
+              {label: "AI internships near me", href: "/marketplace?q=AI%20internships"},
+              {label: "Software engineering projects", href: "/marketplace?industry=Software%20%26%20AI"},
+              {label: "Business & finance opportunities", href: "/marketplace?industry=Business%20%26%20Finance"},
+              {label: "Remote internships", href: "/marketplace?arrangement=Remote&type=Internship"},
+              {label: "Engineering challenges", href: "/marketplace?industry=Engineering"},
+            ].map(({label,href}) => (
+              <Link key={label} href={href}>{label}<ArrowRight size={17}/></Link>
             ))}
           </div>
           <div className="hero-proof">
@@ -98,71 +107,6 @@ export function Landing() {
             </span>
           </div>
         </motion.div>
-        <div className="proof-scene">
-          <div className="scene-caption">
-            <span>YOUR POTENTIAL, IN PRACTICE</span>
-            <span>01 / FIRSTPROOF</span>
-          </div>
-          <div className="scene-sheet">
-            <div className="sheet-top">
-              <span className="sheet-symbol">
-                <Code2 size={22} />
-              </span>
-              <Badge>FICTIONAL DEMO</Badge>
-            </div>
-            <p className="eyebrow">
-              A SMALL PROJECT. A DIFFERENT FIRST IMPRESSION.
-            </p>
-            <h2>{featured?.challenge || "Put your skills to work."}</h2>
-            <p>
-              {featured?.instructions ||
-                "Discover a challenge and make your approach tangible."}
-            </p>
-            <div className="sheet-flow">
-              <div>
-                <Check size={15} />
-                <span>Build something small</span>
-              </div>
-              <div>
-                <Check size={15} />
-                <span>Explain your thinking</span>
-              </div>
-              <div>
-                <ShieldCheck size={15} />
-                <span>Reach a human reviewer</span>
-              </div>
-            </div>
-            <div className="sheet-footer">
-              <div>
-                <strong>{featured?.title || "Your next opportunity"}</strong>
-                <span>
-                  {featured?.company || "FirstProof"} · Fictional employer
-                </span>
-              </div>
-              <Link
-                href={
-                  featured ? "/opportunities/" + featured.id : "/marketplace"
-                }
-                aria-label="Open featured challenge"
-              >
-                <ArrowUpRight size={22} />
-              </Link>
-            </div>
-          </div>
-          <div className="scene-note">
-            <span className="note-icon">
-              <Clock size={19} />
-            </span>
-            <div>
-              <strong>Your time deserves a response.</strong>
-              <span>A published review commitment on every challenge.</span>
-            </div>
-          </div>
-          <div className="scene-index">
-            <span>LEARN BY DOING. GET SEEN FOR IT.</span>
-            <span>↗</span>
-          </div>
-        </div>
       </section>
       <section className="principle-strip">
         <span>A BETTER WAY TO GET STARTED</span>
@@ -235,10 +179,7 @@ export function Landing() {
               <OpportunityCard key={o.id} o={o} />
             ))}
         </div>
-        <p className="fine-print">
-          All listings are fictional demo opportunities. No employer
-          partnerships or active vacancies are implied.
-        </p>
+        
       </section>
       <section className="section audience">
         <article id="students">
@@ -320,8 +261,8 @@ export function Marketplace() {
   const [q, setQ] = useState(params.get("q") || ""),
     [industry, setIndustry] = useState(params.get("industry") || ""),
     [location, setLocation] = useState(""),
-    [arrangement, setArrangement] = useState(""),
-    [type, setType] = useState(""),
+    [arrangement, setArrangement] = useState(params.get("arrangement") || ""),
+    [type, setType] = useState(params.get("type") || ""),
     [paid, setPaid] = useState(""),
     [minPay, setMinPay] = useState(""),
     [duration, setDuration] = useState(""),
@@ -333,6 +274,8 @@ export function Marketplace() {
   useEffect(() => {
     setQ(params.get("q") || "");
     setIndustry(params.get("industry") || "");
+    setArrangement(params.get("arrangement") || "");
+    setType(params.get("type") || "");
   }, [params]);
   useEffect(() => {
     if (!filters || !window.matchMedia("(max-width:600px)").matches) return;
@@ -438,7 +381,7 @@ export function Marketplace() {
       <Heading
         label="THE OPPORTUNITY MARKETPLACE"
         title="Find your next first."
-        description="Explore work samples across business, arts, engineering, science, health, and more. Every listing is a fictional demo opportunity."
+        description="Explore work samples across business, arts, engineering, science, health, and more. Find a challenge that matches your interests."
       />
       <form className="market-search" onSubmit={(e) => e.preventDefault()}>
         <Search size={20} />
@@ -453,8 +396,7 @@ export function Marketplace() {
         </button>
       </form>
       <p className="fine-print">
-        Search matches listing keywords, not your location automatically. All
-        opportunities below are fictional demo records.
+        Search matches listing keywords. Choose a location in the filters to find opportunities near you.
       </p>
       <div className="industry-shortcuts" aria-label="Browse broad fields">
         {[
@@ -592,7 +534,7 @@ export function Marketplace() {
         <div>
           <div className="results-heading" id="marketplace-results">
             <span>
-              <strong>{items.length}</strong> demo opportunities ·{" "}
+              <strong>{items.length}</strong> opportunities ·{" "}
               {new Set(state.opportunities.map((o) => o.industry)).size} fields
             </span>
             <div>
@@ -671,9 +613,10 @@ export function Marketplace() {
 }
 export function Details({ id }: { id: string }) {
   const { state, setState, ready, notify } = useStore();
-  const o = state.opportunities.find(
+  const source = state.opportunities.find(
     (o) => o.id === id && o.status === "Published",
   );
+  const o = source ? publicOpportunityView(source) : undefined;
   if (!ready) return <Loading />;
   if (!o)
     return (
@@ -700,7 +643,7 @@ export function Details({ id }: { id: string }) {
           {o.company.slice(0, 2).toUpperCase()}
         </div>
         <div>
-          <span className="muted">{o.company} · Fictional employer</span>
+          <span className="muted">{o.company}</span>
           <h1>{o.title}</h1>
           <div className="meta">
             <span>
@@ -745,6 +688,7 @@ export function Details({ id }: { id: string }) {
             {o.deliverables.map((d) => (
               <CheckLine key={d}>{d}</CheckLine>
             ))}
+            <ChallengeResources opportunity={o} />
             <h3>Permitted tools & AI assistance</h3>
             <p>{o.tools}</p>
             <h3>How employers review</h3>
@@ -760,7 +704,7 @@ export function Details({ id }: { id: string }) {
             <h2>From submission to a response</h2>
             {[
               "Prepare your work and explanation.",
-              "Add your résumé and eligibility declarations.",
+              "Confirm submission permissions. No résumé or school details are requested.",
               "Submit before the deadline.",
               "Track your application while the employer reviews.",
             ].map((s) => (
@@ -789,7 +733,7 @@ export function Details({ id }: { id: string }) {
               </div>
             </dl>
             <Link className="button full" href={"/workspace/" + id}>
-              Start challenge <ArrowUpRight size={16} />
+              Join challenge <ArrowUpRight size={16} />
             </Link>
             <button
               className="button secondary full"

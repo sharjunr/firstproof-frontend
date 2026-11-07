@@ -46,10 +46,12 @@ Warm editorial design, responsive navigation and filters, keyboard-focus styling
 
 ## Ownership and handoff
 
-Repository: https://github.com/sharjunr/firstproof-frontend. Frontend changes are delivered on `feature/firstproof-frontend` through a pull request. No teammate code is included or replaced.
+Feature branch: `feature/firstproof-frontend`. The remote repository was empty during implementation. No teammate’s tracked files were replaced. Earlier uncommitted career-analysis experiments were kept outside this checkout, because they do not belong to the new frontend product.
 
-## Expanded demo marketplace
+## Expanded opportunity catalog
 
-Explore 88 fictional roles across 20 fields, including business, arts, engineering, health, science, education, policy, hospitality, and recreation. Each added listing has a distinct practical challenge, relevant majors, synthetic sample facts or a concrete scenario, deliverables, effort estimate, compensation, and human-review commitment. These are not live jobs or employer partnerships.
+The marketplace includes 88 fictional opportunities across 20 industries, from software and finance to arts, education, health, policy, hospitality, and recreation. Each added role has a distinct scoped brief, synthetic sample facts or a concrete scenario, relevant majors, deliverables, effort, compensation, and review commitment. No employer or vacancy is real. Major filters, field shortcuts, natural-language keyword aliases, and 12-result pagination support browsing. Existing browser-local records are upgraded by adding missing catalog entries without discarding saved work or employer-created opportunities.
 
-The marketplace supports major and industry filters, field shortcuts, word-based search aliases such as “software roles” and “HR jobs,” and 12-result pagination. Existing local demo records gain missing catalog listings without losing drafts, applications, notes, saved opportunities, or employer-created listings. See docs/catalog.md.
+## Local review update
+
+See [local review notes](docs/local-review-preview.md) for the name/email first-stage flow, optional next-stage background sharing, employer rubrics and current backend boundaries.

@@ -12,10 +12,9 @@ export const student = {
   name: "Alex Morgan",
   email: "alex@example.test",
   role: "student" as const,
-  university: "York University",
-  program: "Computer Engineering · Year 2",
-  resume:
-    "Alex Morgan — Computer Engineering student. Academic Python, JavaScript, and data projects. This is a fictional demo résumé.",
+  university: "",
+  program: "",
+  resume: "",
 };
 export const employer = {
   id: "employer-demo",
@@ -186,6 +185,29 @@ export function seed(now = new Date()): Store {
     demo: true,
   }));
   opportunities.push(...expandedCatalog(now));
+  for (const o of opportunities) {
+    o.challengeDays = 7;
+    o.rubric = [
+      {
+        id: "reasoning",
+        label: "Reasoning",
+        weight: 40,
+        description: "Explain the approach and assumptions.",
+      },
+      {
+        id: "completeness",
+        label: "Completeness",
+        weight: 35,
+        description: "Address the requested deliverables.",
+      },
+      {
+        id: "communication",
+        label: "Communication",
+        weight: 25,
+        description: "Communicate results and limitations clearly.",
+      },
+    ];
+  }
   const applications: Application[] = Array.from({ length: 7 }, (_, i) => {
     const stages: Application["stage"][] = [
       "Submitted",
@@ -267,6 +289,15 @@ export function seed(now = new Date()): Store {
       ],
     };
   });
+  for (const a of applications) {
+    a.studentEmail =
+      a.studentId === "alex"
+        ? student.email
+        : a.studentName.toLowerCase().replace(/\s+/g, ".") + "@example.test";
+    a.university = "";
+    a.program = "";
+    a.resume = "";
+  }
   return {
     version: 2,
     user: null,
@@ -278,12 +309,32 @@ export function seed(now = new Date()): Store {
 }
 
 export function upgradeDemoCatalog(saved: Store, now = new Date()): Store {
+  const defaults = seed(now);
   const known = new Set(saved.opportunities.map((o) => o.id));
   return {
     ...saved,
+    profile: { ...saved.profile, university: "", program: "", resume: "" },
+    user: saved.user
+      ? { ...saved.user, university: "", program: "", resume: "" }
+      : null,
     opportunities: [
-      ...saved.opportunities,
-      ...seed(now).opportunities.filter((o) => !known.has(o.id)),
+      ...saved.opportunities.map((o) => ({
+        ...o,
+        challengeDays: o.challengeDays || 7,
+        rubric: o.rubric || defaults.opportunities[0].rubric,
+      })),
+      ...defaults.opportunities.filter((o) => !known.has(o.id)),
     ],
+    applications: saved.applications.map((a) => ({
+      ...a,
+      studentEmail:
+        a.studentEmail ||
+        (a.studentId === saved.profile.id
+          ? saved.profile.email
+          : a.studentName.toLowerCase().replace(/\s+/g, ".") + "@example.test"),
+      university: "",
+      program: "",
+      resume: "",
+    })),
   };
 }

@@ -26,4 +26,6 @@
 
 This is targeted verification, not an exhaustive accessibility or security audit. Real server authentication, private cloud uploads, and similarity analysis are not implemented or tested.
 
-## GitHub delivery\n\nDelivered to the user-owned repository https://github.com/sharjunr/firstproof-frontend on a feature branch based on its initial main commit. The earlier team repository integration rejected writes; no team repository source was changed.\n
+## GitHub delivery blocker
+
+The connected identity was confirmed as sharjunr. The repository was empty and exposed no default-branch commit. It reported push:false. A source upload attempt through the connected integration returned HTTP 403, Resource not accessible by integration. No remote source or main branch was changed. The owner must grant/complete collaborator access and ensure the GitHub connection is authorized for this repository. The owner should create an initial main commit to provide a pull-request base. Once access exists, fetch main, base the frontend feature branch on that commit without losing these files, then push and create the PR.

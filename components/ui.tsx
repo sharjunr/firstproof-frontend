@@ -44,7 +44,7 @@ export function Nav() {
       <div className="demo-strip">
         <Sparkles size={13} />
         <span>
-          Interactive demo · Fictional opportunities · Browser-local data only
+          Preview · Fictional listings · Data saved on this browser
         </span>
         <Link href="/sign-in">
           Try both roles <ArrowRight size={12} />
@@ -131,7 +131,7 @@ export function Footer() {
       <div>
         <span>Built for UNHACK 2026</span>
         <small>
-          Fictional employers. No job guarantees.
+          Skills open doors.
           <br />
           Demo sign-in is not secure authentication.
         </small>
@@ -189,7 +189,7 @@ export function OpportunityCard({ o }: { o: Opportunity }) {
         </div>
         <div>
           <span>{o.company}</span>
-          <small>Fictional employer</small>
+          
         </div>
         <button
           className={"icon-button " + (saved ? "saved" : "")}
@@ -268,6 +268,7 @@ export function Gate({
   children: ReactNode;
 }) {
   const { state, ready, login } = useStore();
+  const nextPath=usePathname();
   if (!ready) return <Loading />;
   if (state.user?.role !== role)
     return (
@@ -284,7 +285,9 @@ export function Gate({
         <p>
           Enter a fictional {role} account to explore the complete workflow.
         </p>
-        <button className="button" onClick={() => login(role)}>
+        <Link className="button" href={'/sign-up?next='+encodeURIComponent(nextPath)}>Register to join <ArrowRight size={16}/></Link>
+        <br/>
+        <button className="button secondary" onClick={() => login(role)}>
           Continue as demo {role} <ArrowRight size={16} />
         </button>
         <p className="fine-print">

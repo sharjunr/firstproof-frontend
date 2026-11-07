@@ -28,6 +28,7 @@ import {
   Loading,
   Modal,
 } from "./ui";
+import { BackgroundResponse } from "./hiring-controls";
 import { emptyEligibility } from "../lib/demo";
 import type { Application, Role, Stage } from "../lib/types";
 import { submitApplication, studentView } from "../lib/model";
@@ -71,9 +72,11 @@ function WorkspaceBody({ id }: { id: string }) {
         opportunityId: id,
         studentId: state.user.id,
         studentName: state.profile.name,
-        university: state.profile.university,
-        program: state.profile.program,
-        resume: state.profile.resume,
+        studentEmail: state.profile.email,
+        joinedAt: now,
+        university: "",
+        program: "",
+        resume: "",
         stage: "Draft",
         integrity: "Not checked",
         submittedAt: null,
@@ -127,7 +130,10 @@ function WorkspaceBody({ id }: { id: string }) {
       ),
     }));
   }
-  const complete = Object.values(a.eligibility).filter(Boolean).length;
+  const complete = [
+    a.eligibility.availability,
+    a.eligibility.acknowledgment,
+  ].filter(Boolean).length;
   async function files(list: FileList | null) {
     if (!list) return;
     setError("");
@@ -163,7 +169,7 @@ function WorkspaceBody({ id }: { id: string }) {
     try {
       setState(submitApplication(state, app.id));
       setConfirm(false);
-      router.push("/tracker?submitted=" + app.id);
+      router.push("/submission-success?application=" + app.id);
       notify(
         "Application submitted in the local demo. No employer was contacted.",
       );
@@ -219,7 +225,7 @@ function WorkspaceBody({ id }: { id: string }) {
         {[
           "Review challenge",
           "Prepare deliverables",
-          "Confirm eligibility",
+          "Submission permissions",
           "Submit",
         ].map((s, i) => (
           <button
@@ -364,33 +370,29 @@ function WorkspaceBody({ id }: { id: string }) {
                 include at least 80 characters. Linked content is not fetched or
                 analyzed.
               </p>
-              <label>
-                Résumé text (fictional demo only)
-                <textarea
-                  rows={4}
-                  value={a.resume}
-                  maxLength={10000}
-                  onChange={(e) => update({ resume: e.target.value })}
-                />
-              </label>
+              <div className="notice">
+                Only your name, email, and project work are included in initial
+                review. Do not add your résumé, school, GPA, or employment
+                history.
+              </div>
             </>
           ) : step === 2 ? (
             <>
               <p className="eyebrow">YOUR DECLARATIONS</p>
-              <h2>Confirm the basics.</h2>
-              <p>{o.eligibility}</p>
+              <h2>Ready to share your work?</h2>
+              <p>
+                Confirm that you can complete this challenge and have permission
+                to share the submitted work. No academic background is
+                requested.
+              </p>
               <div className="notice">
-                These answers are self-reported. FirstProof has not verified
-                your identity, work authorization, or qualifications.
+                Name and email will be visible to the employer with your
+                submission. Additional background is requested only after you
+                advance and explicitly choose to share it.
               </div>
               {Object.entries({
-                academic: "I meet the published academic requirements.",
-                authorization:
-                  "I declare that I have permission to work in the stated location.",
                 availability:
                   "I am available during the stated employment term.",
-                qualifications:
-                  "I have reviewed and meet the listed required qualifications.",
                 acknowledgment:
                   "I understand the demo terms, have permission to submit this work, and have disclosed any assistance.",
               }).map(([key, label]) => (
@@ -412,7 +414,7 @@ function WorkspaceBody({ id }: { id: string }) {
               ))}
               <p className="fine-print">
                 If you are unsure, leave the declaration unchecked and keep your
-                application as a draft. This demo does not automatically reject
+                application as a draft. This preview does not automatically reject
                 you.
               </p>
             </>
@@ -439,7 +441,7 @@ function WorkspaceBody({ id }: { id: string }) {
                 </div>
                 <div>
                   <dt>Declarations</dt>
-                  <dd>{complete}/5</dd>
+                  <dd>{complete}/2</dd>
                 </div>
                 <div>
                   <dt>Review commitment</dt>
@@ -494,7 +496,7 @@ function WorkspaceBody({ id }: { id: string }) {
             </div>
             <div className="summary-line">
               <Check size={15} />
-              {complete}/5 declarations
+              {complete}/2 declarations
             </div>
             <div className="summary-line">
               <Clock size={15} />
@@ -619,6 +621,7 @@ function TrackerBody() {
           ))}
         </select>
       </div>
+      {apps.some(a=>a.backgroundRequest?.status==='requested')&&<div className="notice"><Clock size={17}/><span>You have a next-stage information request. Open the matching application to choose whether to share details.</span></div>}
       <div className="application-list">
         {apps
           .filter((a) => filter === "All" || a.stage === filter)
@@ -646,6 +649,7 @@ function TrackerBody() {
                 </div>
                 <div className="app-status">
                   <Status stage={a.stage} />
+                  {a.backgroundRequest?.status==='requested'&&<Badge tone="blue">Next-stage request</Badge>}
                   <Deadline application={a as Application} />
                 </div>
                 <div className="app-actions">
@@ -689,11 +693,7 @@ function TrackerBody() {
             }
           </h3>
           <Deadline application={active as Application} />
-          <h3>Self-reported declarations</h3>
-          <p>
-            {Object.values(active.eligibility).filter(Boolean).length}/5
-            confirmed. Not independently verified.
-          </p>
+          <BackgroundResponse application={active} />
           <h3>Integrity review</h3>
           <p>
             {active.integrity === "Demo: human review recommended"
@@ -859,9 +859,10 @@ export function Auth({ register = false }: { register?: boolean }) {
             I’m an employer
           </button>
         </div>
+        {register && dataMode==='demo' && <form className="preview-registration" onSubmit={e=>{e.preventDefault();const f=new FormData(e.currentTarget);const name=String(f.get('previewName')||'').trim();const email=String(f.get('previewEmail')||'').trim();if(!name||!email)return;const user={id:role==='employer'?'employer-demo':'preview-'+crypto.randomUUID(),name,email,role,university:'',program:'',resume:''};setState(s=>({...s,user,profile:role==='student'?user:s.profile}));const next=params.get('next');router.push(next?.startsWith('/')&&!next.startsWith('//')?next:role==='employer'?'/employer':'/tracker')}}><h3>Create a preview account</h3><p>Use sample name and email only. This local preview does not create a secure account, verify email, or store a password.</p><label>Name<input name="previewName" required maxLength={100} autoComplete="off"/></label><label>Email<input name="previewEmail" type="email" required autoComplete="off"/></label><button className="button full" type="submit">Create preview account <ArrowRight size={16}/></button></form>}
         <div className="demo-auth">
           <SparkleMark />
-          <h3>Take the full demo for a spin.</h3>
+          <h3>Or explore with a sample account.</h3>
           <p>
             No password. No real applicant data. Everything stays in this
             browser.
@@ -959,9 +960,9 @@ export function Profile() {
     <Gate role="student">
       <div className="container narrow">
         <Heading
-          label="STUDENT PROFILE"
-          title="Start with your story."
-          description="Fictional demo profile. Do not enter real personal or applicant information."
+          label="YOUR ACCOUNT"
+          title="Just the essentials."
+          description="Your work comes first. We do not collect a résumé, school, GPA, or employment history at this stage."
         />
         <form
           className="panel"
@@ -969,49 +970,88 @@ export function Profile() {
             e.preventDefault();
             setState((s) => ({
               ...s,
-              user: s.user ? { ...s.user, ...s.profile } : s.user,
+              user: s.user
+                ? { ...s.user, name: s.profile.name, email: s.profile.email }
+                : null,
             }));
-            notify(
-              "Demo profile saved locally. Existing submitted applications keep their original details.",
-            );
+            notify("Preview account details saved on this browser.");
           }}
         >
-          {(["name", "university", "program"] as const).map((k) => (
-            <label key={k}>
-              {k === "name"
-                ? "Display name"
-                : k === "university"
-                  ? "University"
-                  : "Program and academic year"}
-              <input
-                required
-                value={state.profile[k]}
-                onChange={(e) =>
-                  setState((s) => ({
-                    ...s,
-                    profile: { ...s.profile, [k]: e.target.value },
-                  }))
-                }
-              />
-            </label>
-          ))}
           <label>
-            Résumé summary
-            <textarea
-              rows={6}
-              value={state.profile.resume}
+            Name
+            <input
+              required
+              maxLength={100}
+              value={state.profile.name}
               onChange={(e) =>
                 setState((s) => ({
                   ...s,
-                  profile: { ...s.profile, resume: e.target.value },
+                  profile: { ...s.profile, name: e.target.value },
+                }))
+              }
+            />
+          </label>
+          <label>
+            Email
+            <input
+              required
+              type="email"
+              value={state.profile.email}
+              onChange={(e) =>
+                setState((s) => ({
+                  ...s,
+                  profile: { ...s.profile, email: e.target.value },
                 }))
               }
             />
           </label>
           <button className="button" type="submit">
-            Save demo profile <Save size={16} />
+            Save account details <Save size={16} />
           </button>
+          <p className="fine-print">
+            Use sample information in this local preview. An employer may
+            request optional background details after advancing your
+            application; respond through your tracker.
+          </p>
         </form>
+      </div>
+    </Gate>
+  );
+}
+export function SubmissionSuccess() {
+  const { state } = useStore();
+  const params = useSearchParams();
+  const a = state.applications.find(
+    (a) => a.id === params.get("application") && a.studentId === state.user?.id,
+  );
+  return (
+    <Gate role="student">
+      <div className="submission-success container narrow">
+        <div className="large-icon">
+          <Check />
+        </div>
+        <h1>
+          {a?.submittedAt
+            ? "Challenge successfully submitted!"
+            : "Your submission tracker"}
+        </h1>
+        <p>
+          {a?.submittedAt
+            ? "Your project is saved in this preview. You can follow its review status from your dashboard."
+            : "Open your dashboard to view saved applications and their status."}
+        </p>
+        {a?.reviewDue && (
+          <p>
+            Employer review due {new Date(a.reviewDue).toLocaleDateString()}.
+          </p>
+        )}
+        <Link className="button" href="/tracker">
+          Return to applicant dashboard <ArrowRight size={16} />
+        </Link>
+        <small>
+          Local preview: no real employer has been contacted and no AI
+          evaluation has run.
+        </small>
       </div>
     </Gate>
   );

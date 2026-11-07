@@ -24,3 +24,6 @@ export const contracts = {
   applications: "/applications",
   uploads: "/uploads",
 };
+
+// Future integration: the server must enforce first-stage field projections and consent.
+export const hiringContracts={join:"/applications/join",requestBackground:"/applications/:id/background-request",respondBackground:"/applications/:id/background-response",employerMaterials:"/opportunities/:id/materials",rubricEvaluation:"/applications/:id/evaluation"};

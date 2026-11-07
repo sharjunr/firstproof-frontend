@@ -38,6 +38,11 @@ export interface Opportunity {
   eligibility: string;
   status: "Draft" | "Published";
   owner: string;
+  challengeDays?: number;
+  resources?: LocalFile[];
+  rubric?: { id: string; label: string; weight: number; description: string }[];
+  referenceSolution?: string;
+  privateEvaluationFiles?: LocalFile[];
   demo: true;
 }
 export interface LocalFile {
@@ -59,6 +64,16 @@ export interface Application {
   opportunityId: string;
   studentId: string;
   studentName: string;
+  studentEmail?: string;
+  joinedAt?: string;
+  backgroundRequest?: {
+    status: "requested" | "shared" | "declined";
+    message: string;
+    requestedAt: string;
+    resume?: string;
+    education?: string;
+    sharedAt?: string;
+  };
   university: string;
   program: string;
   resume: string;

@@ -29,6 +29,11 @@ import {
   industries,
 } from "./ui";
 import { deadlineInfo, validateOpportunity, changeStage } from "../lib/model";
+import {
+  ChallengeMaterials,
+  NextStageReview,
+  SubmissionReview,
+} from "./hiring-controls";
 import { openFile } from "../lib/files";
 export function EmployerDashboard({
   onlyOpportunities = false,
@@ -144,7 +149,7 @@ function DashboardBody({ onlyOpportunities }: { onlyOpportunities: boolean }) {
                     <tr key={a.id}>
                       <td>
                         <strong>{a.studentName}</strong>
-                        <small>{a.university}</small>
+                        <small>{a.studentEmail}</small>
                       </td>
                       <td>
                         {
@@ -307,6 +312,30 @@ function PostBody({ editId }: { editId?: string }) {
           .toISOString()
           .slice(0, 10),
         reviewDays: 7,
+        challengeDays: 7,
+        resources: [],
+        referenceSolution: "",
+        privateEvaluationFiles: [],
+        rubric: [
+          {
+            id: "reasoning",
+            label: "Reasoning",
+            weight: 40,
+            description: "Explain approach and assumptions.",
+          },
+          {
+            id: "completeness",
+            label: "Completeness",
+            weight: 35,
+            description: "Address the requested deliverables.",
+          },
+          {
+            id: "communication",
+            label: "Communication",
+            weight: 25,
+            description: "Communicate results and limitations clearly.",
+          },
+        ],
         description: "",
         qualifications: "",
         challenge: "",
@@ -534,6 +563,22 @@ function PostBody({ editId }: { editId?: string }) {
             </label>
             {area("criteria", "Human evaluation criteria")}
             {area("tools", "Permitted tools and AI assistance")}
+            {input(
+              "challengeDays",
+              "Time to complete after joining (days)",
+              "number",
+            )}
+            <ChallengeMaterials
+              opportunity={o}
+              onChange={(patch) =>
+                setO((current) => ({ ...current, ...patch }))
+              }
+            />
+            {errors.rubric && (
+              <p className="form-error" role="alert">
+                {errors.rubric}
+              </p>
+            )}
           </section>
           <section className="panel">
             <p className="eyebrow">03 · YOUR REVIEW COMMITMENT</p>
@@ -692,7 +737,7 @@ function CandidateBody({
   const filtered = all.filter(
     (a) =>
       (!query ||
-        `${a.studentName} ${a.university} ${state.opportunities.find((o) => o.id === a.opportunityId)?.title}`
+        `${a.studentName} ${a.studentEmail} ${state.opportunities.find((o) => o.id === a.opportunityId)?.title}`
           .toLowerCase()
           .includes(query.toLowerCase())) &&
       (!flags || a.integrity === "Demo: human review recommended") &&
@@ -787,7 +832,7 @@ function CandidateBody({
                       ?.title
                   }
                 </p>
-                <small>{c.university}</small>
+                <small>{c.studentEmail}</small>
                 <div>
                   <Status stage={c.stage} />
                   {c.integrity === "Demo: human review recommended" && (
@@ -817,11 +862,9 @@ function CandidateBody({
                     .join("")}
                 </div>
                 <div>
-                  <Badge>FICTIONAL CANDIDATE</Badge>
+                  <Badge>APPLICANT · SAMPLE</Badge>
                   <h2>{a.studentName}</h2>
-                  <p>
-                    {a.university} · {a.program}
-                  </p>
+                  <p>{a.studentEmail || "Email not supplied"}</p>
                 </div>
                 <Status stage={a.stage} />
               </div>
@@ -834,23 +877,12 @@ function CandidateBody({
                   : "Not started"}
                 . Review commitment is not an interview guarantee.
               </p>
-              <h3>Résumé</h3>
-              <p className="pre-wrap">
-                {a.resume || "No résumé summary supplied."}
-              </p>
-              <h3>Eligibility declarations</h3>
-              {Object.entries(a.eligibility).map(([k, v]) => (
-                <div className="eligibility-row" key={k}>
-                  <span>{k}</span>
-                  <Badge tone={v ? "success" : "warning"}>
-                    {v ? "Self-declared" : "Needs clarification"}
-                  </Badge>
-                </div>
-              ))}
-              <p className="fine-print">
-                Declarations have not been independently verified. The platform
-                has not made an eligibility or hiring decision.
-              </p>
+              <div className="notice">
+                First-stage review includes name, email, and project work only.
+                Résumés, school, GPA, and employment history are not collected
+                here.
+              </div>
+              <NextStageReview application={a} />
             </section>
             <section className="panel">
               <h2>Project deliverables</h2>
@@ -927,6 +959,7 @@ function CandidateBody({
               )}
             </section>
             <section className="panel">
+              <SubmissionReview application={a} opportunity={o} />
               <h2>Employer actions</h2>
               <p className="fine-print">
                 Your actions update the shared local demo. No real candidate is

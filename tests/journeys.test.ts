@@ -78,12 +78,12 @@ test("draft → submission → employer shortlist → student view persists link
     "Shortlisted",
   );
 });
-test("missing eligibility and unauthorized users cannot submit or decide", () => {
+test("missing submission permissions and unauthorized users cannot submit or decide", () => {
   const s = seed();
   s.user = student;
   const a = s.applications.find((a) => a.stage === "Draft")!;
-  a.eligibility.authorization = false;
-  assert.throws(() => submitApplication(s, a.id), /eligibility/);
+  a.eligibility.acknowledgment = false;
+  assert.throws(() => submitApplication(s, a.id), /permission/);
   assert.throws(() => changeStage(s, a.id, "Shortlisted"), /Employer/);
   s.user = employer;
   assert.throws(() => submitApplication(s, a.id), /student/);

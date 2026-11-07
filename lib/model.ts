@@ -131,6 +131,17 @@ export function validateOpportunity(o: Opportunity) {
     errors.pay = "Pay cannot be negative.";
   if (!o.deadline || new Date(o.deadline + "T23:59:59Z").getTime() < Date.now())
     errors.deadline = "Choose a future application deadline.";
+  if (
+    o.challengeDays !== undefined &&
+    (!Number.isInteger(o.challengeDays) ||
+      o.challengeDays < 1 ||
+      o.challengeDays > 60)
+  )
+    errors.challengeDays = "Choose 1–60 whole days.";
+  if (o.rubric) {
+    const rubricError = rubricErrors(o.rubric);
+    if (rubricError) errors.rubric = rubricError;
+  }
   return errors;
 }
 export function submitApplication(
@@ -142,13 +153,19 @@ export function submitApplication(
     o = s.opportunities.find((o) => o.id === a?.opportunityId);
   if (!a || !o || s.user?.id !== a.studentId || s.user.role !== "student")
     throw new Error("Sign in as the student who owns this draft.");
+  if (
+    a.joinedAt &&
+    o.challengeDays &&
+    new Date(a.joinedAt).getTime() + o.challengeDays * 86400000 < now.getTime()
+  )
+    throw new Error("Your joined challenge window has ended.");
   if (a.stage !== "Draft")
     throw new Error("This application has already been submitted.");
   if (new Date(o.deadline + "T23:59:59Z") < now || o.status !== "Published")
     throw new Error("This opportunity is no longer accepting applications.");
-  if (!Object.values(a.eligibility).every(Boolean))
+  if (!a.eligibility.availability || !a.eligibility.acknowledgment)
     throw new Error(
-      "Confirm all eligibility declarations and the acknowledgment.",
+      "Confirm availability and your permission to submit this work.",
     );
   if (a.text.trim().length < 30)
     throw new Error("Add an explanation of at least 30 characters.");
@@ -232,4 +249,136 @@ export function studentView(a: Application) {
   void notes;
   void followUp;
   return visible;
+}
+
+// An explicit projection: legacy educational fields never reach initial review.
+export function employerApplicationView(a: Application) {
+  const {
+    university,
+    program,
+    resume,
+    backgroundRequest,
+    eligibility,
+    ...initial
+  } = a;
+  void university;
+  void program;
+  void resume;
+  void eligibility;
+  const mayShare =
+    ["Shortlisted", "Invited to Next Stage"].includes(a.stage) &&
+    backgroundRequest?.status === "shared";
+  return {
+    ...initial,
+    backgroundRequest: backgroundRequest
+      ? {
+          status: backgroundRequest.status,
+          message: backgroundRequest.message,
+          requestedAt: backgroundRequest.requestedAt,
+          ...(mayShare
+            ? {
+                resume: backgroundRequest.resume,
+                education: backgroundRequest.education,
+                sharedAt: backgroundRequest.sharedAt,
+              }
+            : {}),
+        }
+      : undefined,
+  };
+}
+export function requestBackground(
+  s: Store,
+  id: string,
+  message: string,
+): Store {
+  const a = s.applications.find((x) => x.id === id);
+  const o = s.opportunities.find((o) => o.id === a?.opportunityId);
+  if (!a || s.user?.role !== "employer" || o?.owner !== s.user.id)
+    throw new Error("Only the responsible employer can request details.");
+  if (!["Shortlisted", "Invited to Next Stage"].includes(a.stage))
+    throw new Error(
+      "Advance this applicant before requesting background details.",
+    );
+  if (a.backgroundRequest?.status === "shared")
+    throw new Error("The applicant has already shared a response.");
+  if (message.trim().length < 10)
+    throw new Error("Explain which information you are requesting and why.");
+  return {
+    ...s,
+    applications: s.applications.map((x) =>
+      x.id === id
+        ? {
+            ...x,
+            backgroundRequest: {
+              status: "requested",
+              message: message.trim(),
+              requestedAt: new Date().toISOString(),
+            },
+          }
+        : x,
+    ),
+  };
+}
+export function respondToBackground(
+  s: Store,
+  id: string,
+  share: boolean,
+  resume = "",
+  education = "",
+): Store {
+  const a = s.applications.find((x) => x.id === id);
+  if (!a || s.user?.role !== "student" || s.user.id !== a.studentId)
+    throw new Error("Only this applicant can respond.");
+  if (
+    !["Shortlisted", "Invited to Next Stage"].includes(a.stage) ||
+    a.backgroundRequest?.status !== "requested"
+  )
+    throw new Error("No active next-stage request exists.");
+  if (share && !resume.trim() && !education.trim())
+    throw new Error(
+      "Add the information you choose to share, or decline the request.",
+    );
+  return {
+    ...s,
+    applications: s.applications.map((x) =>
+      x.id === id
+        ? {
+            ...x,
+            backgroundRequest: {
+              ...a.backgroundRequest!,
+              status: share ? "shared" : "declined",
+              ...(share
+                ? {
+                    resume: resume.trim(),
+                    education: education.trim(),
+                    sharedAt: new Date().toISOString(),
+                  }
+                : {}),
+            },
+          }
+        : x,
+    ),
+  };
+}
+export function publicOpportunityView(o: Opportunity) {
+  const { referenceSolution, privateEvaluationFiles, ...publicFields } = o;
+  void referenceSolution;
+  void privateEvaluationFiles;
+  return publicFields;
+}
+export function rubricErrors(rubric: Opportunity["rubric"]) {
+  if (!rubric?.length) return "Add at least one rubric criterion.";
+  if (
+    rubric.some(
+      (c) =>
+        !c.label.trim() ||
+        !c.description.trim() ||
+        !Number.isFinite(c.weight) ||
+        c.weight <= 0,
+    )
+  )
+    return "Each criterion needs a name, description, and positive weight.";
+  if (Math.abs(rubric.reduce((n, c) => n + c.weight, 0) - 100) > 0.001)
+    return "Rubric weights must total 100%.";
+  return "";
 }
