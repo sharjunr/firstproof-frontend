@@ -260,27 +260,131 @@ function DashboardBody({ onlyOpportunities }: { onlyOpportunities: boolean }) {
     </>
   );
 }
-const templateBriefs = [
-  [
-    "Software & AI",
-    "Build a small feedback classifier using fictional sample data. Explain your method, examples, and limitations.",
-  ],
-  [
-    "Business & Finance",
-    "Analyze a fictional sales table and give three recommendations supported by your calculations.",
-  ],
-  [
-    "Engineering",
-    "Diagnose a circuit using synthetic readings. Show calculations and discuss assumptions.",
-  ],
-  [
-    "Marketing",
-    "Create a campaign for a fictional product. Explain audience, channels, message, and measurement.",
-  ],
-  [
-    "Design",
-    "Design a simple campus-service onboarding flow. Explain accessibility and design decisions.",
-  ],
+const templateBriefs: {
+  name: string;
+  patch: Partial<Opportunity>;
+}[] = [
+  {
+    name: "AMD (Fictional Demo) — Digital Design / RTL Engineering Intern",
+    patch: {
+      company: "AMD",
+      title: "Digital Design Engineering Intern",
+      industry: "Engineering",
+      location: "Markham, ON",
+      effort: 4,
+      description:
+        "Fictional Demo — Not affiliated with AMD. Join the fictional RTL Design & Verification team to build and verify synthesizable hardware blocks.",
+      responsibilities:
+        "Design synthesizable RTL blocks in Verilog/SystemVerilog, write self-checking simulation testbenches, and verify corner cases.",
+      dayInTheRole:
+        "Digital design engineers develop and verify RTL modules used in larger hardware systems. The synchronous FIFO challenge demonstrates a small, representative slice of that workflow.",
+      qualifications:
+        "Digital logic, computer architecture, and Verilog/SystemVerilog simulation experience.",
+      challenge: "Design and Verify a Synchronous FIFO",
+      scenario:
+        "Your team is developing a digital data-processing subsystem. You need an 8-bit, 16-entry synchronous FIFO buffer that temporarily stores incoming data before a downstream module reads it.",
+      specifications: [
+        "8-bit data width, 16-entry depth",
+        "Single-clock synchronous operation",
+        "Active-high synchronous reset",
+        "Read and write enable inputs",
+        "Full and empty status outputs",
+        "Defined behavior for simultaneous reads and writes",
+      ],
+      skills: ["RTL Design", "Verilog/SystemVerilog", "Digital Logic", "Verification", "Simulation"],
+      instructions:
+        "Implement read/write control, full/empty flags, and a self-checking testbench that verifies normal operation and boundary conditions.",
+      deliverables: [
+        "fifo.sv — RTL implementation",
+        "fifo_tb.sv — Simulation testbench",
+        "Simulation waveform screenshot",
+        "README.md — Architecture, assumptions, and verification results",
+      ],
+      acceptanceCriteria: [
+        "Correct FIFO ordering and full/empty status transitions",
+        "Clean synchronous reset and simultaneous read/write handling",
+        "Testbench covers normal and edge cases",
+      ],
+      tools:
+        "Verilog or SystemVerilog with Icarus Verilog, Verilator, ModelSim, or Vivado Simulator. Disclose AI assistance.",
+    },
+  },
+  {
+    name: "Skyworks Solutions (Fictional Demo) — RF Test Engineering Intern",
+    patch: {
+      company: "Skyworks Solutions",
+      title: "RF Test Engineering Intern",
+      industry: "Engineering",
+      location: "Ottawa",
+      effort: 3,
+      description:
+        "Fictional Demo — Not affiliated with Skyworks Solutions. Characterize RF amplifier stages and automate S-parameter test data evaluation.",
+      responsibilities:
+        "Automate RF measurement analysis in Python, evaluate S11/S21/S22 against datasheet limits, and produce characterization reports.",
+      dayInTheRole:
+        "RF test engineers automate measurements, interpret S-parameters, and identify devices that fail electrical specifications.",
+      qualifications:
+        "RF fundamentals, S-parameters, Python (NumPy/Matplotlib), and test automation.",
+      challenge: "Analyze Simulated RF Amplifier Test Measurements",
+      scenario:
+        "You receive simulated 2-port S-parameter data (1.8–2.8 GHz) for an RF amplifier stage and must identify return-loss issues, plot gain vs. frequency, and determine pass/fail status.",
+      specifications: [
+        "Passband: 2.10–2.50 GHz",
+        "Minimum forward gain |S21| >= 14.5 dB",
+        "Input/output return loss |S11|, |S22| <= -10 dB",
+      ],
+      skills: ["RF Fundamentals", "S-Parameters", "Python", "Test Automation"],
+      instructions:
+        "Write a Python script to parse the synthetic S-parameters, plot |S21|, |S11|, and |S22| vs. frequency, and identify specification failures.",
+      deliverables: [
+        "Python analysis script",
+        "Gain and return-loss plots vs. frequency",
+        "Concise engineering pass/fail report",
+      ],
+      acceptanceCriteria: [
+        "Accurately flags upper-passband return-loss mismatch",
+        "Plots include clear datasheet threshold lines",
+      ],
+    },
+  },
+  {
+    name: "Satellite Comms (Fictional Demo) — Embedded Software Intern",
+    patch: {
+      company: "Orbital Link Satellite Communications",
+      title: "Embedded Software Intern",
+      industry: "Software & AI",
+      location: "Toronto",
+      effort: 3.5,
+      description:
+        "Fictional Demo — Not affiliated with this company. Build flight and ground telemetry parsers for LEO satellite subsystems.",
+      responsibilities:
+        "Implement binary telemetry decoders in C++ or Python, verify checksums, and write unit tests for corrupted frames.",
+      dayInTheRole:
+        "Embedded engineers translate hardware interface control documents into deterministic packet parsers and flag anomalous spacecraft telemetry.",
+      qualifications:
+        "C++ or Python, binary packet parsing, bitwise operations, and unit testing.",
+      challenge: "Build a Satellite Telemetry Packet Decoder",
+      scenario:
+        "Decode simulated satellite downlink packets containing temperature, battery voltage, and orientation data, validate checksums, and flag abnormal readings.",
+      specifications: [
+        "12-byte fixed binary frames starting with 0xEB90 sync word",
+        "Validate 16-bit big-endian checksum",
+        "Flag battery < 6.8 V, temperature > 60 °C, or attitude pitch > 45°",
+      ],
+      skills: ["Embedded C++/Python", "Packet Parsing", "Checksum Validation", "Unit Testing"],
+      instructions:
+        "Write a telemetry decoder that parses valid packets, rejects corrupted checksums, and flags out-of-range sensor readings.",
+      deliverables: [
+        "Python or C++ telemetry decoder code",
+        "Unit tests and sample decoded outputs",
+        "Short test report",
+      ],
+      acceptanceCriteria: [
+        "Decodes engineering units accurately",
+        "Gracefully rejects corrupted frames",
+      ],
+    },
+  },
 ];
 export function PostOpportunity({ editId }: { editId?: string }) {
   return (
@@ -337,8 +441,21 @@ function PostBody({ editId }: { editId?: string }) {
           },
         ],
         description: "",
+        responsibilities: "",
+        dayInTheRole: "",
         qualifications: "",
         challenge: "",
+        scenario: "",
+        specifications: [
+          "Scoped to 2–5 hours using synthetic materials",
+          "Clear boundary conditions and verification expectations",
+        ],
+        skills: ["Problem Solving", "Technical Documentation"],
+        starterMaterials: [],
+        acceptanceCriteria: [
+          "Meets the stated technical specifications",
+          "Includes clear verification evidence and documentation",
+        ],
         instructions: "",
         deliverables: [
           "Project work (file, link, or pasted content)",
@@ -462,7 +579,15 @@ function PostBody({ editId }: { editId?: string }) {
               {input("company", "Fictional company name")}
               {input("title", "Job title")}
             </div>
-            {area("description", "Role description")}
+            {area("description", "Role overview")}
+            {area(
+              "responsibilities",
+              "Job responsibilities (what this position actually performs)",
+            )}
+            {area(
+              "dayInTheRole",
+              "A Day in the Role (how this challenge mirrors daily engineering work)",
+            )}
             <div className="form-grid">
               <label>
                 Industry
@@ -522,32 +647,76 @@ function PostBody({ editId }: { editId?: string }) {
             {area("eligibility", "Eligibility requirements (self-reported)")}
           </section>
           <section className="panel">
-            <p className="eyebrow">02 · THE MINI-PROJECT</p>
-            <h2>Small scope. Meaningful evidence.</h2>
+            <p className="eyebrow">02 · EMPLOYER CHALLENGE CREATOR</p>
+            <h2>Role-specific engineering problem.</h2>
+            <p className="fine-print">
+              Core FirstProof rule: every challenge must directly correspond to
+              the actual responsibilities of the role. Do not assign generic
+              chatbots or unrelated puzzles.
+            </p>
             <label>
-              Start from a brief template
+              Load a role-specific engineering template
               <select
                 defaultValue=""
                 onChange={(e) => {
-                  const t = templateBriefs.find((t) => t[0] === e.target.value);
+                  const t = templateBriefs.find(
+                    (t) => t.name === e.target.value,
+                  );
                   if (t) {
-                    update("industry", t[0]);
-                    update("instructions", t[1]);
-                    update("challenge", t[0] + " practical mini-project");
+                    setO((curr) => ({ ...curr, ...t.patch }));
                   }
                 }}
               >
                 <option value="" disabled>
-                  Choose an optional starting point
+                  Choose an optional role-specific template
                 </option>
-                {templateBriefs.map(([v]) => (
-                  <option key={v}>{v}</option>
+                {templateBriefs.map((t) => (
+                  <option key={t.name} value={t.name}>
+                    {t.name}
+                  </option>
                 ))}
               </select>
             </label>
-            {input("challenge", "Challenge title")}
-            {area("instructions", "Challenge instructions")}
-            {input("effort", "Estimated effort (0.5–8 hours)", "number")}
+            {input("challenge", "Technical challenge title")}
+            {area(
+              "scenario",
+              "Engineering scenario (the realistic system context)",
+            )}
+            {area("instructions", "Detailed challenge instructions")}
+            <label>
+              Specifications and constraints (one per line)
+              <textarea
+                rows={4}
+                value={(o.specifications || []).join("\n")}
+                onChange={(e) =>
+                  update(
+                    "specifications",
+                    e.target.value.split("\n").filter((x) => x.trim()),
+                  )
+                }
+              />
+            </label>
+            <label>
+              Required technical skills & tools (comma-separated)
+              <input
+                type="text"
+                value={(o.skills || []).join(", ")}
+                onChange={(e) =>
+                  update(
+                    "skills",
+                    e.target.value
+                      .split(",")
+                      .map((x) => x.trim())
+                      .filter(Boolean),
+                  )
+                }
+              />
+            </label>
+            {input(
+              "effort",
+              "Expected completion time (recommended 2–5 hours)",
+              "number",
+            )}
             <label>
               Required deliverables (one per line)
               <textarea
@@ -561,8 +730,21 @@ function PostBody({ editId }: { editId?: string }) {
                 <span className="form-error">{errors.deliverables}</span>
               )}
             </label>
-            {area("criteria", "Human evaluation criteria")}
-            {area("tools", "Permitted tools and AI assistance")}
+            <label>
+              Acceptance criteria (one per line)
+              <textarea
+                rows={3}
+                value={(o.acceptanceCriteria || []).join("\n")}
+                onChange={(e) =>
+                  update(
+                    "acceptanceCriteria",
+                    e.target.value.split("\n").filter((x) => x.trim()),
+                  )
+                }
+              />
+            </label>
+            {area("criteria", "Published manual review rubric summary")}
+            {area("tools", "Permitted tools and AI assistance policy")}
             {input(
               "challengeDays",
               "Time to complete after joining (days)",

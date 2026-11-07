@@ -5860,3 +5860,69 @@ th {
   border-color: #b6e3ff;
   color: #0969da;
 }
+.detail-company-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+.day-in-role-box {
+  background: #f6f8fa;
+  border: 1px solid #d1d9e0;
+  border-left: 4px solid #0969da;
+  border-radius: 10px;
+  padding: 18px 20px;
+  margin: 18px 0;
+}
+.day-in-role-box h3 {
+  margin: 4px 0 8px;
+  font-size: 15px;
+  color: #1f2328;
+}
+.day-in-role-box p:last-child {
+  margin-bottom: 0;
+}
+.starter-material-card {
+  border: 1px solid #d1d9e0;
+  border-radius: 10px;
+  background: #f6f8fa;
+  padding: 14px 16px;
+  margin: 10px 0;
+}
+.starter-material-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+.starter-material-head strong {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 13px;
+  color: #1f2328;
+}
+.starter-material-head p {
+  font-size: 12px;
+  margin: 4px 0 0;
+  color: #59636e;
+}
+.starter-material-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.starter-material-code {
+  margin: 12px 0 0;
+  padding: 14px;
+  border-radius: 8px;
+  background: #0d1117;
+  color: #e6edf3;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 12px;
+  line-height: 1.5;
+  overflow-x: auto;
+  border: 1px solid #30363d;
+}

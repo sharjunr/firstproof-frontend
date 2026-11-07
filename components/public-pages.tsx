@@ -82,56 +82,75 @@ export function Landing() {
           </form>
           <div className="suggestions career-links" id="suggested-searches">
             {[
-              {label: "AI internships near me", href: "/marketplace?q=AI%20internships"},
-              {label: "Software engineering projects", href: "/marketplace?industry=Software%20%26%20AI"},
-              {label: "Business & finance opportunities", href: "/marketplace?industry=Business%20%26%20Finance"},
-              {label: "Remote internships", href: "/marketplace?arrangement=Remote&type=Internship"},
-              {label: "Engineering challenges", href: "/marketplace?industry=Engineering"},
-            ].map(({label,href}) => (
-              <Link key={label} href={href}>{label}<ArrowRight size={14}/></Link>
+              {
+                label: "AMD · Digital Design / RTL FIFO",
+                href: "/opportunities/ai-developer",
+              },
+              {
+                label: "Skyworks · RF S-Parameter Analysis",
+                href: "/opportunities/frontend-developer",
+              },
+              {
+                label: "Satellite Telemetry · Embedded C++/Python",
+                href: "/opportunities/business-analyst",
+              },
+              {
+                label: "NVIDIA · Matrix Multiplication Optimization",
+                href: "/opportunities/electrical-engineer",
+              },
+              {
+                label: "Thermo Fisher · Reliability & Vibration",
+                href: "/opportunities/marketing",
+              },
+            ].map(({ label, href }) => (
+              <Link key={label} href={href}>
+                {label}
+                <ArrowRight size={14} />
+              </Link>
             ))}
           </div>
         </motion.div>
       </section>
       <section className="principle-strip">
-        <span>A BETTER WAY TO GET STARTED</span>
-        <strong>Real work samples.</strong>
-        <strong>Clear expectations.</strong>
-        <strong>Human decisions.</strong>
-        <span>THAT’S FIRSTPROOF.</span>
+        <span>CORE PRODUCT RULE</span>
+        <strong>Role-specific technical work.</strong>
+        <strong>Starter datasets & specs included.</strong>
+        <strong>Human review—never automated AI grading.</strong>
+        <span>FICTIONAL DEMO LISTINGS</span>
       </section>
       <section className="section flow-section">
         <div className="section-heading">
           <div>
-            <p className="eyebrow">HOW IT COMES TOGETHER</p>
+            <p className="eyebrow">HOW FIRSTPROOF RECRUITMENT WORKS</p>
             <h2>
-              From “give me a chance”
+              Test applicants on the actual work
               <br />
-              to “here’s what I made.”
+              they would perform in the role.
             </h2>
           </div>
           <p>
-            No mystery process. Just a focused project and a clear next step.
+            Not generic LeetCode puzzles. Not random AI chatbots. Realistic
+            engineering challenges scoped to 2–5 hours.
           </p>
         </div>
         <div className="process-three">
           {[
             {
               n: "01",
-              title: "Find your kind of work.",
-              text: "Explore employer-created challenges connected to internships and entry-level roles.",
+              title: "Select a role-matched challenge.",
+              text: "Every posting includes a “Day in the Role” brief, concrete technical specifications, and downloadable synthetic starter materials.",
               icon: Search,
             },
             {
               n: "02",
-              title: "Make your potential tangible.",
-              text: "Complete a short project. Share files, links, or your work directly, with an explanation.",
+              title: "Build & verify the engineering artifact.",
+              text: "Write RTL and testbenches, analyze S-parameters, decode telemetry frames, or optimize kernels—then submit code, plots, and your engineering report.",
               icon: Code2,
             },
             {
               n: "03",
-              title: "Let your work meet a person.",
-              text: "Employers review your submission. Follow your application and its review deadline.",
+              title: "Evaluated by engineers against a rubric.",
+              text: "Similarity checks only flag suspicious overlap for human inspection. Employers review your work against published criteria and commit to a response deadline.",
               icon: UsersIcon,
             },
           ].map(({ n, title, text, icon: Icon }) => (
@@ -149,22 +168,87 @@ export function Landing() {
       <section className="section featured-section">
         <div className="section-heading">
           <div>
-            <p className="eyebrow">SMALL PROJECTS. OPEN POSSIBILITIES.</p>
-            <h2>Your next chapter could start here.</h2>
+            <p className="eyebrow">
+              FICTIONAL EMPLOYER DEMONSTRATIONS · NOT AFFILIATED WITH LISTED COMPANIES
+            </p>
+            <h2>Realistic, role-specific engineering challenges.</h2>
           </div>
           <Link className="text-link" href="/marketplace">
-            Explore all opportunities <ArrowUpRight size={17} />
+            Explore all 88 opportunities <ArrowUpRight size={17} />
           </Link>
         </div>
         <div className="cards-grid">
           {state.opportunities
             .filter((o) => o.status === "Published")
-            .slice(0, 3)
+            .slice(0, 6)
             .map((o) => (
               <OpportunityCard key={o.id} o={o} />
             ))}
         </div>
-        
+      </section>
+      <section className="section">
+        <div className="section-heading">
+          <div>
+            <p className="eyebrow">THE FUNDAMENTAL FIRSTPROOF RULE</p>
+            <h2>Every challenge must match the actual job.</h2>
+          </div>
+          <p>
+            Every employer challenge is tied to a specific job responsibility, a
+            realistic engineering problem, and a measurable deliverable.
+          </p>
+        </div>
+        <div className="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Position (Fictional Demo)</th>
+                <th>Appropriate Role-Specific Challenge</th>
+                <th>Inappropriate Generic Assignment</th>
+              </tr>
+            </thead>
+            <tbody>
+              {[
+                [
+                  "AMD — RTL / Digital Design Intern",
+                  "Design and verify an 8-bit, 16-entry synchronous FIFO module in Verilog/SystemVerilog",
+                  "Build a generic AI chatbot",
+                ],
+                [
+                  "Skyworks Solutions — RF Test Intern",
+                  "Analyze S-parameters (S11, S21, S22), return loss, and passband gain from RF test data",
+                  "Create a React marketing website",
+                ],
+                [
+                  "Satellite Comms — Embedded Software Intern",
+                  "Decode binary satellite telemetry packets, validate CRC-16 checksums, and flag faults",
+                  "Solve unrelated dynamic-programming puzzles",
+                ],
+                [
+                  "NVIDIA — GPU / AI Software Intern",
+                  "Optimize matrix multiplication with vectorization/tiling and verify FP32 accuracy",
+                  "Write a social-media launch campaign",
+                ],
+                [
+                  "Thermo Fisher — Reliability Engineering Intern",
+                  "Analyze equipment vibration RMS and thermal sensor data to detect bearing wear",
+                  "Build a mobile arcade game",
+                ],
+              ].map(([role, good, bad]) => (
+                <tr key={role}>
+                  <td>
+                    <strong>{role}</strong>
+                  </td>
+                  <td>
+                    <Badge tone="success">Role-aligned</Badge> {good}
+                  </td>
+                  <td>
+                    <Badge tone="warning">Off-target</Badge> {bad}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </section>
       <section className="section audience">
         <article id="students">
@@ -628,7 +712,13 @@ export function Details({ id }: { id: string }) {
           {o.company.slice(0, 2).toUpperCase()}
         </div>
         <div>
-          <span className="muted">{o.company}</span>
+          <div className="detail-company-line">
+            <span className="muted">{o.company}</span>
+            <Badge tone="warning">
+              Fictional Demo — Not affiliated with {o.company}
+            </Badge>
+            <Badge>Fictional Demo — Not affiliated with this company.</Badge>
+          </div>
           <h1>{o.title}</h1>
           <div className="meta">
             <span>
@@ -647,6 +737,29 @@ export function Details({ id }: { id: string }) {
             <Badge tone="violet">{o.industry}</Badge>
             <h2>The opportunity</h2>
             <p>{o.description}</p>
+            {o.dayInTheRole && (
+              <div className="day-in-role-box">
+                <p className="eyebrow">A DAY IN THE ROLE</p>
+                <h3>What engineers actually do in this position</h3>
+                <p>{o.dayInTheRole}</p>
+              </div>
+            )}
+            {o.responsibilities && (
+              <>
+                <h3>Role responsibilities</h3>
+                <p>{o.responsibilities}</p>
+              </>
+            )}
+            {o.skills?.length ? (
+              <div className="major-list">
+                <span>REQUIRED TECHNICAL SKILLS & TOOLS</span>
+                {o.skills.map((s) => (
+                  <Badge key={s} tone="blue">
+                    {s}
+                  </Badge>
+                ))}
+              </div>
+            ) : null}
             {o.majors?.length ? (
               <div className="major-list">
                 <span>RELEVANT STUDY AREAS</span>
@@ -659,39 +772,65 @@ export function Details({ id }: { id: string }) {
             <p>{o.qualifications}</p>
           </section>
           <section className="panel">
-            <p className="eyebrow">YOUR MINI-PROJECT</p>
+            <p className="eyebrow">ROLE-SPECIFIC ENGINEERING CHALLENGE</p>
             <h2>{o.challenge}</h2>
-            <p>{o.instructions}</p>
             <div className="inline-callout">
               <Clock size={19} />
               <span>
-                Estimated effort: <strong>{o.effort} hours</strong>. Use
-                synthetic data. This is a scoped demonstration task.
+                Estimated time: <strong>{o.effort} hours</strong> ·{" "}
+                {o.skills?.slice(0, 2).join(" / ") || o.industry} · Fictional
+                employer challenge using synthetic data.
               </span>
             </div>
+            {o.scenario && (
+              <>
+                <h3>Engineering scenario</h3>
+                <p>{o.scenario}</p>
+              </>
+            )}
+            <h3>Task instructions</h3>
+            <p>{o.instructions}</p>
+            {o.specifications?.length ? (
+              <>
+                <h3>Technical specifications & constraints</h3>
+                {o.specifications.map((spec) => (
+                  <CheckLine key={spec}>{spec}</CheckLine>
+                ))}
+              </>
+            ) : null}
             <h3>Required deliverables</h3>
             {o.deliverables.map((d) => (
               <CheckLine key={d}>{d}</CheckLine>
             ))}
+            {o.acceptanceCriteria?.length ? (
+              <>
+                <h3>Acceptance criteria</h3>
+                {o.acceptanceCriteria.map((ac) => (
+                  <CheckLine key={ac}>{ac}</CheckLine>
+                ))}
+              </>
+            ) : null}
             <ChallengeResources opportunity={o} />
-            <h3>Permitted tools & AI assistance</h3>
+            <h3>Required tools & AI disclosure</h3>
             <p>{o.tools}</p>
-            <h3>How employers review</h3>
+            <h3>Human review & similarity policy</h3>
             <p>{o.criteria}</p>
             <h3>Eligibility requirements</h3>
             <p>{o.eligibility}</p>
             <p className="fine-print">
-              Declarations are self-reported unless separately verified. No
-              automatic hiring decisions are made.
+              Declarations are self-reported unless separately verified. AI
+              never grades candidate quality or makes hiring decisions;
+              similarity checks only flag suspicious overlap for human review.
             </p>
           </section>
           <section className="panel">
-            <h2>From submission to a response</h2>
+            <h2>A realistic FirstProof hiring process</h2>
             {[
-              "Prepare your work and explanation.",
-              "Confirm submission permissions. No résumé or school details are requested.",
-              "Submit before the deadline.",
-              "Track your application while the employer reviews.",
+              "Employer posts a role-specific internship and defines a representative technical task.",
+              "Student checks eligibility, accepts the challenge, and downloads starter materials.",
+              "Student completes the engineering assignment and submits code, plots, and documentation.",
+              "FirstProof performs a similarity check (suspicious overlap is referred for human review, never auto-rejected).",
+              "Employer reviews the submission against published criteria and chooses whether to shortlist.",
             ].map((s) => (
               <CheckLine key={s}>{s}</CheckLine>
             ))}

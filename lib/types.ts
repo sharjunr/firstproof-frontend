@@ -12,6 +12,11 @@ export type Integrity =
   | "Demo: no flag"
   | "Demo: human review recommended"
   | "Demo: resolved";
+export interface StarterMaterial {
+  name: string;
+  description: string;
+  content: string;
+}
 export interface Opportunity {
   id: string;
   title: string;
@@ -29,8 +34,15 @@ export interface Opportunity {
   deadline: string;
   reviewDays: number;
   description: string;
+  responsibilities?: string;
+  dayInTheRole?: string;
   qualifications: string;
   challenge: string;
+  scenario?: string;
+  specifications?: string[];
+  skills?: string[];
+  starterMaterials?: StarterMaterial[];
+  acceptanceCriteria?: string[];
   instructions: string;
   deliverables: string[];
   tools: string;

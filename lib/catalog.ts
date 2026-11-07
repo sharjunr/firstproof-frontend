@@ -1785,7 +1785,39 @@ export function expandedCatalog(now = new Date()): Opportunity[] {
       .slice(0, 10),
     reviewDays: [5, 7, 10][i % 3],
     description: `A fictional ${r.type.toLowerCase()} opportunity for students in ${r.majors.join(", ")}. Practice a focused task in ${r.industry.toLowerCase()}. This is demonstration data, not a real vacancy or employer partnership.`,
+    responsibilities: `Execute scoped ${r.industry.toLowerCase()} tasks aligned with a ${r.title} workflow, document assumptions, and communicate technical or analytical findings to the team.`,
+    dayInTheRole: `As a ${r.title}, you work with synthetic or staged specifications, verify edge cases, and present clear deliverables for peer and mentor review. This challenge represents a realistic slice of that day-to-day responsibility.`,
     qualifications: `Relevant coursework, academic projects, or equivalent practice in ${r.majors.join(" or ")}. Explain your reasoning; prior professional experience is not required for this fictional listing.`,
+    scenario: r.task,
+    specifications: [
+      `Complete the task within the scoped ${r.effort}-hour estimate using only the provided synthetic facts.`,
+      "Document assumptions, boundary conditions, and trade-offs explicitly.",
+      "Do not include confidential, personal, or production data.",
+    ],
+    skills: [...r.majors.slice(0, 2), r.industry, "Structured documentation"],
+    starterMaterials: [
+      {
+        name: `${r.id}-brief-dataset.json`,
+        description: "Synthetic scenario parameters and baseline inputs for this challenge.",
+        content: JSON.stringify(
+          {
+            id: r.id,
+            role: r.title,
+            company: r.company,
+            disclaimer: "Fictional Demo — Not affiliated with this company.",
+            challenge: r.challenge,
+            scenario: r.task,
+            deliverables: r.deliverables,
+          },
+          null,
+          2,
+        ),
+      },
+    ],
+    acceptanceCriteria: [
+      "Addresses every prompt requirement using the synthetic scenario data.",
+      "Clearly explains reasoning, validation steps, and known limitations.",
+    ],
     instructions: `Fictional brief: ${r.task}\n\nUse only the sample facts in this brief or clearly labeled synthetic material. Do not use personal, confidential, or real patient/client information. Submit a compact work sample within the stated effort estimate.`,
     tools:
       "Use your preferred software. Disclose AI assistance and be ready to explain your approach. No production work, real-world certification, or professional advice is requested.",

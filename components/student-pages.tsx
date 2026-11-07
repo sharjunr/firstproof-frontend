@@ -28,7 +28,7 @@ import {
   Loading,
   Modal,
 } from "./ui";
-import { BackgroundResponse } from "./hiring-controls";
+import { BackgroundResponse, ChallengeResources } from "./hiring-controls";
 import { emptyEligibility } from "../lib/demo";
 import type { Application, Role, Stage } from "../lib/types";
 import { submitApplication, studentView } from "../lib/model";
@@ -242,9 +242,37 @@ function WorkspaceBody({ id }: { id: string }) {
         <section className="panel">
           {step === 0 ? (
             <>
-              <p className="eyebrow">A BRIEF WORTH READING</p>
+              <p className="eyebrow">
+                ROLE-SPECIFIC CHALLENGE BRIEF · FICTIONAL DEMO — NOT AFFILIATED
+                WITH {o.company.toUpperCase()}
+              </p>
               <h2>{o.challenge}</h2>
+              {o.dayInTheRole && (
+                <div className="day-in-role-box">
+                  <p className="eyebrow">A DAY IN THE ROLE</p>
+                  <p>{o.dayInTheRole}</p>
+                </div>
+              )}
+              {o.scenario && (
+                <>
+                  <h3>Engineering scenario</h3>
+                  <p>{o.scenario}</p>
+                </>
+              )}
+              <h3>Challenge instructions</h3>
               <p>{o.instructions}</p>
+              {o.specifications?.length ? (
+                <>
+                  <h3>Technical specifications</h3>
+                  {o.specifications.map((spec) => (
+                    <div className="check-line" key={spec}>
+                      <Check size={16} />
+                      {spec}
+                    </div>
+                  ))}
+                </>
+              ) : null}
+              <ChallengeResources opportunity={o} />
               <h3>Deliverables checklist</h3>
               {o.deliverables.map((d) => (
                 <div className="check-line" key={d}>
@@ -252,6 +280,17 @@ function WorkspaceBody({ id }: { id: string }) {
                   {d}
                 </div>
               ))}
+              {o.acceptanceCriteria?.length ? (
+                <>
+                  <h3>Acceptance criteria</h3>
+                  {o.acceptanceCriteria.map((ac) => (
+                    <div className="check-line" key={ac}>
+                      <Check size={16} />
+                      {ac}
+                    </div>
+                  ))}
+                </>
+              ) : null}
               <h3>Tools & assistance</h3>
               <p>{o.tools}</p>
               <h3>Review criteria</h3>

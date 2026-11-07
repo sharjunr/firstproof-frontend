@@ -178,7 +178,7 @@ export function OpportunityCard({ o }: { o: Opportunity }) {
         </div>
         <div>
           <span>{o.company}</span>
-          
+          <small>Fictional Demo — Not affiliated with this company.</small>
         </div>
         <button
           className={"icon-button " + (saved ? "saved" : "")}
@@ -219,9 +219,14 @@ export function OpportunityCard({ o }: { o: Opportunity }) {
           {o.majors.length > 2 ? " + more" : ""}
         </p>
       ) : null}
-      <p className="challenge-label">THE CHALLENGE</p>
+      <p className="challenge-label">ROLE-SPECIFIC CHALLENGE</p>
       <h4>{o.challenge}</h4>
-      <p className="clamp">{o.instructions}</p>
+      <p className="clamp">{o.scenario || o.instructions}</p>
+      {o.skills?.length ? (
+        <p className="card-majors">
+          Skills: {o.skills.slice(0, 3).join(" · ")}
+        </p>
+      ) : null}
       <div className="card-facts">
         <span>
           <Clock size={13} />

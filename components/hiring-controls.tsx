@@ -438,29 +438,65 @@ export function ChallengeMaterials({
 export function ChallengeResources({
   opportunity: o,
 }: {
-  opportunity: Pick<Opportunity, "resources" | "rubric" | "challengeDays">;
+  opportunity: Pick<
+    Opportunity,
+    "resources" | "rubric" | "challengeDays" | "starterMaterials"
+  >;
 }) {
   const [error, setError] = useState("");
+  const [openMaterial, setOpenMaterial] = useState<string | null>(null);
+  function downloadText(name: string, content: string) {
+    const blob = new Blob([content], { type: "text/plain;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = name;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
   return (
     <section className="challenge-resources">
-      <h3>Time and evaluation</h3>
-      <p>
-        <Clock size={14} /> Complete within {o.challengeDays || 7} days after
-        joining, and before the published application deadline.
-      </p>
-      {o.rubric?.map((c) => (
-        <div className="public-rubric" key={c.id}>
-          <strong>
-            {c.label}
-            <span>{c.weight}%</span>
-          </strong>
-          <p>{c.description}</p>
-        </div>
-      ))}
-      {!!o.resources?.length && (
+      {!!(o.starterMaterials?.length || o.resources?.length) && (
         <>
-          <h3>Starter files and resources</h3>
-          {o.resources.map((f) => (
+          <h3>Starter materials & synthetic datasets</h3>
+          <p className="fine-print">
+            Representative synthetic engineering inputs and starter files for
+            this challenge.
+          </p>
+          {o.starterMaterials?.map((m) => (
+            <div className="starter-material-card" key={m.name}>
+              <div className="starter-material-head">
+                <div>
+                  <strong>
+                    <FileText size={15} /> {m.name}
+                  </strong>
+                  <p>{m.description}</p>
+                </div>
+                <div className="starter-material-actions">
+                  <button
+                    type="button"
+                    className="button secondary small"
+                    onClick={() =>
+                      setOpenMaterial(openMaterial === m.name ? null : m.name)
+                    }
+                  >
+                    {openMaterial === m.name ? "Hide preview" : "Preview"}
+                  </button>
+                  <button
+                    type="button"
+                    className="button small"
+                    onClick={() => downloadText(m.name, m.content)}
+                  >
+                    Download
+                  </button>
+                </div>
+              </div>
+              {openMaterial === m.name && (
+                <pre className="starter-material-code">{m.content}</pre>
+              )}
+            </div>
+          ))}
+          {o.resources?.map((f) => (
             <button
               className="deliverable-link"
               key={f.id}
@@ -474,6 +510,21 @@ export function ChallengeResources({
           ))}
         </>
       )}
+      <h3>What the employer will review</h3>
+      <p>
+        <Clock size={14} /> Complete within {o.challengeDays || 7} days after
+        joining, and before the published application deadline. These are
+        published employer review criteria, not automated AI scores.
+      </p>
+      {o.rubric?.map((c) => (
+        <div className="public-rubric" key={c.id}>
+          <strong>
+            {c.label}
+            <span>{c.weight}%</span>
+          </strong>
+          <p>{c.description}</p>
+        </div>
+      ))}
       {error && (
         <p role="alert" className="form-error">
           {error}
