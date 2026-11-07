@@ -40,17 +40,7 @@ export function Nav() {
   const path = usePathname();
   useEffect(() => setMobile(false), [path]);
   return (
-    <>
-      <div className="demo-strip">
-        <Sparkles size={13} />
-        <span>
-          Preview · Fictional listings · Data saved on this browser
-        </span>
-        <Link href="/sign-in">
-          Try both roles <ArrowRight size={12} />
-        </Link>
-      </div>
-      <header className="nav">
+    <header className="nav">
         <Logo />
         <nav className={mobile ? "nav-links open" : "nav-links"}>
           <Link href="/#students">For students</Link>
@@ -113,7 +103,6 @@ export function Nav() {
           </button>
         </div>
       </header>
-    </>
   );
 }
 export function Footer() {

@@ -5562,6 +5562,7 @@ td strong {
 .nav-links.open {
   background: #fff;
   border-color: #d1d9e0;
+  top: 76px;
 }
 .section-heading > p,
 .process-three p,
@@ -5622,7 +5623,7 @@ td strong {
     font-size: 29px;
   }
   .nav-links.open {
-    top: 106px;
+    top: 76px;
   }
 }
 .preview-registration{padding:22px;border:1px solid #d1d9e0;border-radius:8px;margin:25px 0;background:#fff}.preview-registration>h3{font-size:17px}.preview-registration>p{font-size:11px}.demo-auth{margin-top:20px}.auth-panel form.preview-registration{margin-top:25px}.declaration .notice{margin-bottom:0}
