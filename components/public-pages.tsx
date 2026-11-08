@@ -123,46 +123,52 @@ export function Landing() {
       <section className="section flow-section">
         <div className="section-heading">
           <div>
-            <p className="eyebrow">HOW FIRSTPROOF RECRUITMENT WORKS</p>
+            <p className="eyebrow">HOW FIRSTPROOF WORKS</p>
             <h2>
-              Test applicants on the actual work
+              Don’t just tell employers what you can do.
               <br />
-              they would perform in the role.
+              Show them.
             </h2>
           </div>
           <p>
-            Not generic LeetCode puzzles. Not random AI chatbots. Realistic
-            engineering challenges scoped to 2–5 hours.
+            Forget endless applications and generic coding tests. FirstProof
+            lets you prove your skills through real challenges inspired by the
+            jobs you want.
           </p>
         </div>
         <div className="process-three">
           {[
             {
               n: "01",
-              title: "Select a role-matched challenge.",
-              text: "Every posting includes a “Day in the Role” brief, concrete technical specifications, and downloadable synthetic starter materials.",
+              title: "Find Your Challenge",
+              lead: "Choose a challenge that matches your dream job.",
+              text: "Explore exciting challenges from employers in software, AI, engineering, and more. Pick a role that interests you and see what the job is really like.",
               icon: Search,
             },
             {
               n: "02",
-              title: "Build & verify the engineering artifact.",
-              text: "Write RTL and testbenches, analyze S-parameters, decode telemetry frames, or optimize kernels—then submit code, plots, and your engineering report.",
+              title: "Show What You’ve Got",
+              lead: "Solve real problems. Build real skills.",
+              text: "Put your knowledge to work on a hands-on challenge. Create something meaningful, show your thinking, and submit your solution.",
               icon: Code2,
             },
             {
               n: "03",
-              title: "Evaluated by engineers against a rubric.",
-              text: "Similarity checks only flag suspicious overlap for human inspection. Employers review your work against published criteria and commit to a response deadline.",
+              title: "Get Noticed. Get Hired.",
+              lead: "Let your skills open doors.",
+              text: "Employers review your work based on clear criteria, giving you a chance to stand out, receive feedback, and unlock potential job opportunities.",
               icon: UsersIcon,
             },
-          ].map(({ n, title, text, icon: Icon }) => (
+          ].map(({ n, title, lead, text, icon: Icon }) => (
             <article key={n}>
               <div>
                 <span>{n}</span>
                 <Icon size={22} />
               </div>
               <h3>{title}</h3>
-              <p>{text}</p>
+              <p>
+                <strong>{lead}</strong> {text}
+              </p>
             </article>
           ))}
         </div>
@@ -186,70 +192,6 @@ export function Landing() {
             .map((o) => (
               <OpportunityCard key={o.id} o={o} />
             ))}
-        </div>
-      </section>
-      <section className="section">
-        <div className="section-heading">
-          <div>
-            <p className="eyebrow">THE FUNDAMENTAL FIRSTPROOF RULE</p>
-            <h2>Every challenge must match the actual job.</h2>
-          </div>
-          <p>
-            Every employer challenge is tied to a specific job responsibility, a
-            realistic engineering problem, and a measurable deliverable.
-          </p>
-        </div>
-        <div className="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>Position (Fictional Demo)</th>
-                <th>Appropriate Role-Specific Challenge</th>
-                <th>Inappropriate Generic Assignment</th>
-              </tr>
-            </thead>
-            <tbody>
-              {[
-                [
-                  "AMD — RTL / Digital Design Intern",
-                  "Design and verify an 8-bit, 16-entry synchronous FIFO module in Verilog/SystemVerilog",
-                  "Build a generic AI chatbot",
-                ],
-                [
-                  "Skyworks Solutions — RF Test Intern",
-                  "Analyze S-parameters (S11, S21, S22), return loss, and passband gain from RF test data",
-                  "Create a React marketing website",
-                ],
-                [
-                  "Satellite Comms — Embedded Software Intern",
-                  "Decode binary satellite telemetry packets, validate CRC-16 checksums, and flag faults",
-                  "Solve unrelated dynamic-programming puzzles",
-                ],
-                [
-                  "NVIDIA — GPU / AI Software Intern",
-                  "Optimize matrix multiplication with vectorization/tiling and verify FP32 accuracy",
-                  "Write a social-media launch campaign",
-                ],
-                [
-                  "Thermo Fisher — Reliability Engineering Intern",
-                  "Analyze equipment vibration RMS and thermal sensor data to detect bearing wear",
-                  "Build a mobile arcade game",
-                ],
-              ].map(([role, good, bad]) => (
-                <tr key={role}>
-                  <td>
-                    <strong>{role}</strong>
-                  </td>
-                  <td>
-                    <Badge tone="success">Role-aligned</Badge> {good}
-                  </td>
-                  <td>
-                    <Badge tone="warning">Off-target</Badge> {bad}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
         </div>
       </section>
       <section className="section audience">
