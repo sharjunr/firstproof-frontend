@@ -1,4 +1,5 @@
 "use client";
+import {roleLanguage} from "../lib/role-language";
 import {assertScreeningEdit} from "../lib/screening";
 import {ScreeningEditor,ScreeningMetrics,ScreeningFixtures,EmployerScreening,inQueue,queueOptions} from "./screening-controls";
 import Link from "next/link";
@@ -99,6 +100,7 @@ function DashboardBody({ onlyOpportunities }: { onlyOpportunities: boolean }) {
       />
       {!onlyOpportunities && (
         <>
+          <div className="dashboard-callout roi-dashboard-entry"><div><h3>Employer Screening ROI Simulator</h3><p>Explore an illustrative screening scenario using your own applicant volume, review time and labor cost assumptions.</p></div><Link className="button secondary small" href="/employer/roi">Estimate time and cost <ArrowUpRight size={16}/></Link></div>
           <ScreeningMetrics applications={apps}/>
           <ScreeningFixtures/>
           <div className="metrics five">
@@ -275,7 +277,7 @@ const templateBriefs: {
       title: "Digital Design Engineering Intern",
       industry: "Engineering",
       location: "Markham, ON",
-      effort: 4,
+      effort: 3,
       description:
         "Fictional Demo — Not affiliated with AMD. Join the fictional RTL Design & Verification team to build and verify synthesizable hardware blocks.",
       responsibilities:
@@ -358,7 +360,7 @@ const templateBriefs: {
       title: "Embedded Software Intern",
       industry: "Software & AI",
       location: "Toronto",
-      effort: 3.5,
+      effort: 3,
       description:
         "Fictional Demo — Not affiliated with this company. Build flight and ground telemetry parsers for LEO satellite subsystems.",
       responsibilities:
@@ -451,13 +453,13 @@ function PostBody({ editId }: { editId?: string }) {
         challenge: "",
         scenario: "",
         specifications: [
-          "Scoped to 2–5 hours using synthetic materials",
+          "Scoped to a maximum of 3 hours using synthetic materials",
           "Clear boundary conditions and verification expectations",
         ],
-        skills: ["Problem Solving", "Technical Documentation"],
+        skills: ["Problem Solving", "Clear Communication"],
         starterMaterials: [],
         acceptanceCriteria: [
-          "Meets the stated technical specifications",
+          "Meets the stated role-specific requirements",
           "Includes clear verification evidence and documentation",
         ],
         instructions: "",
@@ -476,6 +478,12 @@ function PostBody({ editId }: { editId?: string }) {
         demo: true,
       },
   );
+  const language=roleLanguage(o);
+  const editorTemplates=[...templateBriefs,...Array.from(new Set(state.opportunities.map(item=>item.industry))).filter(field=>field!=="Engineering").map(field=>{
+    const example=state.opportunities.find(item=>item.industry===field&&item.status==="Published")!;
+    const patch:Partial<Opportunity>={title:example.title,company:example.company,industry:example.industry,description:example.description,responsibilities:example.responsibilities,dayInTheRole:example.dayInTheRole,qualifications:example.qualifications,challenge:example.challenge,scenario:example.scenario,specifications:example.specifications,skills:example.skills,starterMaterials:example.starterMaterials,acceptanceCriteria:example.acceptanceCriteria,instructions:example.instructions,deliverables:example.deliverables,tools:example.tools,criteria:example.criteria,rubric:example.rubric,effort:Math.min(3,example.effort)};
+    return {name:`${field} — ${example.title}`,patch};
+  })];
   const [errors, setErrors] = useState<Record<string, string>>({}),
     [success, setSuccess] = useState(""),
     [preview, setPreview] = useState(false);
@@ -522,7 +530,9 @@ function PostBody({ editId }: { editId?: string }) {
         <input
           type={type}
           value={String(o[k])}
-          min={type === "number" ? 0 : undefined}
+          min={type === "number" ? (k === "effort" ? 0.5 : 0) : undefined}
+          max={k === "effort" ? 3 : undefined}
+          step={k === "effort" ? 0.5 : undefined}
           aria-invalid={!!errors[k]}
           aria-describedby={errors[k] ? "error-" + k : undefined}
           onChange={(e) =>
@@ -591,7 +601,7 @@ function PostBody({ editId }: { editId?: string }) {
             )}
             {area(
               "dayInTheRole",
-              "A Day in the Role (how this challenge mirrors daily engineering work)",
+              "A day in the role (how this task relates to everyday work)",
             )}
             <div className="form-grid">
               <label>
@@ -653,18 +663,18 @@ function PostBody({ editId }: { editId?: string }) {
           </section>
           <section className="panel">
             <p className="eyebrow">02 · EMPLOYER CHALLENGE CREATOR</p>
-            <h2>Role-specific engineering problem.</h2>
+            <h2>{language.challenge}</h2>
             <p className="fine-print">
               Core FirstProof rule: every challenge must directly correspond to
               the actual responsibilities of the role. Do not assign generic
               chatbots or unrelated puzzles.
             </p>
             <label>
-              Load a role-specific engineering template
+              Load a role-specific starting brief
               <select
                 defaultValue=""
                 onChange={(e) => {
-                  const t = templateBriefs.find(
+                  const t = editorTemplates.find(
                     (t) => t.name === e.target.value,
                   );
                   if (t) {
@@ -675,21 +685,21 @@ function PostBody({ editId }: { editId?: string }) {
                 <option value="" disabled>
                   Choose an optional role-specific template
                 </option>
-                {templateBriefs.map((t) => (
+                {editorTemplates.map((t) => (
                   <option key={t.name} value={t.name}>
                     {t.name}
                   </option>
                 ))}
               </select>
             </label>
-            {input("challenge", "Technical challenge title")}
+            {input("challenge", "Work-sample title")}
             {area(
               "scenario",
-              "Engineering scenario (the realistic system context)",
+              language.scenario,
             )}
             {area("instructions", "Detailed challenge instructions")}
             <label>
-              Specifications and constraints (one per line)
+              {language.requirements} (one per line)
               <textarea
                 rows={4}
                 value={(o.specifications || []).join("\n")}
@@ -702,7 +712,7 @@ function PostBody({ editId }: { editId?: string }) {
               />
             </label>
             <label>
-              Required technical skills & tools (comma-separated)
+              Relevant skills and tools (comma-separated)
               <input
                 type="text"
                 value={(o.skills || []).join(", ")}
@@ -719,7 +729,7 @@ function PostBody({ editId }: { editId?: string }) {
             </label>
             {input(
               "effort",
-              "Expected completion time (recommended 2–5 hours)",
+              "Maximum work time (0.5–3 hours, including setup)",
               "number",
             )}
             <label>
@@ -1078,7 +1088,7 @@ function CandidateBody({
               <NextStageReview application={a} />
             </section>
             <section className="panel">
-              <h2>Project deliverables</h2>
+              <h2>Submitted work</h2>
               <p className="pre-wrap">{a.text}</p>
               {a.links.map((url, i) => (
                 <a
@@ -1089,7 +1099,7 @@ function CandidateBody({
                   rel="noreferrer"
                 >
                   <ExternalLink size={16} />
-                  Project link {i + 1}
+                  Work-sample link {i + 1}
                   <span>{url}</span>
                 </a>
               ))}

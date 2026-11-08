@@ -13,6 +13,7 @@ const routes = [
   "employer/candidates",
   "employer/post-opportunity",
   "employer/settings",
+  "employer/roi",
 ];
 export default async function Page({
   params,

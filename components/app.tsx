@@ -1,6 +1,8 @@
 "use client";
 import { usePathname, useSearchParams } from "next/navigation";
 import { StoreProvider } from "./store";
+import { EmployerRoiSimulator } from "./employer-roi";
+import { EmployerShell } from "./ui";
 import { Nav, Footer } from "./ui";
 import { Landing, Marketplace, Details } from "./public-pages";
 import {
@@ -40,6 +42,7 @@ export function App() {
         flagsOnly={params.get("flags") === "true"}
       />
     );
+  else if (path === "/employer/roi") page = <EmployerShell><EmployerRoiSimulator id="employer-roi-dashboard" /></EmployerShell>;
   else if (path === "/employer/settings") page = <EmployerSettings />;
   else if (path === "/employer/opportunities")
     page = <EmployerDashboard onlyOpportunities />;

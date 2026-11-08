@@ -16,6 +16,7 @@ import {
   Users,
   Plus,
   Settings,
+  Calculator,
   LogOut,
   Sparkles,
   ShieldCheck,
@@ -290,6 +291,7 @@ export function EmployerShell({ children }: { children: ReactNode }) {
             [LayoutDashboard, "Overview", "/employer"],
             [Briefcase, "My opportunities", "/employer/opportunities"],
             [Users, "Candidate review", "/employer/candidates"],
+            [Calculator, "ROI Simulator", "/employer/roi"],
             [Plus, "Post opportunity", "/employer/post-opportunity"],
             [Settings, "Settings", "/employer/settings"],
           ].map(([Icon, label, url]) => {

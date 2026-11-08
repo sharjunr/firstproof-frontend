@@ -100,6 +100,6 @@ export function assertScreeningEdit(s:Store,o:Opportunity){
  if(s.user?.role!=='employer'||o.owner!==s.user.id)throw new Error('Employer ownership is required.');
  const old=s.opportunities.find(x=>x.id===o.id);if(!old)return;
  const started=s.applications.some(a=>a.opportunityId===o.id);if(!started)return;
- const keys:(keyof Opportunity)[]=['screeningPolicy','instructions','deliverables','tools','rubric','criteria','deadline','challengeDays','challenge','referenceSolution','privateEvaluationFiles','resources','specifications','scenario','acceptanceCriteria','starterMaterials','skills'];
+ const keys:(keyof Opportunity)[]=['screeningPolicy','effort','instructions','deliverables','tools','rubric','criteria','deadline','challengeDays','challenge','referenceSolution','privateEvaluationFiles','resources','specifications','scenario','acceptanceCriteria','starterMaterials','skills'];
  if(keys.some(k=>JSON.stringify(old[k])!==JSON.stringify(o[k])))throw new Error('Requirements are locked because applicants have already started. Create a new challenge for revised rules.');
 }

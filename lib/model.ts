@@ -124,8 +124,8 @@ export function validateOpportunity(o: Opportunity) {
     errors.deliverables = "Add at least one required deliverable.";
   if (!Number.isFinite(o.reviewDays) || o.reviewDays < 1 || o.reviewDays > 30)
     errors.reviewDays = "Choose 1–30 calendar days.";
-  if (!Number.isFinite(o.effort) || o.effort < 0.5 || o.effort > 8)
-    errors.effort = "Scope the challenge to 0.5–8 hours.";
+  if (!Number.isFinite(o.effort) || o.effort < 0.5 || o.effort > 3)
+    errors.effort = "Scope the challenge to 0.5–3 hours, including setup and documentation.";
   if (!Number.isFinite(o.duration) || o.duration < 1 || o.duration > 24)
     errors.duration = "Choose 1–24 months.";
   if (o.pay < 0 || !Number.isFinite(o.pay))

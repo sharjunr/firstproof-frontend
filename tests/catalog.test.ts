@@ -6,8 +6,8 @@ import { expandedCatalog, catalogIndustries } from "../lib/catalog";
 
 test("catalog spans 20 fields with unique jobs and distinct actionable challenge briefs", () => {
   const s = seed();
-  assert.equal(s.opportunities.length, 88);
-  assert.equal(new Set(s.opportunities.map((o) => o.id)).size, 88);
+  assert.equal(s.opportunities.length, 100);
+  assert.equal(new Set(s.opportunities.map((o) => o.id)).size, 100);
   assert.equal(new Set(s.opportunities.map((o) => o.industry)).size, 20);
   assert.equal(new Set(expandedCatalog().map((o) => o.challenge)).size, 80);
   for (const industry of catalogIndustries)
@@ -87,12 +87,12 @@ test("catalog upgrade preserves existing applications, saved choices, edited lis
   original.applications[0].notes = "Keep private note";
   original.applications[0].stage = "Shortlisted";
   const upgraded = upgradeDemoCatalog(original);
-  assert.equal(upgraded.opportunities.length, 89);
+  assert.equal(upgraded.opportunities.length, 101);
   assert.equal(upgraded.opportunities[0].title, "My edited demo role");
   assert.ok(upgraded.opportunities.some((o) => o.id === "employer-custom"));
   assert.deepEqual(upgraded.saved, original.saved);
   assert.deepEqual(upgraded.applications, original.applications);
-  assert.equal(upgradeDemoCatalog(upgraded).opportunities.length, 89);
+  assert.equal(upgradeDemoCatalog(upgraded).opportunities.length, 101);
 });
 test("paid, unpaid, part-time effort, arrangement and role variety is represented consistently", () => {
   const jobs = expandedCatalog();
