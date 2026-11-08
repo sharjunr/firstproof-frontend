@@ -1,4 +1,5 @@
 'use client';
+import {ChallengeAccommodations} from './challenge-accommodations';
 import type {Opportunity} from '../lib/types';
 import {roleLanguage} from '../lib/role-language';
 import {Badge,CheckLine} from './ui';
@@ -9,6 +10,7 @@ export function ChallengeBrief({opportunity:o}:{opportunity:Opportunity}){
  return <div className="concise-challenge">
   <p className="eyebrow">{language.challenge}</p><h2>{o.challenge}</h2>
   <div className="brief-time"><Badge tone="blue">Maximum time: {o.effort} hours</Badge><span>Includes reading, setup, checks and your short handoff.</span></div>
+  <ChallengeAccommodations challenge={o.challenge}/>
   <h3>Your task</h3><p className="brief-field-label">{language.scenario}</p><p>{o.scenario||o.instructions.split('\n\n')[0]}</p>
   <h3>What to submit</h3><div className="brief-deliverables">{o.deliverables.map(d=><CheckLine key={d}>{d}</CheckLine>)}</div>
   <p className="fine-print">Once you start the timed challenge, submit before the countdown ends. Partial work with a note about unfinished items is acceptable when submitted on time. An unsubmitted attempt closes when time expires.</p>
