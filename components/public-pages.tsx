@@ -34,7 +34,7 @@ export function Landing() {
   const router = useRouter();
   const [query, setQuery] = useState("");
   const reduced = useReducedMotion();
-  const { state } = useStore();
+  const { state, login } = useStore();
   return (
     <>
       <section className="hero editorial-hero">
@@ -205,8 +205,8 @@ export function Landing() {
             Find a starting point that values your approach, your curiosity, and
             the work you can show.
           </p>
-          <Link className="text-link" href="/marketplace">
-            Find your first opportunity <ArrowUpRight size={17} />
+          <Link className="text-link" href="/tracker" onClick={()=>login("student")}>
+            Open your student workspace <ArrowUpRight size={17} />
           </Link>
         </article>
         <article id="employers">
@@ -220,7 +220,7 @@ export function Landing() {
             Post a focused challenge. Review tangible work. Give someone their
             first meaningful opportunity.
           </p>
-          <Link className="text-link" href="/employer">
+          <Link className="text-link" href="/employer" onClick={()=>login("employer")}>
             Open your employer workspace <ArrowUpRight size={17} />
           </Link>
           <Link className="text-link roi-entry-link" href="#employer-roi" onClick={e=>{e.preventDefault();window.history.replaceState(null,"","#employer-roi");document.getElementById("employer-roi")?.scrollIntoView({block:"start",behavior:"instant"});}}>Estimate screening time and cost <ArrowUpRight size={17}/></Link>

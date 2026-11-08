@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState, useId, type ReactNode } from "react";
 import {
   ArrowUpRight,
@@ -38,8 +38,7 @@ export function Logo() {
   );
 }
 export function Nav() {
-  const { state, setState, notify, login } = useStore();
-  const router = useRouter();
+  const { state, setState, notify } = useStore();
   const [mobile, setMobile] = useState(false);
   const path = usePathname();
   useEffect(() => setMobile(false), [path]);
@@ -57,21 +56,6 @@ export function Nav() {
           </Link>
         </nav>
         <div className="nav-actions">
-          <label className="demo-view-switch">
-            <span>Demo view</span>
-            <select aria-label="Switch demo view" value={state.user?.role || ""} onChange={e=>{
-              const role=e.target.value;
-              if(role!=="student"&&role!=="employer")return;
-              login(role);
-              router.push(role==="student"?"/tracker":"/employer");
-              setMobile(false);
-              notify(role==="student"?"Student demo opened.":"Employer demo opened.");
-            }}>
-              <option value="" disabled>Choose view</option>
-              <option value="student">Student</option>
-              <option value="employer">Employer</option>
-            </select>
-          </label>
           {state.user ? (
             <>
               <Link
