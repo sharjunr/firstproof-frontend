@@ -208,6 +208,9 @@ export function Landing() {
           <Link className="text-link" href="/tracker" onClick={()=>login("student")}>
             Open your student workspace <ArrowUpRight size={17} />
           </Link>
+          <Link className="text-link roi-entry-link" href="/marketplace">
+            Search for opportunities <ArrowUpRight size={17} />
+          </Link>
         </article>
         <article id="employers">
           <span className="audience-number">FOR EMPLOYERS WHO LOOK CLOSER</span>
