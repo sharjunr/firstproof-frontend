@@ -46,9 +46,9 @@ export function Landing() {
           transition={{ duration: 0.45 }}
         >
           <h1>
-            Your work.
+            Your Potential Deserves
             <br />
-            <span>Your first opportunity.</span>
+            <span>a First Chance.</span>
           </h1>
           <p>
             Find real employer challenges. Compete with students, Unlock Careers
