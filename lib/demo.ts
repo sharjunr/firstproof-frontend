@@ -343,24 +343,25 @@ endmodule
   },
   {
     id: "business-analyst",
-    title: "Embedded Software Intern",
-    company: "MDA Space",
-    industry: "Software & AI",
+    title: "Financial Analyst Intern",
+    company: "RBC",
+    industry: "Business & Finance",
     majors: [
-      "Computer Engineering",
-      "Software Engineering",
-      "Electrical Engineering",
-      "Computer Science",
+      "Finance",
+      "Accounting",
+      "Business Administration",
+      "Economics",
     ],
     tags: [
-      "satellite",
-      "embedded",
-      "telemetry",
-      "firmware",
-      "c++",
-      "python",
-      "crc",
-      "packet decoder",
+      "rbc",
+      "finance",
+      "financial analyst",
+      "valuation",
+      "dcf",
+      "accounting",
+      "cpa",
+      "cfa",
+      "business",
     ],
     location: "Toronto",
     arrangement: "Hybrid",
@@ -368,107 +369,109 @@ endmodule
     paid: true,
     pay: 29,
     duration: 4,
-    effort: 3.5,
+    effort: 3,
     description:
-      "Fictional Demo — Not affiliated with this company. Join our fictional satellite flight & ground software team to build resilient telemetry decoders, packet validators, and spacecraft health monitoring tools.",
+      "Fictional Demo — Not affiliated with RBC. Join our fictional Corporate & Investment Banking Financial Analysis team to build 3-statement cash-flow schedules, analyze working-capital drivers, and run DCF valuation sensitivity tables.",
     responsibilities:
-      "Write C++ or Python packet parsers for satellite subsystem telemetry, verify framing sync words and CRC-16 checksums, and build automated tests for anomalous or corrupted downlink frames.",
+      "Build free-cash-flow projections from historical income statement and balance sheet extracts, compute net working capital (NWC) changes, and evaluate enterprise value sensitivity across WACC and terminal growth assumptions.",
     dayInTheRole:
-      "Embedded and ground-station software engineers translate binary interface control documents (ICDs) into deterministic packet decoders, validate checksums over noisy radio links, and flag out-of-family thermal or power readings.",
+      "Financial analysts reconcile historical quarterly statements, normalize non-recurring expenses, calculate unlevered free cash flow (UFCF), and prepare sensitivity tables for credit and investment committee memos.",
     qualifications:
-      "Proficiency in Python or C++, binary data manipulation, bitwise operations, and unit testing.",
-    challenge: "Build a Satellite Telemetry Packet Decoder",
+      "Coursework in corporate finance, financial accounting (CPA/CFA pathway), spreadsheet modeling, and financial statement analysis.",
+    challenge:
+      "Build a Working Capital & Unlevered Free Cash Flow Valuation Model",
     scenario:
-      "The company provides simulated satellite telemetry packets from a LEO attitude-and-power subsystem. You must write software to decode temperature, battery voltage, and orientation data, validate CRC-16 checksums, and flag abnormal readings.",
+      "Your team is evaluating a mid-market industrial packaging business. Using the supplied 4-quarter financial extract and valuation assumptions, compute normalized EBITDA, change in Net Working Capital (ΔNWC), Unlevered Free Cash Flow (UFCF), and a 3x3 WACC vs. terminal-multiple enterprise value sensitivity table.",
     specifications: [
-      "12-byte binary frame format (hex-encoded per line) starting with 2-byte sync word 0xEB90",
-      "Byte layout: [0..1] sync 0xEB90, [2] seq_id (uint8), [3..4] battery_mv (uint16 BE), [5..6] temp_deci_c (int16 BE), [7..8] pitch_deg10 (int16 BE), [9] status_flags (uint8), [10..11] crc16_xor (uint16 BE)",
-      "Checksum rule: 16-bit big-endian sum of bytes [0..9] modulo 65536 must match bytes [10..11]",
-      "Flag abnormal readings: battery_mv < 6800 mV, temp_c > 60.0 °C or < -15.0 °C, or |pitch_deg| > 45.0°",
-      "Reject malformed frames or bad sync/checksums without halting the stream parser",
+      "Normalize EBITDA by adding back the documented one-time Q3 warehouse relocation charge ($0.45M)",
+      "Compute Net Working Capital = (Accounts Receivable + Inventory) - Accounts Payable for each quarter and derive ΔNWC",
+      "Calculate Unlevered Free Cash Flow: UFCF = EBIT × (1 - 26.5% tax rate) + D&A - CapEx - ΔNWC",
+      "Build a 3×3 Enterprise Value sensitivity table across WACC (8.5%, 9.5%, 10.5%) and Exit EV/EBITDA multiple (7.5x, 8.5x, 9.5x)",
     ],
     skills: [
-      "Embedded Programming",
-      "Packet Parsing",
-      "Data Validation & Checksums",
-      "Python or C++",
-      "Unit Testing",
+      "Financial Modeling",
+      "DCF & Valuation",
+      "Financial Accounting",
+      "Working Capital Analysis",
+      "Excel / Spreadsheets",
     ],
     starterMaterials: [
       {
-        name: "telemetry_packets_synthetic.hex",
+        name: "quarterly_financials_synthetic.csv",
         description:
-          "Synthetic satellite downlink hex frames including nominal frames, a bad checksum frame, a low-battery warning, and an over-temperature fault.",
-        content: `# Fictional Satellite Telemetry Stream (12 bytes / 24 hex chars per frame)
-EB90011D4C00FA00140103DF
-EB90021D1A0104001E0103C9
-EB9003196401180028030037
-EB90041CE8028A000A0503BA
-EB90051D00010E001001FFFF
-EB90061CF40104021C0903E3
+          "Synthetic 4-quarter income statement and working-capital balance sheet extract ($ CAD millions).",
+        content: `Quarter,Revenue_M,COGS_M,SG_A_M,OneTime_Relocation_M,DA_M,CapEx_M,AR_M,Inventory_M,AP_M
+Q1_2026,18.40,11.04,3.20,0.00,0.85,0.95,3.10,2.80,1.95
+Q2_2026,19.80,11.88,3.35,0.00,0.88,1.10,3.45,3.05,2.10
+Q3_2026,20.50,12.30,3.40,0.45,0.90,1.05,3.80,3.25,2.15
+Q4_2026,22.10,13.04,3.55,0.00,0.92,1.20,3.95,3.15,2.35
 `,
       },
       {
-        name: "telemetry_icd_spec.md",
+        name: "dcf_valuation_assumptions.json",
         description:
-          "Interface Control Document (ICD) specifying byte offsets, endianness, scaling factors, and fault thresholds.",
-        content: `# Fictional LEO Subsystem Telemetry ICD
-- Bytes 0–1: Sync word = 0xEB90
-- Byte 2: Sequence counter (uint8)
-- Bytes 3–4: Battery voltage in mV (uint16 big-endian, nominal 7000–8400 mV, fault < 6800 mV)
-- Bytes 5–6: Board temperature in 0.1 °C (int16 big-endian, fault > 60.0 °C or < -15.0 °C)
-- Bytes 7–8: Pitch angle in 0.1 deg (int16 big-endian, fault if |pitch| > 45.0 deg)
-- Byte 9: Subsystem bitmask (bit 0 = payload_on, bit 1 = heater_on, bit 2 = fault_latched)
-- Bytes 10–11: 16-bit big-endian sum of bytes[0..9] & 0xFFFF`,
+          "Statutory tax rate, discount rate (WACC) grid, and net debt bridge assumptions.",
+        content: JSON.stringify(
+          {
+            company: "Maple Packaging Corp. (Fictional Target)",
+            currency: "CAD Millions",
+            statutory_tax_rate: 0.265,
+            wacc_grid: [0.085, 0.095, 0.105],
+            exit_ev_ebitda_grid: [7.5, 8.5, 9.5],
+            net_debt_m: 14.2,
+          },
+          null,
+          2,
+        ),
       },
     ],
     acceptanceCriteria: [
-      "Decodes all valid frames into human-readable engineering units (V, °C, degrees)",
-      "Detects and logs frame #5 as a checksum mismatch without crashing",
-      "Flags frame #3 (battery < 6.8 V), frame #4 (temp > 60 °C), and frame #6 (pitch > 45°)",
-      "Includes unit tests covering valid, corrupted, and truncated packet inputs",
+      "Correctly adds back the $0.45M Q3 relocation expense to arrive at normalized EBITDA",
+      "Accurately computes quarterly NWC and cash-flow impact of ΔNWC (increase in NWC = cash outflow)",
+      "Produces a reconciled UFCF schedule and 3×3 Enterprise & Implied Equity Value sensitivity table",
+      "Includes a 1-page investment memo highlighting working-capital trends and key valuation risks",
     ],
     instructions:
-      "Implement a telemetry packet decoder in Python or C++ for a simulated satellite subsystem. Parse binary/hex sensor fields, validate frame sync and checksums, and flag abnormal readings according to the ICD.",
+      "Using the synthetic financial dataset, construct a clean working-capital and unlevered free cash flow model. Produce a 3×3 valuation sensitivity table and write a concise 1-page financial analysis memo.",
     deliverables: [
-      "Python or C++ telemetry decoder source code",
-      "Automated unit tests and sample decoded output log",
-      "Short test report documenting decoded values, checksum rejections, and anomaly flags",
+      "Spreadsheet financial model (.xlsx / .csv) or Python notebook with visible formulas",
+      "Normalized EBITDA, ΔNWC, and UFCF schedule plus 3×3 sensitivity table",
+      "1-page financial analysis & key risks memo",
     ],
     tools:
-      "Python 3 or C++17/20 using standard libraries. Disclose any AI assistance and document your packet validation logic.",
+      "Excel, Google Sheets, or Python. Disclose any AI assistance and show all formula steps.",
     criteria:
-      "Published employer review criteria (human review only): accuracy of binary field decoding, checksum and error handling, anomaly threshold detection, and test coverage.",
+      "Published employer review criteria (human review only): accuracy of EBITDA normalization and ΔNWC sign conventions, UFCF and DCF math, model structure, and clarity of investment commentary.",
     eligibility:
-      "Currently enrolled student or recent graduate in computer, software, or electrical engineering; self-declared work authorization.",
+      "Currently enrolled student or recent graduate in Finance, Accounting, Business, or Economics; self-declared work authorization.",
     rubric: [
       {
-        id: "packet-decoding",
-        label: "Packet parsing & field scaling",
+        id: "ebitda-nwc",
+        label: "EBITDA normalization & working capital math",
         weight: 35,
         description:
-          "Accurate big-endian extraction and conversion to physical units.",
+          "Correctly handles non-recurring add-backs and ΔNWC cash flow sign conventions.",
       },
       {
-        id: "checksum-validation",
-        label: "Checksum & malformed frame handling",
-        weight: 25,
+        id: "ufcf-sensitivity",
+        label: "UFCF schedule & DCF sensitivity table",
+        weight: 30,
         description:
-          "Reliably rejects bad sync words, truncated lines, and invalid checksums.",
+          "Accurate tax, CapEx, D&A, and WACC/exit-multiple enterprise value grid.",
       },
       {
-        id: "anomaly-detection",
-        label: "Abnormal reading detection & unit tests",
-        weight: 25,
+        id: "model-hygiene",
+        label: "Spreadsheet structure & formula transparency",
+        weight: 20,
         description:
-          "Flags battery, thermal, and attitude threshold violations with automated tests.",
+          "Clear separation of inputs, calculations, and outputs without hardcoded overrides.",
       },
       {
-        id: "code-clarity",
-        label: "Code structure & test report",
+        id: "investment-memo",
+        label: "Financial commentary & risk analysis",
         weight: 15,
         description:
-          "Clean, maintainable parser interface and clear summary of decoded frames.",
+          "Concise interpretation of AR/Inventory build and valuation sensitivity.",
       },
     ],
   },
@@ -600,6 +603,273 @@ def matmul_baseline(A, B):
   },
   {
     id: "marketing",
+    title: "Audit & Assurance Intern (CPA Pathway)",
+    company: "Deloitte",
+    industry: "Business & Finance",
+    majors: [
+      "Accounting",
+      "Finance",
+      "Business Administration",
+      "Commerce",
+    ],
+    tags: [
+      "deloitte",
+      "accounting",
+      "cpa",
+      "audit",
+      "assurance",
+      "reconciliation",
+      "financial reporting",
+      "business",
+    ],
+    location: "Toronto",
+    arrangement: "Hybrid",
+    type: "Internship",
+    paid: true,
+    pay: 27,
+    duration: 4,
+    effort: 3,
+    description:
+      "Fictional Demo — Not affiliated with Deloitte. Join our fictional Audit & Assurance practice (CPA-approved pathway) to perform year-end revenue cutoff testing, reconcile cash and subledger balances, and document audit working papers under IFRS/ASPE.",
+    responsibilities:
+      "Execute substantive audit procedures over year-end revenue cutoff and cash reconciliations, vouch shipping documents against invoice recognition dates, and prepare proposed adjusting journal entries (AJEs).",
+    dayInTheRole:
+      "Audit and CPA-track interns inspect year-end sales invoices, bills of lading, and bank statements to verify that revenue and cash are recorded in the proper fiscal period and document audit exceptions clearly for the engagement manager.",
+    qualifications:
+      "Enrollment in an Accounting or Commerce degree pursuing CPA PEP/CFE prerequisites, understanding of accrual accounting (IFRS 15 / ASPE 3400), and attention to detail.",
+    challenge:
+      "Perform Year-End Revenue Cutoff Testing & Prepare Audit Adjusting Entries",
+    scenario:
+      "You are auditing the December 31, 2026 year-end financial statements of a wholesale distribution client. Materiality is set at $15,000. Using the year-end sales register, shipping log, and bank reconciliation schedule, identify revenue cutoff misstatements and propose the required Adjusting Journal Entries (AJEs).",
+    specifications: [
+      "Fiscal year-end cutoff date: December 31, 2026 (23:59 EST)",
+      "Under IFRS 15, FOB Shipping Point sales transfer control upon carrier pickup; FOB Destination sales transfer control upon customer delivery",
+      "Flag any invoice recorded in FY2026 where control transferred in January 2027, or shipped/delivered in FY2026 but omitted from FY2026 revenue",
+      "Prepare balanced Adjusting Journal Entries (Dr/Cr) forRevenue, Accounts Receivable, Inventory, and COGS where misstatements exceed trivial threshold ($1,500)",
+    ],
+    skills: [
+      "CPA Audit & Assurance",
+      "IFRS 15 / Accrual Accounting",
+      "Adjusting Journal Entries",
+      "Bank & Subledger Reconciliation",
+      "Working Paper Documentation",
+    ],
+    starterMaterials: [
+      {
+        name: "revenue_cutoff_ledger_synthetic.csv",
+        description:
+          "Synthetic year-end sales register with invoice dates, FOB terms, carrier ship dates, customer delivery dates, invoice amounts, and cost of goods sold.",
+        content: `Invoice_ID,Customer,FOB_Terms,Invoice_Date,Ship_Date,Delivery_Date,Recorded_Period,Amount_CAD,COGS_CAD
+INV-901,Northline Retail,FOB Shipping Point,2026-12-29,2026-12-30,2027-01-03,FY2026,42000,27300
+INV-902,Harbour Medical,FOB Destination,2026-12-30,2026-12-30,2027-01-04,FY2026,68000,44200
+INV-903,Apex Industrial,FOB Shipping Point,2026-12-31,2027-01-02,2027-01-05,FY2026,31500,20475
+INV-904,Summit Foods,FOB Shipping Point,2027-01-02,2026-12-31,2027-01-03,FY2027,24000,15600
+INV-905,Beacon Supply,FOB Destination,2026-12-28,2026-12-28,2026-12-30,FY2026,19500,12675
+`,
+      },
+      {
+        name: "bank_reconciliation_schedule.json",
+        description:
+          "Year-end cash lead sheet and reconciling items between general ledger cash and bank confirmation.",
+        content: JSON.stringify(
+          {
+            client: "Vanguard Distribution Ltd. (Fictional Audit Client)",
+            fiscal_year_end: "2026-12-31",
+            gl_cash_balance_cad: 412850,
+            bank_statement_balance_cad: 438200,
+            deposits_in_transit_cad: 18400,
+            outstanding_cheques_cad: 46250,
+            unrecorded_bank_wire_fee_cad: 350,
+            nsf_customer_cheque_returned_dec30_cad: 2150,
+          },
+          null,
+          2,
+        ),
+      },
+    ],
+    acceptanceCriteria: [
+      "Correctly flags INV-902 ($68,000 FOB Destination delivered Jan 4) and INV-903 ($31,500 FOB Shipping Point shipped Jan 2) as premature FY2026 revenue recognition",
+      "Correctly flags INV-904 ($24,000 FOB Shipping Point shipped Dec 31) as unrecorded FY2026 revenue",
+      "Provides balanced Dr/Cr Adjusting Journal Entries for both Revenue/AR and Inventory/COGS",
+      "Reconciles the $2,500 bank-to-GL cash difference ($2,150 NSF cheque + $350 wire fee)",
+    ],
+    instructions:
+      "Perform year-end revenue cutoff testing and cash reconciliation using the supplied synthetic audit schedules. Identify period-cutoff misstatements under IFRS 15, prepare balanced Adjusting Journal Entries (AJEs), and summarize your audit conclusion.",
+    deliverables: [
+      "Audit working paper (.xlsx / .csv) with invoice-by-invoice cutoff testing",
+      "Schedule of proposed Adjusting Journal Entries (Dr/Cr) and reconciled cash table",
+      "Short audit memo summarizing misstatements relative to $15,000 materiality",
+    ],
+    tools:
+      "Excel, Google Sheets, or accounting working-paper templates. Disclose any AI assistance.",
+    criteria:
+      "Published employer review criteria (human review only): accuracy of FOB shipping/destination cutoff testing, completeness of Revenue + COGS/Inventory journal entries, cash reconciliation accuracy, and professional audit documentation.",
+    eligibility:
+      "Currently enrolled student or recent graduate in Accounting, Finance, or Commerce (CPA pathway); self-declared work authorization.",
+    rubric: [
+      {
+        id: "cutoff-testing",
+        label: "FOB shipping vs. destination cutoff accuracy",
+        weight: 35,
+        description:
+          "Correctly evaluates transfer of control for INV-901 through INV-905.",
+      },
+      {
+        id: "journal-entries",
+        label: "Adjusting journal entries (Revenue & COGS/Inventory)",
+        weight: 30,
+        description:
+          "Complete, balanced Dr/Cr entries reversing premature sales and recording omitted shipments.",
+      },
+      {
+        id: "cash-reconciliation",
+        label: "Bank reconciliation & book adjustments",
+        weight: 20,
+        description:
+          "Reconciles bank vs. book cash and proposes entries for NSF cheque and bank fees.",
+      },
+      {
+        id: "audit-memo",
+        label: "Materiality assessment & working-paper clarity",
+        weight: 15,
+        description:
+          "Clear comparison of net misstatement against $15,000 materiality threshold.",
+      },
+    ],
+  },
+  {
+    id: "data-analyst",
+    title: "Embedded Software Intern",
+    company: "MDA Space",
+    industry: "Software & AI",
+    majors: [
+      "Computer Engineering",
+      "Software Engineering",
+      "Electrical Engineering",
+      "Computer Science",
+    ],
+    tags: [
+      "satellite",
+      "embedded",
+      "telemetry",
+      "firmware",
+      "c++",
+      "python",
+      "crc",
+      "packet decoder",
+    ],
+    location: "Toronto",
+    arrangement: "Hybrid",
+    type: "Internship",
+    paid: true,
+    pay: 29,
+    duration: 4,
+    effort: 3.5,
+    description:
+      "Fictional Demo — Not affiliated with MDA Space. Join our fictional satellite flight & ground software team to build resilient telemetry decoders, packet validators, and spacecraft health monitoring tools.",
+    responsibilities:
+      "Write C++ or Python packet parsers for satellite subsystem telemetry, verify framing sync words and CRC-16 checksums, and build automated tests for anomalous or corrupted downlink frames.",
+    dayInTheRole:
+      "Embedded and ground-station software engineers translate binary interface control documents (ICDs) into deterministic packet decoders, validate checksums over noisy radio links, and flag out-of-family thermal or power readings.",
+    qualifications:
+      "Proficiency in Python or C++, binary data manipulation, bitwise operations, and unit testing.",
+    challenge: "Build a Satellite Telemetry Packet Decoder",
+    scenario:
+      "The company provides simulated satellite telemetry packets from a LEO attitude-and-power subsystem. You must write software to decode temperature, battery voltage, and orientation data, validate CRC-16 checksums, and flag abnormal readings.",
+    specifications: [
+      "12-byte binary frame format (hex-encoded per line) starting with 2-byte sync word 0xEB90",
+      "Byte layout: [0..1] sync 0xEB90, [2] seq_id (uint8), [3..4] battery_mv (uint16 BE), [5..6] temp_deci_c (int16 BE), [7..8] pitch_deg10 (int16 BE), [9] status_flags (uint8), [10..11] crc16_xor (uint16 BE)",
+      "Checksum rule: 16-bit big-endian sum of bytes [0..9] modulo 65536 must match bytes [10..11]",
+      "Flag abnormal readings: battery_mv < 6800 mV, temp_c > 60.0 °C or < -15.0 °C, or |pitch_deg| > 45.0°",
+      "Reject malformed frames or bad sync/checksums without halting the stream parser",
+    ],
+    skills: [
+      "Embedded Programming",
+      "Packet Parsing",
+      "Data Validation & Checksums",
+      "Python or C++",
+      "Unit Testing",
+    ],
+    starterMaterials: [
+      {
+        name: "telemetry_packets_synthetic.hex",
+        description:
+          "Synthetic satellite downlink hex frames including nominal frames, a bad checksum frame, a low-battery warning, and an over-temperature fault.",
+        content: `# Fictional Satellite Telemetry Stream (12 bytes / 24 hex chars per frame)
+EB90011D4C00FA00140103DF
+EB90021D1A0104001E0103C9
+EB9003196401180028030037
+EB90041CE8028A000A0503BA
+EB90051D00010E001001FFFF
+EB90061CF40104021C0903E3
+`,
+      },
+      {
+        name: "telemetry_icd_spec.md",
+        description:
+          "Interface Control Document (ICD) specifying byte offsets, endianness, scaling factors, and fault thresholds.",
+        content: `# Fictional LEO Subsystem Telemetry ICD
+- Bytes 0–1: Sync word = 0xEB90
+- Byte 2: Sequence counter (uint8)
+- Bytes 3–4: Battery voltage in mV (uint16 big-endian, nominal 7000–8400 mV, fault < 6800 mV)
+- Bytes 5–6: Board temperature in 0.1 °C (int16 big-endian, fault > 60.0 °C or < -15.0 °C)
+- Bytes 7–8: Pitch angle in 0.1 deg (int16 big-endian, fault if |pitch| > 45.0 deg)
+- Byte 9: Subsystem bitmask (bit 0 = payload_on, bit 1 = heater_on, bit 2 = fault_latched)
+- Bytes 10–11: 16-bit big-endian sum of bytes[0..9] & 0xFFFF`,
+      },
+    ],
+    acceptanceCriteria: [
+      "Decodes all valid frames into human-readable engineering units (V, °C, degrees)",
+      "Detects and logs frame #5 as a checksum mismatch without crashing",
+      "Flags frame #3 (battery < 6.8 V), frame #4 (temp > 60 °C), and frame #6 (pitch > 45°)",
+      "Includes unit tests covering valid, corrupted, and truncated packet inputs",
+    ],
+    instructions:
+      "Implement a telemetry packet decoder in Python or C++ for a simulated satellite subsystem. Parse binary/hex sensor fields, validate frame sync and checksums, and flag abnormal readings according to the ICD.",
+    deliverables: [
+      "Python or C++ telemetry decoder source code",
+      "Automated unit tests and sample decoded output log",
+      "Short test report documenting decoded values, checksum rejections, and anomaly flags",
+    ],
+    tools:
+      "Python 3 or C++17/20 using standard libraries. Disclose any AI assistance and document your packet validation logic.",
+    criteria:
+      "Published employer review criteria (human review only): accuracy of binary field decoding, checksum and error handling, anomaly threshold detection, and test coverage.",
+    eligibility:
+      "Currently enrolled student or recent graduate in computer, software, or electrical engineering; self-declared work authorization.",
+    rubric: [
+      {
+        id: "packet-decoding",
+        label: "Packet parsing & field scaling",
+        weight: 35,
+        description:
+          "Accurate big-endian extraction and conversion to physical units.",
+      },
+      {
+        id: "checksum-validation",
+        label: "Checksum & malformed frame handling",
+        weight: 25,
+        description:
+          "Reliably rejects bad sync words, truncated lines, and invalid checksums.",
+      },
+      {
+        id: "anomaly-detection",
+        label: "Abnormal reading detection & unit tests",
+        weight: 25,
+        description:
+          "Flags battery, thermal, and attitude threshold violations with automated tests.",
+      },
+      {
+        id: "code-clarity",
+        label: "Code structure & test report",
+        weight: 15,
+        description:
+          "Clean, maintainable parser interface and clear summary of decoded frames.",
+      },
+    ],
+  },
+  {
+    id: "product-design",
     title: "Reliability Engineering Intern",
     company: "Thermo Fisher Scientific",
     industry: "Engineering",
@@ -726,233 +996,113 @@ def matmul_baseline(A, B):
     ],
   },
   {
-    id: "data-analyst",
-    title: "Data Analyst Intern",
-    company: "Shopify",
-    industry: "Software & AI",
-    majors: ["Data Science", "Statistics", "Computer Science"],
-    tags: ["data", "analytics", "sql", "python", "cohort"],
-    location: "Toronto",
-    arrangement: "Remote",
-    type: "Internship",
-    paid: true,
-    pay: 26,
-    duration: 4,
-    effort: 3,
-    description:
-      "Fictional Demo — Not affiliated with this company. Join the fictional Northstar Labs Product Analytics team to audit event telemetry, clean messy data, and surface retention insights.",
-    responsibilities:
-      "Audit product event logs for schema anomalies, compute cohort retention metrics, and communicate data quality caveats to product and engineering teams.",
-    dayInTheRole:
-      "Product data analysts spend significant time validating raw telemetry schemas, deduplicating retry events, and verifying metric definitions before building dashboards.",
-    qualifications:
-      "Experience with Python or SQL data cleaning, descriptive statistics, and clear analytical writing.",
-    challenge: "Audit and Clean a Product Telemetry Dataset",
-    scenario:
-      "A fictional onboarding funnel log contains duplicate client retries, missing timestamps, and mixed timezone records. Clean the dataset and compute verified 7-day activation rates.",
-    specifications: [
-      "Deduplicate identical (user_id, event_type, minute_bucket) retry events",
-      "Quarantine rows with null timestamps and report the exclusion rate",
-      "Compute 7-day activation conversion by signup channel",
-    ],
-    skills: ["Data Cleaning", "Python / SQL", "Cohort Analysis", "Data Quality"],
-    starterMaterials: [
-      {
-        name: "onboarding_events_synthetic.csv",
-        description: "Synthetic signup and activation event log with duplicate retries.",
-        content: `event_id,user_id,channel,event_type,timestamp_utc\n1,u101,organic,signup,2026-10-01T10:00:00Z\n2,u101,organic,signup,2026-10-01T10:00:02Z\n3,u101,organic,activated,2026-10-03T14:20:00Z\n4,u102,referral,signup,2026-10-01T11:15:00Z\n5,u102,referral,activated,\n`,
-      },
-    ],
-    acceptanceCriteria: [
-      "Reports both raw and deduplicated activation rates",
-      "Clearly documents excluded rows and assumptions",
-    ],
-    instructions:
-      "Clean the provided fictional customer telemetry dataset, summarize verified activation patterns, and communicate data limitations.",
-    deliverables: [
-      "Data-cleaning script or notebook",
-      "Summary table of cleaned metrics and data-quality limitations",
-    ],
-    tools: "Python, SQL, or spreadsheets. Disclose AI assistance.",
-    criteria:
-      "Human reviewers evaluate deduplication logic, metric accuracy, and transparency about data limitations.",
-    eligibility:
-      "Currently enrolled student or recent graduate; self-declared work authorization.",
-    rubric: [
-      {
-        id: "cleaning",
-        label: "Data cleaning & deduplication",
-        weight: 40,
-        description: "Correctly handles duplicate events and missing timestamps.",
-      },
-      {
-        id: "metrics",
-        label: "Metric calculation accuracy",
-        weight: 35,
-        description: "Accurate cohort conversion calculation from cleaned data.",
-      },
-      {
-        id: "communication",
-        label: "Data limitation reporting",
-        weight: 25,
-        description: "Clear summary of anomalies and sample-size caveats.",
-      },
-    ],
-  },
-  {
-    id: "product-design",
-    title: "Product Design Intern",
-    company: "Figma",
-    industry: "Design",
-    majors: ["Interaction Design", "Industrial Design", "Human-Computer Interaction"],
-    tags: ["design", "ux", "accessibility", "onboarding", "figma"],
-    location: "Vancouver",
-    arrangement: "Hybrid",
-    type: "Internship",
-    paid: true,
-    pay: 24,
-    duration: 4,
-    effort: 2.5,
-    description:
-      "Fictional Demo — Not affiliated with this company. Work with the fictional Forma Collective design systems team to design accessible, task-focused product workflows.",
-    responsibilities:
-      "Create low-to-mid fidelity user flows, design accessible form and empty states, and document interaction rationale for engineering handoff.",
-    dayInTheRole:
-      "Product designers translate ambiguous user friction into clear screen flows, keyboard-accessible states, and annotated edge cases for engineers.",
-    qualifications:
-      "Portfolio or coursework in interaction design, wireframing, and WCAG accessibility fundamentals.",
-    challenge: "Design an Accessible Lab-Equipment Booking Flow",
-    scenario:
-      "Students booking shared engineering lab benches frequently miss safety-certification prerequisites. Design a 3-step booking flow that surfaces prerequisite status clearly.",
-    specifications: [
-      "Include prerequisite check, time-slot selection, and confirmation/error states",
-      "Specify keyboard navigation order and WCAG AA contrast considerations",
-    ],
-    skills: ["Interaction Design", "Wireframing", "Accessibility (WCAG)", "UX Writing"],
-    starterMaterials: [
-      {
-        name: "booking_constraints_brief.md",
-        description: "User personas, lab rules, and error states to cover.",
-        content: `# Fictional Lab Booking Brief\nUsers: 2nd-year engineering students.\nConstraint: Laser cutter requires Module-2 badge; oscilloscope bench requires basic lab orientation.`,
-      },
-    ],
-    acceptanceCriteria: [
-      "Covers happy path and missing-prerequisite state",
-      "Includes accessibility and keyboard-focus annotations",
-    ],
-    instructions:
-      "Design a 3-step onboarding and booking flow for a fictional campus engineering lab. Explain the user problem, state transitions, and accessibility choices.",
-    deliverables: [
-      "Wireframes or interactive prototype link",
-      "Short design rationale covering edge cases and accessibility",
-    ],
-    tools: "Figma, Penpot, or sketched wireframes. Disclose AI assistance.",
-    criteria:
-      "Human reviewers evaluate task clarity, edge-case coverage, and accessibility annotations.",
-    eligibility:
-      "Currently enrolled student or recent graduate; self-declared work authorization.",
-    rubric: [
-      {
-        id: "flow-clarity",
-        label: "User flow & state coverage",
-        weight: 40,
-        description: "Clear progression across normal and blocked prerequisite states.",
-      },
-      {
-        id: "accessibility",
-        label: "Accessibility & inclusive design",
-        weight: 35,
-        description: "Explicit keyboard, contrast, and error-messaging considerations.",
-      },
-      {
-        id: "rationale",
-        label: "Design rationale & trade-offs",
-        weight: 25,
-        description: "Concise explanation of design decisions.",
-      },
-    ],
-  },
-  {
     id: "operations",
-    title: "Operations Analyst",
-    company: "Celestica",
+    title: "Commercial Credit & Accounting Analyst (CPA / CFA)",
+    company: "TD Bank",
     industry: "Business & Finance",
     majors: [
+      "Accounting",
+      "Finance",
       "Business Administration",
-      "Supply Chain Management",
-      "Industrial Engineering",
+      "Economics",
     ],
-    tags: ["operations", "supply chain", "logistics", "process", "business"],
-    location: "Montreal",
-    arrangement: "Onsite",
+    tags: [
+      "td bank",
+      "credit",
+      "accounting",
+      "cpa",
+      "cfa",
+      "financial analysis",
+      "covenants",
+      "business",
+    ],
+    location: "Toronto",
+    arrangement: "Hybrid",
     type: "Entry-level",
     paid: true,
-    pay: 25,
+    pay: 28,
     duration: 6,
     effort: 2.5,
     description:
-      "Fictional Demo — Not affiliated with this company. Join the fictional Common Ground fulfillment operations team to analyze warehouse throughput, cycle times, and bottleneck stations.",
+      "Fictional Demo — Not affiliated with TD Bank. Join our fictional Commercial Credit Underwriting team to spread borrower financial statements, test Debt Service Coverage Ratio (DSCR) and leverage covenants, and draft credit risk memos.",
     responsibilities:
-      "Map fulfillment workflows, quantify station cycle times and queue buildup, and propose measurable process improvements.",
+      "Spread borrower income statements and balance sheets, calculate covenant compliance ratios (DSCR, Total Debt / EBITDA, Current Ratio), and evaluate credit facility renewal requests.",
     dayInTheRole:
-      "Operations analysts study station-by-station timing data, calculate line capacity and utilization, and test layout or staffing changes before rollout.",
+      "Commercial credit and accounting analysts review audited and management-prepared financial statements, adjust for non-operating items, test loan covenants, and recommend credit risk mitigations.",
     qualifications:
-      "Analytical coursework in operations, industrial engineering, or business administration.",
-    challenge: "Diagnose a Fulfillment Packing Bottleneck",
+      "Coursework or degree in Accounting (CPA pathway), Finance (CFA pathway), or Business Administration.",
+    challenge:
+      "Test Commercial Loan Covenants & Debt Service Coverage (DSCR)",
     scenario:
-      "A regional fulfillment line experiences a 28% backlog during peak afternoon hours. Use the synthetic station timing table to identify the bottleneck and evaluate two staffing options.",
+      "A mid-market manufacturing borrower has submitted its FY2026 financial extract for annual covenant review on a $12.0M term loan. Calculate covenant compliance against the credit agreement thresholds and write a short credit risk recommendation.",
     specifications: [
-      "Station A (Pick): 45 sec/order, 2 operators",
-      "Station B (Pack & Verify): 75 sec/order, 2 operators",
-      "Station C (Label & Stage): 30 sec/order, 1 operator",
-      "Calculate hourly capacity per station and recommend a reallocation",
+      "Minimum Debt Service Coverage Ratio (DSCR) covenant: (EBITDA - Cash Taxes - Maintenance CapEx) / (Annual Principal + Interest) >= 1.25x",
+      "Maximum Total Funded Debt / EBITDA covenant: <= 3.25x",
+      "Minimum Current Ratio (Current Assets / Current Liabilities): >= 1.20x",
+      "Identify any covenant breach or tight headroom and recommend one structuring remedy",
     ],
     skills: [
-      "Operations Analysis",
-      "Capacity Modeling",
-      "Process Mapping",
-      "Quantitative Reasoning",
+      "Credit Underwriting",
+      "Financial Statement Spreading",
+      "CPA / CFA Ratio Analysis",
+      "Covenant Compliance",
+      "Risk Memo Writing",
     ],
     starterMaterials: [
       {
-        name: "fulfillment_station_timings.csv",
-        description: "Synthetic station cycle times, operator counts, and defect rates.",
-        content: `Station,Cycle_Time_Sec,Operators,Rework_Pct\nPick,45,2,1.5\nPack_Verify,75,2,4.0\nLabel_Stage,30,1,0.8\n`,
+        name: "borrower_financial_extract.csv",
+        description:
+          "Synthetic FY2025 and FY2026 borrower financial summary and debt service schedule ($ CAD thousands).",
+        content: `Metric,FY2025_CAD_k,FY2026_CAD_k
+Revenue,28500,26900
+Operating_EBITDA,4600,3750
+Cash_Taxes_Paid,780,610
+Maintenance_CapEx,620,690
+Annual_Principal_Amortization,1200,1200
+Annual_Interest_Expense,760,840
+Total_Funded_Debt,12600,12450
+Current_Assets,6400,5850
+Current_Liabilities,4700,5100
+`,
       },
     ],
     acceptanceCriteria: [
-      "Calculates exact orders/hour capacity for each station",
-      "Quantifies throughput gain and trade-offs of two proposed improvements",
+      "Calculates exact FY2025 and FY2026 DSCR (FY2026 DSCR = 2,450 / 2,040 = 1.20x, breaching the 1.25x minimum)",
+      "Calculates Total Funded Debt / EBITDA (3.32x in FY2026, breaching the 3.25x maximum) and Current Ratio (1.15x, breaching 1.20x)",
+      "Provides a clear covenant compliance table and actionable credit committee recommendation",
     ],
     instructions:
-      "Map the fictional order fulfillment process, calculate station capacities, and recommend two improvements with measurable success criteria.",
+      "Spread the provided synthetic borrower financial extract, compute FY2025 and FY2026 DSCR, Leverage, and Current Ratio covenants, identify breaches, and write a concise credit risk memo.",
     deliverables: [
-      "Capacity calculation worksheet and process map",
-      "Short recommendation memo with measurable KPIs",
+      "Covenant calculation worksheet (.xlsx / .csv)",
+      "Credit risk & covenant waiver/remedy memo",
     ],
-    tools: "Spreadsheet or process-mapping tools. Disclose AI assistance.",
+    tools: "Excel, Google Sheets, or Python. Disclose any AI assistance.",
     criteria:
-      "Human reviewers evaluate capacity math, bottleneck identification, and practical operational reasoning.",
+      "Published employer review criteria (human review only): accuracy of DSCR, leverage, and liquidity calculations, identification of covenant breaches, and practical credit structuring recommendations.",
     eligibility:
-      "Recent graduate or final-year student; self-declared work authorization.",
+      "Recent graduate or final-year student in Accounting, Finance, or Business; self-declared work authorization.",
     rubric: [
       {
-        id: "capacity-math",
-        label: "Bottleneck & capacity calculations",
+        id: "covenant-math",
+        label: "DSCR, leverage & liquidity calculations",
         weight: 40,
-        description: "Accurate hourly throughput and utilization calculations.",
+        description:
+          "Accurate numerator/denominator calculation for all three loan covenants.",
       },
       {
-        id: "recommendations",
-        label: "Process improvement design",
+        id: "breach-analysis",
+        label: "Covenant breach & trend diagnosis",
         weight: 35,
-        description: "Feasible recommendations with quantified throughput impact.",
+        description:
+          "Pinpoints EBITDA compression and working-capital tightening driving the FY2026 breaches.",
       },
       {
-        id: "kpi-clarity",
-        label: "Success metrics & trade-offs",
+        id: "credit-remedy",
+        label: "Credit risk recommendation",
         weight: 25,
-        description: "Clear KPIs, quality controls, and implementation risks.",
+        description:
+          "Practical remedies (e.g., equity cure, cash sweep, working-capital borrowing base).",
       },
     ],
   },
@@ -1138,7 +1288,8 @@ export function upgradeDemoCatalog(saved: Store, now = new Date()): Store {
           (legacyTitles.has(o.title) ||
             legacyCompanies.has(o.company) ||
             /\bStudio$/i.test(o.company) ||
-            o.title === fresh.title)
+            o.title === fresh.title ||
+            o.company !== fresh.company)
         ) {
           return { ...fresh };
         }

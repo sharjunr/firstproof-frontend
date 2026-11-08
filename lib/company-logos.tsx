@@ -26,6 +26,7 @@ const SVG_COMPANIES = new Set([
   "skyworks-solutions",
   "spotify",
   "stripe",
+  "td-bank",
   "thermo-fisher-scientific",
   "unilever",
   "zendesk",

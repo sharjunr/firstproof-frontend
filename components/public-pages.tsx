@@ -89,20 +89,20 @@ export function Landing() {
                 href: "/opportunities/ai-developer",
               },
               {
+                label: "RBC · Financial Analyst (DCF & Valuation)",
+                href: "/opportunities/business-analyst",
+              },
+              {
+                label: "Deloitte · CPA Audit & Assurance",
+                href: "/opportunities/marketing",
+              },
+              {
                 label: "Skyworks · RF S-Parameter Analysis",
                 href: "/opportunities/frontend-developer",
               },
               {
-                label: "Satellite Telemetry · Embedded C++/Python",
-                href: "/opportunities/business-analyst",
-              },
-              {
                 label: "NVIDIA · Matrix Multiplication Optimization",
                 href: "/opportunities/electrical-engineer",
-              },
-              {
-                label: "Thermo Fisher · Reliability & Vibration",
-                href: "/opportunities/marketing",
               },
             ].map(({ label, href }) => (
               <Link key={label} href={href}>
@@ -179,7 +179,7 @@ export function Landing() {
             <p className="eyebrow">
               FICTIONAL EMPLOYER DEMONSTRATIONS · NOT AFFILIATED WITH LISTED COMPANIES
             </p>
-            <h2>Realistic, role-specific engineering challenges.</h2>
+            <h2>Realistic, role-specific employer challenges.</h2>
           </div>
           <Link className="text-link" href="/marketplace">
             Explore all 88 opportunities <ArrowUpRight size={17} />
