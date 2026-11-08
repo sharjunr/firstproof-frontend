@@ -23,6 +23,7 @@ import {
 } from "lucide-react";
 import { useStore } from "./store";
 import {
+  OpportunityCard,
   Heading,
   Gate,
   Badge,
@@ -549,9 +550,11 @@ function TrackerBody() {
   const apps = state.applications
     .filter((a) => a.studentId === state.user?.id)
     .map(studentView);
+  const savedOpportunities=state.opportunities.filter(o=>state.saved.includes(o.id));
   const active = apps.find((a) => a.id === selected);
   const counts = [
     ["Applications", apps.length],
+    ["Saved opportunities", savedOpportunities.length],
     [
       "Awaiting review",
       apps.filter((a) =>
@@ -595,7 +598,7 @@ function TrackerBody() {
         ))}
       </div>
       <div className="toolbar">
-        <h2>Your applications</h2>
+        <h2>{filter === "Saved opportunities" ? "Your saved opportunities" : "Your applications"}</h2>
         <select
           aria-label="Filter application status"
           value={filter}
@@ -603,6 +606,7 @@ function TrackerBody() {
         >
           {[
             "All",
+            "Saved opportunities",
             "Time expired",
             "Draft",
             "Submitted",
@@ -617,7 +621,10 @@ function TrackerBody() {
         </select>
       </div>
       {apps.some(a=>a.backgroundRequest?.status==='requested')&&<div className="notice"><Clock size={17}/><span>You have a next-stage information request. Open the matching application to choose whether to share details.</span></div>}
-      <div className="application-list">
+      {filter === "Saved opportunities" ? <>
+        <p className="fine-print">Jobs you bookmarked. Saving an opportunity does not start a challenge or submit an application.</p>
+        {savedOpportunities.length ? <div className="opportunity-grid">{savedOpportunities.map(o=><OpportunityCard key={o.id} o={o}/>)}</div> : <Empty title="No saved opportunities yet" description="Use the bookmark icon on a job to save it here."><Link className="button" href="/marketplace">Search for opportunities <ArrowRight size={16}/></Link></Empty>}
+      </> : <div className="application-list">
         {apps
           .filter((a) => filter === "All" || a.stage === filter)
           .map((a) => {
@@ -674,7 +681,7 @@ function TrackerBody() {
             description="Try another status or find your first challenge."
           />
         )}
-      </div>
+      </div>}
       <p className="fine-print">
         Demo integrity statuses are pre-seeded scenarios, not analysis results.
         New applications remain “Not checked.”
