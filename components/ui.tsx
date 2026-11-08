@@ -135,7 +135,7 @@ export function Status({ stage }: { stage: string }) {
       tone={
         stage === "Shortlisted" || stage === "Invited to Next Stage"
           ? "success"
-          : stage === "Declined"
+          : stage === "Declined" || stage === "Time expired"
             ? "error"
             : stage === "Under Employer Review"
               ? "blue"

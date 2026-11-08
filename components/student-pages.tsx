@@ -1,4 +1,5 @@
 "use client";
+import {startTimedChallenge,challengeTimeLeft,formatCountdown} from "../lib/challenge-timer";
 import {ChallengeBrief,RoleDetails} from "./challenge-brief";
 import {freezeScreening} from "../lib/screening";
 import {ScreeningSubmission,StudentScreening} from "./screening-controls";
@@ -61,6 +62,8 @@ function WorkspaceBody({ id }: { id: string }) {
   const a = state.applications.find(
     (a) => a.opportunityId === id && a.studentId === state.user?.id,
   );
+  const [clock,setClock]=useState(()=>Date.now());
+  useEffect(()=>{const timer=setInterval(()=>setClock(Date.now()),1000);return()=>clearInterval(timer);},[]);
   const [step, setStep] = useState(0),
     [link, setLink] = useState(""),
     [error, setError] = useState(""),
@@ -77,6 +80,7 @@ function WorkspaceBody({ id }: { id: string }) {
         studentName: state.profile.name,
         studentEmail: state.profile.email,
         joinedAt: now,
+        timedChallengeRequired: true,
         screeningSnapshot: freezeScreening(o,now),
         university: "",
         program: "",
@@ -182,6 +186,9 @@ function WorkspaceBody({ id }: { id: string }) {
       setConfirm(false);
     }
   }
+  const timeLeft=challengeTimeLeft(a,clock);
+  if(a.stage==='Time expired'||(timeLeft===0&&!a.submittedAt))return <div className="container"><Empty title="Time expired — not submitted" description="The time limit ended before you submitted. This attempt is closed and cannot be selected. Your draft is retained in this browser; no work quality assessment was made."><Link className="button" href="/tracker">View application tracker</Link><Link className="text-link" href="/marketplace">Find another opportunity</Link></Empty></div>;
+  if(a.stage==='Draft'&&!a.challengeStartedAt)return <div className="container workspace"><Heading label="BEFORE YOU START" title={o.challenge}/><ChallengeBrief opportunity={o}/><section className="timer-start-panel"><h2>Ready to start your timed challenge?</h2><p><strong>You have up to {o.effort} hours.</strong> The countdown begins when you click Start timed challenge. It continues if you leave or refresh. The listing deadline may close the attempt sooner.</p><p>Submit your work before time runs out. Partial work is accepted if submitted in time. Without a submission, this attempt closes as “Time expired — not submitted” and cannot be selected.</p><p className="fine-print">This preview saves the timer in this browser. It is not a server-enforced assessment clock.</p><button className="button" onClick={()=>{try{setState(startTimedChallenge(state,a.id));setStep(1);}catch(e){setError(e instanceof Error?e.message:'Could not start challenge.');}}}>Start timed challenge · {o.effort} hours <Clock size={18}/></button>{error&&<p role="alert" className="form-error">{error}</p>}</section></div>;
   if (a.stage !== "Draft")
     return (
       <div className="container">
@@ -210,7 +217,7 @@ function WorkspaceBody({ id }: { id: string }) {
             className="button secondary"
             onClick={() => {
               setSavedAt(new Date().toLocaleTimeString());
-              notify("Draft saved locally. The review clock has not started.");
+              notify("Draft saved locally. Your challenge timer is still running.");
             }}
           >
             <Save size={16} />
@@ -225,6 +232,7 @@ function WorkspaceBody({ id }: { id: string }) {
           browser storage, not securely uploaded.
         </span>
       </div>
+      <div className={'challenge-countdown'+(timeLeft!==null&&timeLeft<300000?' countdown-urgent':'')}><Clock size={25}/><div><strong>Time remaining</strong><span role="timer" aria-label="Challenge time remaining">{formatCountdown(timeLeft??0)}</span></div><p>Submit before time runs out. This timer does not pause when you leave.</p></div>
       <div className="stepper">
         {[
           "Review challenge",
@@ -557,6 +565,7 @@ function TrackerBody() {
       ).length,
     ],
     ["Drafts", apps.filter((a) => a.stage === "Draft").length],
+    ["Time expired", apps.filter((a) => a.stage === "Time expired").length],
   ];
   return (
     <div className="container">
@@ -594,6 +603,7 @@ function TrackerBody() {
         >
           {[
             "All",
+            "Time expired",
             "Draft",
             "Submitted",
             "Under Employer Review",
@@ -627,7 +637,7 @@ function TrackerBody() {
                       {a.submittedAt
                         ? "Submitted " +
                           new Date(a.submittedAt).toLocaleDateString()
-                        : "Unsubmitted draft"}
+                        : a.stage === "Time expired" ? "Time expired — not submitted" : "Unsubmitted draft"}
                     </span>
                     <span>{a.integrity}</span>
                   </div>

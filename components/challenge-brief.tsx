@@ -11,7 +11,7 @@ export function ChallengeBrief({opportunity:o}:{opportunity:Opportunity}){
   <div className="brief-time"><Badge tone="blue">Maximum time: {o.effort} hours</Badge><span>Includes reading, setup, checks and your short handoff.</span></div>
   <h3>Your task</h3><p className="brief-field-label">{language.scenario}</p><p>{o.scenario||o.instructions.split('\n\n')[0]}</p>
   <h3>What to submit</h3><div className="brief-deliverables">{o.deliverables.map(d=><CheckLine key={d}>{d}</CheckLine>)}</div>
-  <p className="fine-print">Stop at the maximum time. A clear partial result and a note about unfinished work are acceptable.</p>
+  <p className="fine-print">Once you start the timed challenge, submit before the countdown ends. Partial work with a note about unfinished items is acceptable when submitted on time. An unsubmitted attempt closes when time expires.</p>
   <h3>Provided materials</h3><ChallengeResources opportunity={o} materialsOnly/>
   {!o.starterMaterials?.length&&!o.resources?.length&&<p>Use the facts and requirements in the task above. No separate files are provided.</p>}
   <h3>How your work is reviewed</h3>

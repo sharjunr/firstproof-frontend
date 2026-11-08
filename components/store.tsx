@@ -8,6 +8,7 @@ import {
   type Dispatch,
   type SetStateAction,
 } from "react";
+import {expireTimedChallenges} from "../lib/challenge-timer";
 import type { Store, Role } from "../lib/types";
 import { seed, student, employer, upgradeDemoCatalog } from "../lib/demo";
 const Context = createContext<{
@@ -46,6 +47,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
         );
       }
   }, [state, ready]);
+  useEffect(()=>{if(!ready)return;const tick=()=>setState(s=>expireTimedChallenges(s));tick();const timer=setInterval(tick,1000);return()=>clearInterval(timer);},[ready]);
   useEffect(() => {
     if (!toast) return;
     const id = setTimeout(() => setToast(""), 5500);

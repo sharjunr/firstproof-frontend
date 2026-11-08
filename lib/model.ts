@@ -155,6 +155,8 @@ export function submitApplication(
     o = s.opportunities.find((o) => o.id === a?.opportunityId);
   if (!a || !o || s.user?.id !== a.studentId || s.user.role !== "student")
     throw new Error("Sign in as the student who owns this draft.");
+  if(a.timedChallengeRequired&&!a.challengeStartedAt)throw new Error("Start the timed challenge before submitting.");
+  if(a.stage==='Time expired'||(!a.submittedAt&&a.challengeEndsAt&&now.getTime()>=Date.parse(a.challengeEndsAt)))throw new Error("Time expired — this attempt is closed without a submission.");
   if (
     a.joinedAt &&
     o.challengeDays &&
@@ -209,7 +211,7 @@ export function changeStage(s: Store, id: string, stage: Stage): Store {
   if (!a || s.user?.role !== "employer" || o?.owner !== s.user.id)
     throw new Error("Employer demo access required.");
   if (
-    ["Draft", "Withdrawn"].includes(a.stage) ||
+    ["Draft", "Withdrawn", "Time expired"].includes(a.stage) ||
     ![
       "Under Employer Review",
       "Shortlisted",

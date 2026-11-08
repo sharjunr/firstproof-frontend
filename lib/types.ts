@@ -1,6 +1,7 @@
 import type {ScreeningPolicy,ScreeningSnapshot,ScreeningRecord} from "./screening";
 export type Role = "student" | "employer";
 export type Stage =
+  | "Time expired"
   | "Draft"
   | "Submitted"
   | "Under Employer Review"
@@ -83,6 +84,9 @@ export interface Application {
   studentName: string;
   studentEmail?: string;
   joinedAt?: string;
+  timedChallengeRequired?: boolean;
+  challengeStartedAt?: string;
+  challengeEndsAt?: string;
   backgroundRequest?: {
     status: "requested" | "shared" | "declined";
     message: string;

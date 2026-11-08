@@ -34,7 +34,7 @@ export function freezeScreening(o:Opportunity,at=new Date().toISOString()):Scree
 const latest=(a:Pick<Application,"screening">)=>a.screening?.reports.at(-1);
 export {latest as latestTechnical};
 export function currentQuality(a:Pick<Application,"screening">){const q=a.screening?.qualityReviews.at(-1);return q?.reportId===latest(a)?.id?q:undefined;}
-function owner(s:Store,id:string){const a=s.applications.find(x=>x.id===id);const o=s.opportunities.find(x=>x.id===a?.opportunityId);if(!a||!o||s.user?.role!=='employer'||o.owner!==s.user.id)throw new Error('Only the responsible employer reviewer can perform this action.');if(['Draft','Withdrawn'].includes(a.stage))throw new Error('This application is not available for review.');return a;}
+function owner(s:Store,id:string){const a=s.applications.find(x=>x.id===id);const o=s.opportunities.find(x=>x.id===a?.opportunityId);if(!a||!o||s.user?.role!=='employer'||o.owner!==s.user.id)throw new Error('Only the responsible employer reviewer can perform this action.');if(['Draft','Withdrawn','Time expired'].includes(a.stage))throw new Error('This application is not available for review.');return a;}
 function replace(s:Store,a:Application){return {...s,applications:s.applications.map(x=>x.id===a.id?a:x)};}
 function record(a:Application):ScreeningRecord{return a.screening||{reports:[],qualityReviews:[],events:[]};}
 function sameJSON(a:unknown,b:unknown):boolean{if(a===b)return true;if(!a||!b||typeof a!=='object'||typeof b!=='object')return false;if(Array.isArray(a)!==Array.isArray(b))return false;const aa=a as Record<string,unknown>,bb=b as Record<string,unknown>;const keys=Object.keys(aa).sort();return JSON.stringify(keys)===JSON.stringify(Object.keys(bb).sort())&&keys.every(k=>sameJSON(aa[k],bb[k]));}
@@ -90,11 +90,11 @@ export function requestTechnicalReview(s:Store,id:string,message:string):Store{
 }
 export function resubmitScreening(s:Store,id:string,payload:string,now=new Date(),files?:Application["files"]):Store{
  const a=s.applications.find(x=>x.id===id);if(!a||s.user?.role!=='student'||s.user.id!==a.studentId)throw new Error('Only the applicant may correct their submission.');
- const snap=a.screeningSnapshot;if(!snap?.policy.allowResubmission||!['failed','manual'].includes(latest(a)?.outcome||'')||['Draft','Withdrawn','Declined'].includes(a.stage))throw new Error('Corrections are not available under the published rules.');
+ const snap=a.screeningSnapshot;if(!snap?.policy.allowResubmission||!['failed','manual'].includes(latest(a)?.outcome||'')||['Draft','Withdrawn','Declined','Time expired'].includes(a.stage))throw new Error('Corrections are not available under the published rules.');
  if(now>new Date(snap.deadline+'T23:59:59Z') || (a.joinedAt && now.getTime()>new Date(a.joinedAt).getTime()+snap.challengeDays*86400000))throw new Error('The published correction window has ended. Request human review instead.');
  if(payload.length>100000)throw new Error('JSON artifact must be 100 KB or smaller.');if(files?.some(f=>!f.stored||f.size>10*1024*1024)|| (files&&files.length>8))throw new Error('Save at most eight attachments, each up to 10 MB, before resubmitting.');return replace(s,evaluateTechnical({...a,files:files||a.files,screeningPayload:payload},now));
 }
-export function screeningCounts(apps:Application[]){const list=apps.filter(a=>!['Draft','Withdrawn'].includes(a.stage));return [
+export function screeningCounts(apps:Application[]){const list=apps.filter(a=>!['Draft','Withdrawn','Time expired'].includes(a.stage));return [
  ['Total Submissions',list.length],['Technically Qualified',list.filter(a=>latest(a)?.outcome==='qualified').length],['Automatically Failed Technical Requirements',list.filter(a=>latest(a)?.outcome==='failed'&&latest(a)?.automatic).length],['Manual Technical Review Required',list.filter(a=>latest(a)?.outcome==='manual').length],['Quality Review Pending',list.filter(a=>latest(a)?.outcome==='qualified'&&!currentQuality(a)).length],['Quality Review Completed',list.filter(a=>latest(a)?.outcome==='qualified'&&currentQuality(a)).length],['Advanced to HR',list.filter(a=>a.screening?.advancedToHR).length]] as const;}
 export function assertScreeningEdit(s:Store,o:Opportunity){
  if(s.user?.role!=='employer'||o.owner!==s.user.id)throw new Error('Employer ownership is required.');

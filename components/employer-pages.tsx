@@ -57,7 +57,7 @@ function DashboardBody({ onlyOpportunities }: { onlyOpportunities: boolean }) {
   const apps = state.applications.filter(
     (a) =>
       opportunities.some((o) => o.id === a.opportunityId) &&
-      a.stage !== "Draft",
+      a.stage !== "Draft" && a.stage !== "Time expired",
   );
   const pending = apps.filter((a) =>
     ["Submitted", "Under Employer Review"].includes(a.stage),
@@ -920,7 +920,7 @@ function CandidateBody({
   const { state, setState, notify } = useStore();
   const all = state.applications.filter(
     (a) =>
-      a.stage !== "Draft" &&
+      a.stage !== "Draft" && a.stage !== "Time expired" &&
       state.opportunities.some(
         (o) => o.id === a.opportunityId && o.owner === state.user?.id,
       ),
