@@ -113,7 +113,7 @@ export function Landing() {
       </section>
       <section className="principle-strip">
         <span>CORE PRODUCT RULE</span>
-        <strong>Role-specific technical work.</strong>
+        <strong>Role-specific work samples.</strong>
         <strong>Starter datasets & specs included.</strong>
         <strong>Human review—never automated AI grading.</strong>
         <span>FICTIONAL DEMO LISTINGS</span>

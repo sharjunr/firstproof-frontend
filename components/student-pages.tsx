@@ -293,16 +293,16 @@ function WorkspaceBody({ id }: { id: string }) {
                 </div>
               ))}
               <label>
-                Project links
+                Work-sample links
                 <div className="input-action">
                   <input
-                    placeholder="https://github.com/your-project"
+                    placeholder="https://example.com/your-work"
                     value={link}
                     onChange={(e) => setLink(e.target.value)}
                   />
                   <button
                     className="button secondary"
-                    aria-label="Add project link"
+                    aria-label="Add work-sample link"
                     onClick={() => {
                       if (!safeLink(link)) {
                         setError(
@@ -341,7 +341,7 @@ function WorkspaceBody({ id }: { id: string }) {
                 </div>
               ))}
               <label>
-                Project content and explanation
+                Work sample and explanation
                 <textarea
                   rows={8}
                   maxLength={20000}
@@ -351,7 +351,7 @@ function WorkspaceBody({ id }: { id: string }) {
                 />
               </label>
               <p className="fine-print">
-                At least 30 characters of explanation. For a text-only project,
+                At least 30 characters of explanation. For a text-only work sample,
                 include at least 80 characters. Linked content is not fetched or
                 analyzed.
               </p>
@@ -417,7 +417,7 @@ function WorkspaceBody({ id }: { id: string }) {
                   <dd>{a.files.length}</dd>
                 </div>
                 <div>
-                  <dt>Project links</dt>
+                  <dt>Work-sample links</dt>
                   <dd>{a.links.length}</dd>
                 </div>
                 <div>
@@ -1024,7 +1024,7 @@ export function SubmissionSuccess() {
         </h1>
         <p>
           {a?.submittedAt
-            ? "Your project is saved in this preview. You can follow its review status from your dashboard."
+            ? "Your work sample is saved in this preview. You can follow its review status from your dashboard."
             : "Open your dashboard to view saved applications and their status."}
         </p>
         {a?.reviewDue && (

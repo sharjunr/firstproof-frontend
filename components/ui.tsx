@@ -37,7 +37,7 @@ export function Logo() {
   );
 }
 export function Nav() {
-  const { state, setState, login, notify } = useStore();
+  const { state, setState, notify } = useStore();
   const [mobile, setMobile] = useState(false);
   const path = usePathname();
   useEffect(() => setMobile(false), [path]);
@@ -57,17 +57,6 @@ export function Nav() {
         <div className="nav-actions">
           {state.user ? (
             <>
-              <select
-                aria-label="Switch preview role"
-                value={state.user.role}
-                onChange={(e) => {
-                  login(e.target.value as "student" | "employer");
-                  notify("Switched preview account.");
-                }}
-              >
-                <option value="student">Student demo</option>
-                <option value="employer">Employer demo</option>
-              </select>
               <Link
                 className="text-link desktop"
                 href={state.user.role === "employer" ? "/employer" : "/tracker"}

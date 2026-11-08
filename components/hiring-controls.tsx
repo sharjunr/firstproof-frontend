@@ -19,6 +19,7 @@ import {
 } from "../lib/model";
 import { saveFile, fileError, openFile, resumeFileError } from "../lib/files";
 import { Badge } from "./ui";
+import {requirementsHeading} from "../lib/role-language";
 import {technicalVerification,suppliedContent} from "../lib/review-status";
 
 export function NextStageReview({ application }: { application: Application }) {
@@ -482,7 +483,7 @@ export function ChallengeResources({
         <>
           {!materialsOnly&&<h3>Starter materials & synthetic datasets</h3>}
           <p className="fine-print">
-            Representative synthetic engineering inputs and starter files for
+            Supplied scenario data and starter files for
             this challenge.
           </p>
           {o.starterMaterials?.map((m) => (
@@ -589,7 +590,7 @@ export function SubmissionReview({
           </Badge>
         </div>
       ))}
-      <div className="technical-verification"><h3>Technical requirements verification</h3><Badge tone={technical.tone}>{technical.label}</Badge><p>{technical.description}</p></div>
+      <div className="technical-verification"><h3>{requirementsHeading(o)}</h3><Badge tone={technical.tone}>{technical.label}</Badge><p>{technical.description}</p></div>
       <h4>AI rubric evaluation</h4>
       <Badge>Coming soon</Badge>
       <p>
