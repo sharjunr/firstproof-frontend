@@ -56,7 +56,7 @@ const flagshipOpportunities: Omit<
     paid: true,
     pay: 30,
     duration: 4,
-    effort: 4,
+    effort: 3,
     description:
       "Fictional Demo — Not affiliated with AMD. Join the fictional AMD Silicon Design & Verification demo team to work on synthesizable RTL blocks, simulation testbenches, and digital subsystem verification.",
     responsibilities:
@@ -504,7 +504,7 @@ Q4_2026,22.10,13.04,3.55,0.00,0.92,1.20,3.95,3.15,2.35
     paid: true,
     pay: 32,
     duration: 4,
-    effort: 4,
+    effort: 3,
     description:
       "Fictional Demo — Not affiliated with NVIDIA. Join our fictional Compute Performance Engineering team to profile numerical kernels, optimize matrix operations using vectorization or GPU acceleration, and validate floating-point accuracy.",
     responsibilities:
@@ -766,7 +766,7 @@ INV-905,Beacon Supply,FOB Destination,2026-12-28,2026-12-28,2026-12-30,FY2026,19
     paid: true,
     pay: 29,
     duration: 4,
-    effort: 3.5,
+    effort: 3,
     description:
       "Fictional Demo — Not affiliated with MDA Space. Join our fictional satellite flight & ground software team to build resilient telemetry decoders, packet validators, and spacecraft health monitoring tools.",
     responsibilities:

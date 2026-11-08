@@ -729,7 +729,7 @@ function PostBody({ editId }: { editId?: string }) {
             </label>
             {input(
               "effort",
-              "Maximum work time (0.5–3 hours, including setup)",
+              "Challenge time in hours (0.5–3; for example 1, 1.5 or 2, including setup)",
               "number",
             )}
             <label>
