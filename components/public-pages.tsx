@@ -1,4 +1,5 @@
 "use client";
+import {EmployerRoiSimulator} from "./employer-roi";
 import {ChallengeBrief,RoleDetails} from "./challenge-brief";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -222,8 +223,10 @@ export function Landing() {
           <Link className="text-link" href="/employer">
             Open your employer workspace <ArrowUpRight size={17} />
           </Link>
+          <Link className="text-link roi-entry-link" href="#employer-roi" onClick={e=>{e.preventDefault();window.history.replaceState(null,"","#employer-roi");document.getElementById("employer-roi")?.scrollIntoView({block:"start",behavior:"instant"});}}>Estimate screening time and cost <ArrowUpRight size={17}/></Link>
         </article>
       </section>
+      <EmployerRoiSimulator/>
       <section className="section promise-section">
         <div className="promise-symbol">
           <ShieldCheck size={48} />
