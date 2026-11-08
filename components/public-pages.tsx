@@ -86,7 +86,7 @@ export function Landing() {
           </form>
           <div className="suggestions career-links" id="suggested-searches">
             {[
-              ...freshChallenges.map(o=>({label:'New challenge · '+o.title,href:'/opportunities/'+o.id})),
+              ...freshChallenges.map(o=>({label:o.title,href:'/opportunities/'+o.id})),
               {
                 label: "AMD · Digital Design / RTL FIFO",
                 href: "/opportunities/ai-developer",
