@@ -37,3 +37,10 @@ export function roiSummary(input:RoiInputs){const r=calculateRoi(input);const ad
  `Estimated screening time ${additional?'increase':'reduction'}: ${formatPercent(r.timeReductionPercent===null?null:Math.abs(r.timeReductionPercent))}`,
  '',ROI_DISCLAIMER,
  ].join('\n');}
+
+export const ROI_SCENARIOS=[10,25,50] as const;
+export function scenarioInputs(input:RoiInputs,reduction:number):RoiInputs{
+ if(!ROI_SCENARIOS.some(value=>value===reduction))throw new Error('Invalid planning scenario.');
+ const next={...input,firstProofMinutes:input.currentMinutes*(1-reduction/100)};
+ calculateRoi(next);return next;
+}
