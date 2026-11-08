@@ -1,3 +1,4 @@
+import {demoJourneys,DEMO_JOURNEY_PREFIX} from "./demo-journeys";
 import {applyDailyScope} from "./daily-tasks";
 import {additionalRoles} from "./additional-roles";
 import { developRole } from "./role-content";
@@ -1242,7 +1243,7 @@ export function seed(now = new Date()): Store {
     user: null,
     profile: { ...student },
     opportunities: opportunities.map(developRole).map(applyDailyScope),
-    applications,
+    applications: [...applications,...demoJourneys(opportunities.map(developRole).map(applyDailyScope),now)],
     saved: [],
   };
 }
@@ -1304,7 +1305,7 @@ export function upgradeDemoCatalog(saved: Store, now = new Date()): Store {
       }),
       ...defaults.opportunities.filter((o) => !known.has(o.id)),
     ],
-    applications: saved.applications.map((a) => ({
+    applications: [...saved.applications.map((a) => ({
       ...a,
       studentEmail:
         a.studentEmail ||
@@ -1314,6 +1315,6 @@ export function upgradeDemoCatalog(saved: Store, now = new Date()): Store {
       university: "",
       program: "",
       resume: "",
-    })),
+    })),...defaults.applications.filter(a=>a.id.startsWith(DEMO_JOURNEY_PREFIX)&&!saved.applications.some(existing=>existing.id===a.id))],
   };
 }

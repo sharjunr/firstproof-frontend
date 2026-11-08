@@ -9,10 +9,10 @@ import {
   validateOpportunity,
   studentView,
 } from "../lib/model";
-test("seed provides 100 listings, four student applications, at least five candidates, integrity and overdue scenarios", () => {
+test("seed provides 100 listings, multiple student applications, at least five candidates, integrity and overdue scenarios", () => {
   const s = seed();
   assert.equal(s.opportunities.length, 100);
-  assert.equal(s.applications.filter((a) => a.studentId === "alex").length, 4);
+  assert.ok(s.applications.filter((a) => a.studentId === "alex").length >= 13);
   assert.ok(s.applications.filter((a) => a.stage !== "Draft").length >= 5);
   assert.ok(
     s.applications.some(

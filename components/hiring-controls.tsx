@@ -48,6 +48,7 @@ export function NextStageReview({ application }: { application: Application }) {
             <>
               <h4>Resume supplied for this stage</h4>
               <p className="pre-wrap">{view.backgroundRequest.resume}</p>
+              <button type="button" className="button secondary small" onClick={()=>{const url=URL.createObjectURL(new Blob([view.backgroundRequest!.resume!],{type:'text/plain;charset=utf-8'}));const link=document.createElement('a');link.href=url;link.download=application.studentName.replaceAll(' ','-')+'-shared-resume.txt';link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}}><FileText size={16}/>Download shared resume text</button>
             </>
           )}
           {view.backgroundRequest.resumeFile && <button className="button secondary" onClick={()=>{const file=view.backgroundRequest!.resumeFile!;openFile(file.id,file.name).catch(e=>setError(e.message));}}><FileText size={16}/>Download resume: {view.backgroundRequest.resumeFile.name}</button>}

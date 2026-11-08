@@ -100,6 +100,7 @@ function DashboardBody({ onlyOpportunities }: { onlyOpportunities: boolean }) {
       />
       {!onlyOpportunities && (
         <>
+          <div className="notice"><span>Explore demo applications across review stages, including an invited applicant who shared a resume with consent. <Link className="text-link" href="/employer/candidates?application=demo-journey-v1-0">Open completed next-stage example <ArrowUpRight size={15}/></Link></span></div>
           <div className="dashboard-callout roi-dashboard-entry"><div><h3>Employer Screening ROI Simulator</h3><p>Explore an illustrative screening scenario using your own applicant volume, review time and labor cost assumptions.</p></div><Link className="button secondary small" href="/employer/roi">Estimate time and cost <ArrowUpRight size={16}/></Link></div>
           <ScreeningMetrics applications={apps}/>
           <ScreeningFixtures/>
