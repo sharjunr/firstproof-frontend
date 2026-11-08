@@ -1,4 +1,5 @@
 "use client";
+import {PublishedScreening} from "./screening-controls";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
@@ -818,6 +819,7 @@ export function Details({ id }: { id: string }) {
               </>
             ) : null}
             <ChallengeResources opportunity={o} />
+            <PublishedScreening opportunity={o}/>
             <h3>Required tools & AI disclosure</h3>
             <p>{o.tools}</p>
             <h3>Human review & similarity policy</h3>

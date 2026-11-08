@@ -1131,6 +1131,10 @@ export function upgradeDemoCatalog(saved: Store, now = new Date()): Store {
         const fresh = byId.get(o.id);
         if (
           fresh &&
+          !o.screeningPolicy &&
+          !saved.applications.some(
+            (a) => a.opportunityId === o.id && a.screeningSnapshot,
+          ) &&
           (legacyTitles.has(o.title) ||
             legacyCompanies.has(o.company) ||
             /^(Demo\s+)?[A-Za-z]+\s+Studio$/.test(o.company))
