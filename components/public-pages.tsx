@@ -35,6 +35,9 @@ export function Landing() {
   const [query, setQuery] = useState("");
   const reduced = useReducedMotion();
   const { state, login } = useStore();
+  const [quickLinkNow]=useState(()=>Date.now());
+  const freshChallenges=state.opportunities.filter(o=>o.status==='Published' && new Date(o.deadline+'T23:59:59Z').getTime()>=quickLinkNow && !state.applications.some(a=>a.opportunityId===o.id&&a.studentId===(state.user?.role==='student'?state.user.id:state.profile.id))).slice(0,3);
+
   return (
     <>
       <section className="hero editorial-hero">
@@ -83,6 +86,7 @@ export function Landing() {
           </form>
           <div className="suggestions career-links" id="suggested-searches">
             {[
+              ...freshChallenges.map(o=>({label:'New challenge · '+o.title,href:'/opportunities/'+o.id})),
               {
                 label: "AMD · Digital Design / RTL FIFO",
                 href: "/opportunities/ai-developer",
