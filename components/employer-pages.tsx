@@ -275,7 +275,7 @@ const templateBriefs: {
       title: "Digital Design Engineering Intern",
       industry: "Engineering",
       location: "Markham, ON",
-      effort: 4,
+      effort: 3,
       description:
         "Fictional Demo — Not affiliated with AMD. Join the fictional RTL Design & Verification team to build and verify synthesizable hardware blocks.",
       responsibilities:
@@ -358,7 +358,7 @@ const templateBriefs: {
       title: "Embedded Software Intern",
       industry: "Software & AI",
       location: "Toronto",
-      effort: 3.5,
+      effort: 3,
       description:
         "Fictional Demo — Not affiliated with this company. Build flight and ground telemetry parsers for LEO satellite subsystems.",
       responsibilities:
@@ -451,7 +451,7 @@ function PostBody({ editId }: { editId?: string }) {
         challenge: "",
         scenario: "",
         specifications: [
-          "Scoped to 2–5 hours using synthetic materials",
+          "Scoped to a maximum of 3 hours using synthetic materials",
           "Clear boundary conditions and verification expectations",
         ],
         skills: ["Problem Solving", "Technical Documentation"],
@@ -522,7 +522,9 @@ function PostBody({ editId }: { editId?: string }) {
         <input
           type={type}
           value={String(o[k])}
-          min={type === "number" ? 0 : undefined}
+          min={type === "number" ? (k === "effort" ? 0.5 : 0) : undefined}
+          max={k === "effort" ? 3 : undefined}
+          step={k === "effort" ? 0.5 : undefined}
           aria-invalid={!!errors[k]}
           aria-describedby={errors[k] ? "error-" + k : undefined}
           onChange={(e) =>
@@ -719,7 +721,7 @@ function PostBody({ editId }: { editId?: string }) {
             </label>
             {input(
               "effort",
-              "Expected completion time (recommended 2–5 hours)",
+              "Maximum work time (0.5–3 hours, including setup)",
               "number",
             )}
             <label>

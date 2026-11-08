@@ -179,10 +179,10 @@ export function Landing() {
             <p className="eyebrow">
               FICTIONAL EMPLOYER DEMONSTRATIONS · NOT AFFILIATED WITH LISTED COMPANIES
             </p>
-            <h2>Realistic, role-specific employer challenges.</h2>
+            <h2>Realistic daily tasks. Three hours or less.</h2>
           </div>
           <Link className="text-link" href="/marketplace">
-            Explore all 88 opportunities <ArrowUpRight size={17} />
+            Explore all {state.opportunities.filter(o=>o.status==="Published").length} opportunities <ArrowUpRight size={17} />
           </Link>
         </div>
         <div className="cards-grid">
@@ -487,7 +487,7 @@ export function Marketplace() {
               "Maximum challenge hours",
               effort,
               setEffort,
-              ["2", "3", "4", "8"],
+              ["1.5", "2", "2.5", "3"],
             ],
           ].map(([label, value, setter, options]) => (
             <label key={String(label)}>
@@ -682,7 +682,7 @@ export function Details({ id }: { id: string }) {
             {o.dayInTheRole && (
               <div className="day-in-role-box">
                 <p className="eyebrow">A DAY IN THE ROLE</p>
-                <h3>What engineers actually do in this position</h3>
+                <h3>What you would do in this role</h3>
                 <p>{o.dayInTheRole}</p>
               </div>
             )}
@@ -714,10 +714,10 @@ export function Details({ id }: { id: string }) {
             <p>{o.qualifications}</p>
           </section>
           <section className="panel project-spotlight">
-            <p className="eyebrow">ROLE-SPECIFIC ENGINEERING CHALLENGE</p>
+            <p className="eyebrow">ROLE-SPECIFIC DAILY WORK CHALLENGE</p>
             <h2>{o.challenge}</h2>
             <div className="challenge-priority">
-              <strong>Start here: build the project below.</strong>
+              <strong>Start here: complete the work task below.</strong>
               <p>
                 Your work sample is the main part of this application. Other
                 applicants may complete the same challenge. Show your own
@@ -727,14 +727,14 @@ export function Details({ id }: { id: string }) {
             <div className="inline-callout">
               <Clock size={19} />
               <span>
-                Estimated time: <strong>{o.effort} hours</strong> ·{" "}
+                Maximum time: <strong>{o.effort} hours</strong> ·{" "}
                 {o.skills?.slice(0, 2).join(" / ") || o.industry} · Fictional
                 employer challenge using synthetic data and scoped requirements.
               </span>
             </div>
             {o.scenario && (
               <>
-                <h3>Engineering scenario</h3>
+                <h3>Workplace scenario</h3>
                 <p>{o.scenario}</p>
               </>
             )}
@@ -742,7 +742,7 @@ export function Details({ id }: { id: string }) {
             <p>{o.instructions}</p>
             {o.specifications?.length ? (
               <>
-                <h3>Technical specifications & constraints</h3>
+                <h3>Scope & constraints</h3>
                 {o.specifications.map((spec) => (
                   <CheckLine key={spec}>{spec}</CheckLine>
                 ))}
@@ -777,10 +777,10 @@ export function Details({ id }: { id: string }) {
           <section className="panel">
             <h2>A realistic FirstProof hiring process</h2>
             {[
-              "Employer posts a role-specific internship and defines a representative technical task.",
+              "Employer posts a role-specific internship and defines a representative work task.",
               "Student checks eligibility, accepts the challenge, and downloads starter materials. No resume or school details are requested.",
-              "Student completes the engineering assignment and submits code, plots, and documentation.",
-              "FirstProof performs a similarity check (suspicious overlap is referred for human review, never auto-rejected).",
+              "Complete the role-specific task within the time budget and submit the requested work sample.",
+              "Similarity checking is planned; no originality conclusion or automatic rejection is made in this preview.",
               "Employer reviews the submission against published criteria and chooses whether to shortlist.",
             ].map((s) => (
               <CheckLine key={s}>{s}</CheckLine>

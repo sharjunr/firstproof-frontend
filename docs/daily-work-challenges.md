@@ -1,0 +1,11 @@
+# Daily-work challenge update — local review
+
+100 example roles across 20 fields, including 12 added positions: web developer, articling student/junior lawyer, paralegal trainee, contracts analyst, legal research assistant, employment policy assistant, junior accountant, civil engineer, newsroom editorial intern, data engineer, project coordinator and visual designer.
+
+All newly generated catalog briefs have a 1.5–3-hour total work budget including setup, checking and handoff. Scope is reduced rather than merely relabeling longer work. Two required deliverables maximum; a time-boxed partial result is acceptable. No paid tools, production work or live clients are required. The employer publishing validator enforces 0.5–3 hours for new posts. Completion windows remain calendar days, distinct from active-work budgets; time-on-task is not invasively monitored.
+
+The eight flagship engineering/data/design/operations tasks now specify small everyday tickets: a FIFO module and basic tests, one RF plot and exception table, a small telemetry decoder, a CPU-only NumPy comparison, sensor trend triage, a tiny telemetry cleanup, three low-fidelity booking screens, and one staffing-capacity comparison. Supplied starter records are retained. Legal tasks use supplied training facts and supervisor checklists, not real legal advice, unsupervised practice or external jurisdictional research.
+
+Existing started applications and published screening snapshots are preserved during browser-state migration. They are not silently changed to new requirements. Unstarted catalog examples receive the refreshed briefs and new roles are added without duplicates. The preview runs on a fresh origin to show all 100 current examples.
+
+Verification: 40 tests pass, including catalog coverage/unique IDs, all role work budgets and deliverable limits, concrete web/legal tasks, over-budget publishing rejection, migration preservation, prior resume/consent and two-stage screening checks. Lint, TypeScript and production build pass. The user approved GitHub delivery after local review. The delivery preserves the teammate’s newer RBC, Deloitte and TD role examples and reduces those tasks to a working-capital check, two-invoice cutoff paper and one DSCR calculation respectively. Scope selection uses role titles rather than reused opportunity IDs.

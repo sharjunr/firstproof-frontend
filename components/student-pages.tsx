@@ -272,7 +272,7 @@ function WorkspaceBody({ id }: { id: string }) {
               )}
               {o.scenario && (
                 <>
-                  <h3>Engineering scenario</h3>
+                  <h3>Workplace scenario</h3>
                   <p>{o.scenario}</p>
                 </>
               )}

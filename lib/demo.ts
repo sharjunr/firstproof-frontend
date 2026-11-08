@@ -1,3 +1,5 @@
+import {applyDailyScope} from "./daily-tasks";
+import {additionalRoles} from "./additional-roles";
 import { developRole } from "./role-content";
 import { expandedCatalog } from "./catalog";
 import type { Store, Opportunity, Application, Eligibility } from "./types";
@@ -1119,7 +1121,7 @@ export function seed(now = new Date()): Store {
     owner: "employer-demo",
     demo: true,
   }));
-  opportunities.push(...expandedCatalog(now));
+  opportunities.push(...expandedCatalog(now),...additionalRoles(now));
   for (const o of opportunities) {
     o.challengeDays = o.challengeDays || 7;
     if (!o.rubric?.length) {
@@ -1239,7 +1241,7 @@ export function seed(now = new Date()): Store {
     version: 2,
     user: null,
     profile: { ...student },
-    opportunities: opportunities.map(developRole),
+    opportunities: opportunities.map(developRole).map(applyDailyScope),
     applications,
     saved: [],
   };
@@ -1283,7 +1285,7 @@ export function upgradeDemoCatalog(saved: Store, now = new Date()): Store {
           fresh &&
           !o.screeningPolicy &&
           !saved.applications.some(
-            (a) => a.opportunityId === o.id && a.screeningSnapshot,
+            (a) => a.opportunityId === o.id,
           ) &&
           (legacyTitles.has(o.title) ||
             legacyCompanies.has(o.company) ||
