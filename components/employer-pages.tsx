@@ -100,7 +100,7 @@ function DashboardBody({ onlyOpportunities }: { onlyOpportunities: boolean }) {
       />
       {!onlyOpportunities && (
         <>
-          <div className="dashboard-callout roi-dashboard-entry"><div><h3>Employer Screening ROI Simulator</h3><p>Explore an illustrative screening scenario using your own applicant volume, review time and labor cost assumptions.</p></div><Link className="button secondary small" href="/#employer-roi">Estimate time and cost <ArrowUpRight size={16}/></Link></div>
+          <div className="dashboard-callout roi-dashboard-entry"><div><h3>Employer Screening ROI Simulator</h3><p>Explore an illustrative screening scenario using your own applicant volume, review time and labor cost assumptions.</p></div><Link className="button secondary small" href="/employer/roi">Estimate time and cost <ArrowUpRight size={16}/></Link></div>
           <ScreeningMetrics applications={apps}/>
           <ScreeningFixtures/>
           <div className="metrics five">
