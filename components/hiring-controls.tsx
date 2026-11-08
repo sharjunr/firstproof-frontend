@@ -19,6 +19,7 @@ import {
 } from "../lib/model";
 import { saveFile, fileError, openFile, resumeFileError } from "../lib/files";
 import { Badge } from "./ui";
+import {technicalVerification,suppliedContent} from "../lib/review-status";
 
 export function NextStageReview({ application }: { application: Application }) {
   const { state, setState, notify } = useStore();
@@ -456,12 +457,13 @@ export function ChallengeMaterials({
   );
 }
 export function ChallengeResources({
-  opportunity: o,
+  opportunity: o, materialsOnly=false,
 }: {
   opportunity: Pick<
     Opportunity,
     "resources" | "rubric" | "challengeDays" | "starterMaterials"
   >;
+  materialsOnly?: boolean;
 }) {
   const [error, setError] = useState("");
   const [openMaterial, setOpenMaterial] = useState<string | null>(null);
@@ -478,7 +480,7 @@ export function ChallengeResources({
     <section className="challenge-resources">
       {!!(o.starterMaterials?.length || o.resources?.length) && (
         <>
-          <h3>Starter materials & synthetic datasets</h3>
+          {!materialsOnly&&<h3>Starter materials & synthetic datasets</h3>}
           <p className="fine-print">
             Representative synthetic engineering inputs and starter files for
             this challenge.
@@ -530,7 +532,7 @@ export function ChallengeResources({
           ))}
         </>
       )}
-      <h3>What the employer will review</h3>
+      {!materialsOnly&&<><h3>What the employer will review</h3>
       <p>
         <Clock size={14} /> Complete within {o.challengeDays || 7} days after
         joining, and before the published application deadline. These are
@@ -545,11 +547,8 @@ export function ChallengeResources({
           <p>{c.description}</p>
         </div>
       ))}
-      {error && (
-        <p role="alert" className="form-error">
-          {error}
-        </p>
-      )}
+      </>}
+      {error && <p role="alert" className="form-error">{error}</p>}
     </section>
   );
 }
@@ -561,19 +560,19 @@ export function SubmissionReview({
   opportunity: Opportunity;
 }) {
   const checks = [
-    ["Project explanation supplied", a.text.trim().length >= 30],
+    ["Explanation supplied", a.text.trim().length >= 30],
     [
-      "Deliverables present",
-      !!a.files.length || !!a.links.length || a.text.trim().length >= 80,
+      "Submission content supplied",
+      suppliedContent(a),
     ],
-    ["Employer rubric ready", !rubricErrors(o.rubric)],
+    ["Published review rubric", !rubricErrors(o.rubric)],
   ] as const;
+  const technical=technicalVerification(a);
   return (
     <section className="preflight-panel">
-      <h3>First review layer</h3>
+      <h3>Content supplied</h3>
       <p>
-        These are local completeness checks, not an assessment of technical
-        quality or a hiring score.
+        These indicators check only whether submission content exists. They do not verify required deliverables, correctness or technical quality.
       </p>
       {checks.map(([label, passed]) => (
         <div className="preflight-row" key={label}>
@@ -582,14 +581,15 @@ export function SubmissionReview({
             {passed ? (
               <>
                 <Check size={12} />
-                Present
+                {label === "Published review rubric" ? "Configured" : "Supplied"}
               </>
             ) : (
-              "Needs review"
+              label === "Published review rubric" ? "Not configured" : "Not supplied"
             )}
           </Badge>
         </div>
       ))}
+      <div className="technical-verification"><h3>Technical requirements verification</h3><Badge tone={technical.tone}>{technical.label}</Badge><p>{technical.description}</p></div>
       <h4>AI rubric evaluation</h4>
       <Badge>Coming soon</Badge>
       <p>

@@ -1,4 +1,5 @@
 "use client";
+import {ChallengeBrief,RoleDetails} from "./challenge-brief";
 import {freezeScreening} from "../lib/screening";
 import {ScreeningSubmission,StudentScreening} from "./screening-controls";
 import Link from "next/link";
@@ -30,7 +31,7 @@ import {
   Loading,
   Modal,
 } from "./ui";
-import { BackgroundResponse, ChallengeResources } from "./hiring-controls";
+import { BackgroundResponse } from "./hiring-controls";
 import { emptyEligibility } from "../lib/demo";
 import type { Application, Role, Stage } from "../lib/types";
 import { submitApplication, studentView } from "../lib/model";
@@ -245,79 +246,7 @@ function WorkspaceBody({ id }: { id: string }) {
       <div className="workspace-grid">
         <section className="panel">
           {step === 0 ? (
-            <>
-              <p className="eyebrow">
-                ROLE-SPECIFIC CHALLENGE BRIEF · FICTIONAL DEMO — NOT AFFILIATED
-                WITH {o.company.toUpperCase()}
-              </p>
-              <h2>{o.challenge}</h2>
-              <div className="challenge-priority">
-                <strong>Your challenge: {o.challenge}</strong>
-                <p>
-                  Complete the required deliverables below. Your submission is
-                  considered alongside other applicants; explain your own
-                  approach and decisions.
-                </p>
-                <p>
-                  Time budget: {o.effort} hours · Completion window:{" "}
-                  {o.challengeDays || 7} days after joining, before the
-                  application deadline.
-                </p>
-              </div>
-              {o.dayInTheRole && (
-                <div className="day-in-role-box">
-                  <p className="eyebrow">A DAY IN THE ROLE</p>
-                  <p>{o.dayInTheRole}</p>
-                </div>
-              )}
-              {o.scenario && (
-                <>
-                  <h3>Workplace scenario</h3>
-                  <p>{o.scenario}</p>
-                </>
-              )}
-              <h3>Challenge instructions</h3>
-              <p>{o.instructions}</p>
-              {o.specifications?.length ? (
-                <>
-                  <h3>Technical specifications</h3>
-                  {o.specifications.map((spec) => (
-                    <div className="check-line" key={spec}>
-                      <Check size={16} />
-                      {spec}
-                    </div>
-                  ))}
-                </>
-              ) : null}
-              <ChallengeResources opportunity={o} />
-              <h3>Deliverables checklist</h3>
-              {o.deliverables.map((d) => (
-                <div className="check-line" key={d}>
-                  <Check size={16} />
-                  {d}
-                </div>
-              ))}
-              {o.acceptanceCriteria?.length ? (
-                <>
-                  <h3>Acceptance criteria</h3>
-                  {o.acceptanceCriteria.map((ac) => (
-                    <div className="check-line" key={ac}>
-                      <Check size={16} />
-                      {ac}
-                    </div>
-                  ))}
-                </>
-              ) : null}
-              <h3>Tools & assistance</h3>
-              <p>{o.tools}</p>
-              <h3>Review criteria</h3>
-              <p>{o.criteria}</p>
-              <div className="inline-callout">
-                <Clock size={18} />
-                Budget around {o.effort} hours. Human review within{" "}
-                {o.reviewDays} calendar days after complete submission.
-              </div>
-            </>
+            <><ChallengeBrief opportunity={o}/><RoleDetails opportunity={o}/></>
           ) : step === 1 ? (
             <>
               <p className="eyebrow">MAKE YOUR WORK TANGIBLE</p>

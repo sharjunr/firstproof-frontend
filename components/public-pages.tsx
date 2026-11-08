@@ -1,5 +1,5 @@
 "use client";
-import {PublishedScreening} from "./screening-controls";
+import {ChallengeBrief,RoleDetails} from "./challenge-brief";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
@@ -14,7 +14,6 @@ import {
   ShieldCheck,
   SlidersHorizontal,
   MapPin,
-  Clock,
   Bookmark,
   ArrowLeft,
 } from "lucide-react";
@@ -27,10 +26,9 @@ import {
   industries,
   Empty,
   Loading,
-  CheckLine,
 } from "./ui";
 import { searchOpportunities, publicOpportunityView } from "../lib/model";
-import { ChallengeResources } from "./hiring-controls";
+
 export function Landing() {
   const router = useRouter();
   const [query, setQuery] = useState("");
@@ -659,7 +657,7 @@ export function Details({ id }: { id: string }) {
             <Badge tone="warning">
               Fictional Demo — Not affiliated with {o.company}
             </Badge>
-            <Badge>Fictional Demo — Not affiliated with this company.</Badge>
+
           </div>
           <h1>{o.title}</h1>
           <div className="meta">
@@ -675,117 +673,9 @@ export function Details({ id }: { id: string }) {
       </div>
       <div className="detail-grid">
         <div>
-          <section className="panel">
-            <Badge tone="violet">{o.industry}</Badge>
-            <h2>The opportunity</h2>
-            <p>{o.description}</p>
-            {o.dayInTheRole && (
-              <div className="day-in-role-box">
-                <p className="eyebrow">A DAY IN THE ROLE</p>
-                <h3>What you would do in this role</h3>
-                <p>{o.dayInTheRole}</p>
-              </div>
-            )}
-            {o.responsibilities && (
-              <>
-                <h3>Role responsibilities</h3>
-                <p>{o.responsibilities}</p>
-              </>
-            )}
-            {o.skills?.length ? (
-              <div className="major-list">
-                <span>REQUIRED TECHNICAL SKILLS & TOOLS</span>
-                {o.skills.map((s) => (
-                  <Badge key={s} tone="blue">
-                    {s}
-                  </Badge>
-                ))}
-              </div>
-            ) : null}
-            {o.majors?.length ? (
-              <div className="major-list">
-                <span>RELEVANT STUDY AREAS</span>
-                {o.majors.map((m) => (
-                  <Badge key={m}>{m}</Badge>
-                ))}
-              </div>
-            ) : null}
-            <h3>What you’ll bring</h3>
-            <p>{o.qualifications}</p>
-          </section>
-          <section className="panel project-spotlight">
-            <p className="eyebrow">ROLE-SPECIFIC DAILY WORK CHALLENGE</p>
-            <h2>{o.challenge}</h2>
-            <div className="challenge-priority">
-              <strong>Start here: complete the work task below.</strong>
-              <p>
-                Your work sample is the main part of this application. Other
-                applicants may complete the same challenge. Show your own
-                reasoning and follow every required deliverable.
-              </p>
-            </div>
-            <div className="inline-callout">
-              <Clock size={19} />
-              <span>
-                Maximum time: <strong>{o.effort} hours</strong> ·{" "}
-                {o.skills?.slice(0, 2).join(" / ") || o.industry} · Fictional
-                employer challenge using synthetic data and scoped requirements.
-              </span>
-            </div>
-            {o.scenario && (
-              <>
-                <h3>Workplace scenario</h3>
-                <p>{o.scenario}</p>
-              </>
-            )}
-            <h3>Task instructions</h3>
-            <p>{o.instructions}</p>
-            {o.specifications?.length ? (
-              <>
-                <h3>Scope & constraints</h3>
-                {o.specifications.map((spec) => (
-                  <CheckLine key={spec}>{spec}</CheckLine>
-                ))}
-              </>
-            ) : null}
-            <h3>Required deliverables</h3>
-            {o.deliverables.map((d) => (
-              <CheckLine key={d}>{d}</CheckLine>
-            ))}
-            {o.acceptanceCriteria?.length ? (
-              <>
-                <h3>Acceptance criteria</h3>
-                {o.acceptanceCriteria.map((ac) => (
-                  <CheckLine key={ac}>{ac}</CheckLine>
-                ))}
-              </>
-            ) : null}
-            <ChallengeResources opportunity={o} />
-            <PublishedScreening opportunity={o}/>
-            <h3>Required tools & AI disclosure</h3>
-            <p>{o.tools}</p>
-            <h3>Human review & similarity policy</h3>
-            <p>{o.criteria}</p>
-            <h3>Eligibility requirements</h3>
-            <p>{o.eligibility}</p>
-            <p className="fine-print">
-              Declarations are self-reported unless separately verified. AI
-              never grades candidate quality or makes hiring decisions;
-              similarity checks only flag suspicious overlap for human review.
-            </p>
-          </section>
-          <section className="panel">
-            <h2>A realistic FirstProof hiring process</h2>
-            {[
-              "Employer posts a role-specific internship and defines a representative work task.",
-              "Student checks eligibility, accepts the challenge, and downloads starter materials. No resume or school details are requested.",
-              "Complete the role-specific task within the time budget and submit the requested work sample.",
-              "Similarity checking is planned; no originality conclusion or automatic rejection is made in this preview.",
-              "Employer reviews the submission against published criteria and chooses whether to shortlist.",
-            ].map((s) => (
-              <CheckLine key={s}>{s}</CheckLine>
-            ))}
-          </section>
+          <section className="panel project-spotlight"><ChallengeBrief opportunity={o}/></section>
+          <RoleDetails opportunity={o}/>
+
         </div>
         <aside className="detail-sidebar">
           <div className="panel sticky">
