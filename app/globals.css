@@ -5933,16 +5933,21 @@ th {
 .challenge-priority strong{font-size:18px;line-height:1.5}.challenge-priority p{font-size:14px!important;line-height:1.7;margin:10px 0 0!important;color:#344d68!important}
 .resume-upload-box{padding:20px;border:1px solid #b6d3f2;background:#f5f9ff;border-radius:10px;margin:18px 0}.resume-upload-box input{max-width:100%;padding:12px;background:white}.resume-upload-box h4{margin-top:0}.resume-upload-box .file-row{flex-wrap:wrap;overflow-wrap:anywhere}
 .company-icon.has-logo {
-  padding: 0;
+  padding: 5px;
   overflow: hidden;
-  border: none;
-  background: transparent;
-  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.12);
+  border: 1px solid #d1d9e0;
+  background: #ffffff;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
+.company-icon.has-logo img,
 .company-icon.has-logo svg {
   display: block;
   width: 100%;
   height: 100%;
+  object-fit: contain;
 }
 
 /* Two-stage employer screening — existing layout extension */
