@@ -1137,7 +1137,8 @@ export function upgradeDemoCatalog(saved: Store, now = new Date()): Store {
           ) &&
           (legacyTitles.has(o.title) ||
             legacyCompanies.has(o.company) ||
-            /^(Demo\s+)?[A-Za-z]+\s+Studio$/.test(o.company))
+            /\bStudio$/i.test(o.company) ||
+            o.title === fresh.title)
         ) {
           return { ...fresh };
         }
