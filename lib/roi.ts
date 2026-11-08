@@ -2,9 +2,9 @@ export interface RoiInputs {applicants:number;currentMinutes:number;firstProofMi
 export const ROI_DEFAULTS:Readonly<RoiInputs>={applicants:500,currentMinutes:8,firstProofMinutes:4,hourlyCost:60};
 export const ROI_DISCLAIMER='This is a scenario calculator, not a measured FirstProof outcome. It excludes challenge creation, detailed technical review, platform fees, and other hiring costs. Actual savings depend on employer workflows and candidate volume.';
 export const ROI_CONTROLS=[
- {key:'applicants',label:'Number of applicants',min:100,max:2000,step:1},
- {key:'currentMinutes',label:'Minutes per applicant — Current process',min:5,max:30,step:1},
- {key:'firstProofMinutes',label:'Minutes per applicant — FirstProof',min:1,max:30,step:1},
+ {key:'applicants',label:'Number of applicants',min:1,max:10000,step:1},
+ {key:'currentMinutes',label:'Employer review minutes per applicant — Without FirstProof',min:5,max:30,step:1},
+ {key:'firstProofMinutes',label:'Employer review minutes per applicant — With FirstProof',min:1,max:30,step:1},
  {key:'hourlyCost',label:'Fully loaded reviewer cost per hour',min:30,max:150,step:1},
 ] as const;
 export function calculateRoi(input:RoiInputs){
@@ -23,8 +23,8 @@ export function roiSummary(input:RoiInputs){const r=calculateRoi(input);const ad
  'FirstProof — Illustrative ROI Scenario',
  '',
  `Applicants: ${new Intl.NumberFormat('en-CA').format(input.applicants)}`,
- `Current process: ${input.currentMinutes} minutes per applicant`,
- `FirstProof: ${input.firstProofMinutes} minutes per applicant`,
+ `Employer review without FirstProof: ${input.currentMinutes} minutes per applicant`,
+ `Employer review with FirstProof: ${input.firstProofMinutes} minutes per applicant`,
  `Fully loaded reviewer cost: ${formatCad(input.hourlyCost)}/hour`,
  '',
  `Current screening time: ${formatHours(r.currentHours)} hours`,
